@@ -1,0 +1,282 @@
+@import url('https://fonts.googleapis.com/css?family=Parisienne');
+
+body {
+    background: #333;
+    display: grid;
+    place-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.tape-player * {
+    transition: ease all 0.3s;
+    user-select: none;
+    -webkit-transform-style: preserve-3d;
+}
+
+.tape-player {
+    background: #ABD1B5;
+    width: 300px;
+    height: calc(62px * 3);
+    border-radius: 5px;
+    box-shadow: 0px 10px 10px #222;
+    position: relative;
+    transition: ease all 0.1s;
+    cursor: pointer;
+}
+
+.tape-player .small-reel {
+    width: 70px;
+    height: 70px;
+    background: white;
+    position: absolute;
+    bottom: 25px;
+    left: 25px;
+    border-radius: 50%;
+    box-shadow: 0 0 10px 3px #333;
+    animation: rotating 2s linear infinite;
+    animation-play-state: paused;
+    border: 2px solid transparent;
+}
+
+.tape-player .big-reel {
+    border-radius: 50%;
+    height: 140px;
+    width: 140px;
+    background: white;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    box-shadow: 0 0 20px 3px #333;
+    animation: rotating 2s linear infinite;
+    animation-play-state: paused;
+    border: 2px solid transparent;
+}
+
+.tape-player .buttons {
+    position: absolute;
+    top: -15px;
+    left: 10px;
+    height: 15px;
+    z-index: -1;
+}
+
+.tape-player .buttons > * {
+    display: inline-block;
+    width: 20px;
+    height: 5px;
+    border-radius: 3px 3px 0 0;
+    background: grey;
+    margin-right: 3px;
+    padding: 0;
+    bottom: 0;
+}
+
+.tape-player .buttons > .left {
+    background: #DE6449;
+    height: 10px;
+}
+
+.tape-player .hole {
+    position: absolute;
+    top: calc(50% - 14px);
+    left: calc(50% - 14px);
+    height: 28px;
+    width: 28px;
+    background: #333;
+    -webkit-clip-path: polygon(0% 0%, 100% 0%, 82% 100%, 18% 100%);
+    transform: translateY(-37px);
+}
+
+.tape-player .hole.two {
+    transform: rotateZ(120deg) translateY(-37px);
+}
+
+.tape-player .hole.three {
+    transform: rotateZ(240deg) translateY(-37px);
+}
+
+.tape-player .middle-hole {
+    width: 30px;
+    height: 30px;
+    background: #333;
+    top: calc(50% - 15px);
+    left: calc(50% - 15px);
+    position: absolute;
+    border-radius: 50%;
+    border: 3px solid #555;
+    box-sizing: border-box;
+}
+
+@keyframes rotating {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.tape-player:hover {
+    scale: 1.1;
+}
+
+.tape-player .circle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #333;
+    left: calc(50% - 5px);
+    top: calc(50% - 5px);
+    border-radius: 50%;
+    border: 1px solid #666;
+    box-sizing: border-box;
+    transform: translateY(25px);
+}
+
+.tape-player .middle.circle {
+    transform: translateY(0);
+}
+
+.tape-player .circle.one {
+    transform: rotateZ(0deg) translateY(-25px);
+}
+
+.tape-player .circle.two {
+    transform: rotateZ(40deg) translateY(-25px);
+}
+
+.tape-player .circle.three {
+    transform: rotateZ(80deg) translateY(-25px);
+}
+
+.tape-player .circle.four {
+    transform: rotateZ(120deg) translateY(-25px);
+}
+
+.tape-player .circle.five {
+    transform: rotateZ(160deg) translateY(-25px);
+}
+
+.tape-player .circle.six {
+    transform: rotateZ(200deg) translateY(-25px);
+}
+
+.tape-player .circle.seven {
+    transform: rotateZ(240deg) translateY(-25px);
+}
+
+.tape-player .circle.eight {
+    transform: rotateZ(280deg) translateY(-25px);
+}
+
+.tape-player .circle.nine {
+    transform: rotateZ(320deg) translateY(-25px);
+}
+
+.tape-player .signature {
+    top: 20px;
+    left: 25px;
+    position: absolute;
+    border-radius: 3px;
+    font-size: 14pt;
+    width: 100px;
+    font-family: 'Parisienne', cursive;
+    color: black;
+}
+
+.tape-player.playing > .small-reel, .tape-player.playing > .big-reel {
+    animation-play-state: running;
+}
+
+.tape-player.playing > .buttons > .left {
+    height: 5px;
+}
+
+.tape-player .vu-meter {
+    background: white;
+    width: 60px;
+    height: 38px;
+    top: 25px;
+    left: 30px;
+    position: absolute;
+    border-radius: 3px;
+    box-shadow: 0 0 4px inset;
+}
+
+.tape-player .colour-bar {
+    width: 50px;
+    left: 5px;
+    top: 10px;
+    position: absolute;
+    border-width: 4px;
+    border-style: solid;
+    height: 0px;
+    box-sizing: border-box;
+    border-radius: 50%;
+    border-image: linear-gradient(to right, green, red);
+}
+
+.tape-player .colour-bar:after {
+    background: white;
+    width: 55px;
+}
+
+.tape-player .tape-top {
+    position: absolute;
+    top: 60px;
+    left: 34px;
+    width: 150px;
+    height: 2px;
+    background: #333;
+    transform: rotateZ(-26deg);
+    z-index: 2;
+    display: none;
+}
+
+
+.tape-player.has-tape > .small-reel, .tape-player.has-tape > .big-reel {
+    border: 2px solid #333;
+    z-index: 2;
+}
+
+.tape-player .tape-bottom {
+    position: absolute;
+    bottom: 23.5px;
+    left: 60px;
+    width: 150px;
+    height: 2px;
+    transform: rotateZ(1.2deg);
+    background: #333;
+    z-index: 2;
+    display: none;
+}
+
+
+.tape-player.has-tape > .tape-top, .tape-player.has-tape > .tape-bottom {
+    display: inherit;
+}
+
+.tape-player .zoomed {
+    transform: scale(1.3);
+}
+
+.tape-player .eject {
+    background: #eee;
+    border-radius: 2px;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    box-shadow: 0 0 3px #333 inset, 0 0 3px #333;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    color: #333;
+}
+
+.tape-player .eject:hover {
+    background: white;
+    transition: ease all 0.1s;
+}
