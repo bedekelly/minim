@@ -1,32 +1,67 @@
-.App {
-  text-align: center;
+* {
+  box-sizing: border-box;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
+body {
+  background: #333;
+  border: 5px solid;
+  height: 100vh;
+  border-image:
+          linear-gradient(
+                  45deg,
+                  rgba(131,58,180,1) 0%,
+                  rgba(253,29,29,1) 50%,
+                  rgba(252,176,69,1) 100%
+          ) 1 100;
+  padding-top: 10vh;
+  padding-bottom: 10vh;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+
+button {
+  user-select: none;
+  font-size: 12pt;
+  font-family: "Helvetica Neue", sans-serif;
+  padding: 10px;
+}
+
+.components-wrapper {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.components {
+  width: 80vw;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.add-buttons {
+  position: absolute;
+  bottom: 0;
+  width: 100vw;
+  height: 10vh;
+  display: flex;
+  place-content: center;
+  margin: 0 0 5vh;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.add-buttons button {
+  margin: 1vh;
+  border: 1px solid white;
+  border-radius: 1vh;
+  outline: 0;
+  background: transparent;
+  color: whitesmoke;
+}
+
+.add-buttons button:active {
+  margin: 1vh;
+  border: 1px solid white;
+  border-radius: 1vh;
+  outline: 0;
+  color: #333;
+  background: whitesmoke;
 }

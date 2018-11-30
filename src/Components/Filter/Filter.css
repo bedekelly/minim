@@ -1,0 +1,38 @@
+.filter {
+    width: 100px;
+    height: 100px;
+    border-radius: 5px;
+    border: 2px solid whitesmoke;
+    overflow: hidden;
+    margin: 3vh;
+    transition: ease all 0.1s;
+}
+
+.filter:hover {
+    scale: 1.1;
+}
+
+.filter input[type=range] {
+    -webkit-appearance: none;
+    width: 280px;
+    background: transparent;
+    height: 100px;
+    transform: translateX(-100px);
+    cursor: ew-resize;
+    margin: 0;
+}
+
+.filter input[type=range]:focus {
+    outline: none;
+}
+
+.filter input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 100px;
+    font-size: 96pt;
+    width: 170px;
+    background: linear-gradient(to bottom right, red, blue);
+    border-radius: 0 75px 0 0;
+    transform: translateX(-60px);
+    z-index: -1;
+}

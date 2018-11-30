@@ -9,20 +9,32 @@ class TapeRecorder extends React.Component {
         this.state = {
             playing: false,
             hasTape: false,
-            zoomed: false
+            zoomed: false,
+            context: new AudioContext(),
+            buffer: null,
+            source: null
         };
-        this.togglePlaying = this.togglePlaying.bind(this);
-        this.onDragOver = this.onDragOver.bind(this);
-        this.onDrop = this.onDrop.bind(this);
-        this.onDragLeave = this.onDragLeave.bind(this);
-        this.eject = this.eject.bind(this);
     }
 
-    togglePlaying() {
+    playAudio() {
+        const source = this.state.context.createBufferSource();
+        source.buffer = this.state.buffer;
+        source.connect(this.state.context.destination);
+        source.start(0);
+        return this.setState({...this.state, source})
+    }
+
+    pauseAudio() {
+        this.state.source.stop();
+    }
+
+    async togglePlaying() {
         if (this.state.playing || !this.state.hasTape) {
-            this.setState({ playing: false });
+            await this.setState({ playing: false });
+            await this.pauseAudio();
         } else {
-            this.setState({ playing: true });
+            await this.setState({ playing: true });
+            await this.playAudio();
         }
     }
 
@@ -36,7 +48,20 @@ class TapeRecorder extends React.Component {
         event.preventDefault();
     }
 
+    async fileLoaded(arrayBuffer) {
+        this.setState({...this.state, buffer: await this.state.context.decodeAudioData(arrayBuffer)});
+    }
+
+    newFile(file) {
+        const reader = new FileReader();
+        reader.onloadend = () => this.fileLoaded(reader.result);
+        reader.readAsArrayBuffer(file);
+    }
+
     onDrop(event) {
+        let file = event.dataTransfer.files[0];
+        // If dropped items aren't files, reject them
+        this.newFile(file);
         this.setState({ zoomed: false, hasTape: true });
         event.preventDefault();
     }
@@ -56,10 +81,10 @@ class TapeRecorder extends React.Component {
 
         return <div
             className={ classNames }
-            onClick={ this.togglePlaying }
-            onDragOver={ this.onDragOver }
-            onDragLeave={ this.onDragLeave }
-            onDrop={ this.onDrop }
+            onClick={ event => this.togglePlaying(event) }
+            onDragOver={ event => this.onDragOver(event) }
+            onDragLeave={ event => this.onDragLeave(event) }
+            onDrop={ event => this.onDrop(event) }
         >
             <div className="buttons">
                 <div className="left"></div>
@@ -89,7 +114,7 @@ class TapeRecorder extends React.Component {
             <div className="tape-top"></div>
             <div className="tape-bottom"></div>
 
-            <div className="eject" onClick={ this.eject }>⏏</div>
+            <div className="eject" onClick={ event => this.eject(event) }>⏏</div>
         </div>
     }
 }
