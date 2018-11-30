@@ -1,9 +1,14 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import './App.css';
 
 import uuid from "uuid4";
 
-import { Filter, TapeRecorder } from './Components';
+import {Filter, TapeRecorder} from './Components';
+
+
+function createAudioContext() {
+    return new (window.AudioContext || window.webkitAudioContext)();
+}
 
 
 class App extends Component {
@@ -12,12 +17,22 @@ class App extends Component {
       super(props);
       this.state = {
           components: [],
-          source: null
+          source: null,
+          context: createAudioContext()
       };
+      this.makeSource = this.makeSource.bind(this);
   }
 
   addFilter() {
-    this.addComponent(<Filter key={uuid()}/>);
+      const audioCtx = this.state.context;
+      const source = this.state.source;
+      this.addComponent(<Filter input={source} context={audioCtx} key={uuid()}/>);
+  }
+
+  async makeSource() {
+      const source = this.state.context.createBufferSource();
+      await this.setState({...this.state, source});
+      return source;
   }
 
   addComponent(component) {
@@ -27,8 +42,8 @@ class App extends Component {
   }
 
   async addTapeRecorder() {
-      await this.addComponent(<TapeRecorder key={uuid()} />);
-      this.setState({...this.state, source: true})
+      const recorder = <TapeRecorder makeSource={this.makeSource} context={this.state.context} key={uuid()} />;
+      await this.addComponent(recorder);
   }
 
   render() {
@@ -41,8 +56,8 @@ class App extends Component {
           </div>
 
           <section className="add-buttons">
-              { this.state.source ? null : <button onClick={() => this.addTapeRecorder()}>Add Tape Player</button> }
-              { this.state.source ? <button onClick={() => this.addFilter()}>Add Filter</button> : null }
+              { this.state.source !== null ? null : <button onClick={() => this.addTapeRecorder()}>Add Tape Player</button> }
+              { this.state.source !== null ? <button onClick={() => this.addFilter()}>Add Filter</button> : null }
           </section>
       </section>;
   }

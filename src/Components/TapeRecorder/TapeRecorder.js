@@ -10,22 +10,25 @@ class TapeRecorder extends React.Component {
             playing: false,
             hasTape: false,
             zoomed: false,
-            context: new AudioContext(),
             buffer: null,
             source: null
         };
     }
 
-    playAudio() {
-        const source = this.state.context.createBufferSource();
-        source.buffer = this.state.buffer;
-        source.connect(this.state.context.destination);
-        source.start(0);
-        return this.setState({...this.state, source})
+    async playAudio() {
+        if (this.state.source) {
+            this.props.context.resume();
+        } else {
+            const source = await this.props.makeSource();
+            source.buffer = this.state.buffer;
+            source.connect(this.props.context.destination);
+            source.start(0);
+            return this.setState({...this.state, source})
+        }
     }
 
     pauseAudio() {
-        this.state.source.stop();
+        this.state.source && this.props.context.suspend();
     }
 
     async togglePlaying() {
@@ -49,7 +52,9 @@ class TapeRecorder extends React.Component {
     }
 
     async fileLoaded(arrayBuffer) {
-        this.setState({...this.state, buffer: await this.state.context.decodeAudioData(arrayBuffer)});
+        const p = new Promise();
+        
+        this.setState({...this.state, buffer: await this.props.context.decodeAudioData(arrayBuffer)});
     }
 
     newFile(file) {
@@ -67,7 +72,7 @@ class TapeRecorder extends React.Component {
     }
 
     eject(event) {
-        this.setState({ hasTape: false, playing: false });
+        this.setState({ hasTape: false, playing: false, source: null });
         event.stopPropagation();
     }
 
