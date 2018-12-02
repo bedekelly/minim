@@ -199,12 +199,12 @@
 
 .tape-player .tape-top {
     position: absolute;
-    top: 60px;
+    top: 62.7px;
     left: 34px;
     width: 150px;
     height: 2px;
     background: #333;
-    transform: rotateZ(-26deg);
+    transform: rotateZ(-26.6deg);
     z-index: 2;
     display: none;
 }
@@ -216,11 +216,11 @@
 
 .tape-player .tape-bottom {
     position: absolute;
-    bottom: 23.5px;
+    bottom: 25.5px;
     left: 60px;
     width: 150px;
     height: 2px;
-    transform: rotateZ(1.2deg);
+    transform: rotateZ(-0.4deg);
     background: #333;
     z-index: 2;
     display: none;
@@ -243,10 +243,11 @@
     position: absolute;
     bottom: 10px;
     right: 10px;
-    box-shadow: 0 0 3px #333 inset, 0 0 3px #333;
+    border: 1px solid #333;
+    box-shadow: 0 0 5px #333;
     display: grid;
-    place-items: center;
     text-align: center;
+    place-content: center;
     color: #333;
 }
 
