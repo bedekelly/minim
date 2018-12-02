@@ -18,12 +18,15 @@ class TapeRecorder extends React.Component {
     async playAudio() {
         if (this.state.source) {
             this.props.context.resume();
+            console.log("Resuming audio!");
         } else {
+            const context = this.props.context;
             const source = await this.props.makeSource();
             source.buffer = this.state.buffer;
-            source.connect(this.props.context.destination);
+            source.connect(context.destination);
             source.start(0);
-            return this.setState({...this.state, source})
+            console.log("Starting audio!");
+            return this.setState({...this.state, source, context})
         }
     }
 
@@ -52,9 +55,12 @@ class TapeRecorder extends React.Component {
     }
 
     async fileLoaded(arrayBuffer) {
-        const p = new Promise();
-        
-        this.setState({...this.state, buffer: await this.props.context.decodeAudioData(arrayBuffer)});
+        const prom = new Promise(resolve => {
+            this.props.context.decodeAudioData(arrayBuffer, buffer => {
+                resolve(buffer);
+            });
+        });
+        return prom.then(buffer => this.setState({...this.state, buffer}));
     }
 
     newFile(file) {
