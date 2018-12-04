@@ -13,8 +13,6 @@ body {
                   rgba(253,29,29,1) 50%,
                   rgba(252,176,69,1) 100%
           ) 1 100;
-  padding-top: 10vh;
-  padding-bottom: 10vh;
 }
 
 
@@ -25,43 +23,67 @@ button {
   padding: 10px;
 }
 
-.components-wrapper {
-  max-height: 70vh;
-  overflow-y: auto;
-}
 
-.components {
-  width: 80vw;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.add-buttons {
-  position: absolute;
-  bottom: 0;
-  width: 100vw;
-  height: 10vh;
-  display: flex;
-  place-content: center;
-  margin: 0 0 5vh;
-}
-
-.add-buttons button {
-  margin: 1vh;
+.add-rack {
   border: 1px solid white;
   border-radius: 1vh;
   outline: 0;
   background: transparent;
   color: whitesmoke;
+  position: absolute;
+  bottom: 3vh;
+  left: 3vh;
 }
 
-.add-buttons button:active {
-  margin: 1vh;
-  border: 1px solid white;
-  border-radius: 1vh;
-  outline: 0;
+.add-rack:active {
   color: #333;
   background: whitesmoke;
+}
+
+.app {
+  display: flex;
+  flex-direction: row;
+  overflow-x: scroll;
+}
+
+.play-all {
+  position: absolute;
+  right: 3vh;
+  bottom: 3vh;
+  width: 16vh;
+  border: 1px solid whitesmoke;
+  background: transparent;
+  border-radius: 5px;
+  color: whitesmoke;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  outline: 0;
+  padding: 1.5vh;
+}
+
+.play-all:active {
+  background: whitesmoke;
+  color: #333;
+}
+
+.stop-all {
+  position: absolute;
+  right: 21vh;
+  bottom: 3vh;
+  width: 16vh;
+  border: 1px solid whitesmoke;
+  background: transparent;
+  border-radius: 5px;
+  color: whitesmoke;
+  display: grid;
+  flex-direction: column;
+  align-items: center;
+  outline: 0;
+  padding: 1.5vh;
+}
+
+.stop-all:active {
+  background: whitesmoke;
+  color: #333;
 }

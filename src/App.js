@@ -1,76 +1,69 @@
 import React, {Component} from 'react';
-import './App.css';
-
 import uuid from "uuid4";
-
-import {Filter, TapeRecorder} from './Components';
+import './App.css';
+import Rack from "./Rack/Rack";
 
 
 class App extends Component {
 
-  constructor(props) {
-      super(props);
-      this.makeSource = this.makeSource.bind(this);
-      this.state = { components: [], source: null }
-  }
+    constructor(props) {
+        super(props);
+        this.state = { racks: [], context: null, playing: false }
+    }
 
-  async addFilter() {
-      const { context, source } = this.state;
-      await this.addComponent(
-          <Filter
-              input={source}
-              context={context}
-              key={uuid()}/>
-      );
-  }
+    async makeContext() {
+        if (this.state.context) return this.state.context;
+        const context = new (window.AudioContext || window.webkitAudioContext)();
 
-  async makeSource() {
-      const source = this.state.context.createBufferSource();
-      await this.setState({...this.state, source});
-      return source;
-  }
+        // Unlock audio context for iOS devices.
+        if (context.state === 'suspended' && 'ontouchstart' in window) {
+            await context.resume();
+        }
 
-  addComponent(component) {
-      return this.setState({
-          components: [...this.state.components, component]
-      });
-  }
+        await this.setState({...this.state, context});
+        window.globalContext = context;
+        return context;
+    }
 
-  async makeContext() {
-      const context = new (window.AudioContext || window.webkitAudioContext)();
-      if (context.state === 'suspended' && 'ontouchstart' in window) {
-          console.log("Trying to resume context...");
-          await context.resume();
-          console.log("Done!");
-      }
-      await this.setState({...this.state, context});
-  }
+    async makeRack() {
+        const context = await this.makeContext();
+        return { context, key: uuid(), ref: React.createRef() };
+    }
 
-  async addTapeRecorder() {
-      await this.makeContext();
-      await this.addComponent(
-          <TapeRecorder
-              makeSource={this.makeSource}
-              context={this.state.context}
-              key={uuid()} />
-      );
-  }
+    async addRack() {
+        const rack = await this.makeRack();
+        return this.setState({ ...this.state, racks: [ ...this.state.racks, rack ] })
+    }
 
-  render() {
-      return <section className="app">
+    async playAll() {
+        for (let { ref: { current: rack } } of this.state.racks) {
+            rack.play();
+        }
+        return this.setState({ ...this.state, playing: true });
+    }
 
-          <div className="components-wrapper">
-              <section className={"components"}>
-                  { this.state.components }
-              </section>
-          </div>
+    async stopAll() {
+        for (let { ref: { current: rack } } of this.state.racks) {
+            rack.stop();
+        }
+        return this.setState({ ...this.state, playing: false });
+    }
 
-          <section className="add-buttons">
-              { this.state.source !== null ? null : <button onClick={() => this.addTapeRecorder()}>Add Tape Player</button> }
-              { this.state.source !== null ? <button onClick={() => this.addFilter()}>Add Filter</button> : null }
-          </section>
-      </section>;
-  }
+    render() {
+        return <section className="app">
+            <button className="add-rack" onClick={() => this.addRack()}>Add Rack</button>
+
+            { this.state.racks.map(
+                ({ key, context, ref }) =>
+                    <Rack key={ key } context={ context }
+                          playing={ this.state.playing } ref={ ref }/>
+            ) }
+
+            { this.state.playing
+                ? <button className="stop-all" onClick={() => this.stopAll()}>Stop All</button>
+                : <button className="play-all" onClick={() => this.playAll()}>Play All</button> }
+        </section>;
+    }
 }
 
 

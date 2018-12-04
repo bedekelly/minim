@@ -4,44 +4,26 @@ import './TapeRecorder.css';
 
 
 class TapeRecorder extends React.Component {
+
     constructor(props) {
         super(props);
         this.state = {
-            playing: false,
-            hasTape: false,
-            zoomed: false,
-            buffer: null,
-            source: null
-        };
-    }
-
-    async playAudio() {
-        if (this.state.source) {
-            this.props.context.resume();
-            console.log("Resuming audio!");
-        } else {
-            const context = this.props.context;
-            const source = await this.props.makeSource();
-            source.buffer = this.state.buffer;
-            source.connect(context.destination);
-            source.start(0);
-            console.log("Starting audio!");
-            return this.setState({...this.state, source, context})
+            zoomed: false
         }
     }
 
-    pauseAudio() {
-        this.state.source && this.props.context.suspend();
+    async play() {
+        const bufferSourceNode = this.props.context.createBufferSource();
+        bufferSourceNode.buffer = this.props.buffer;
+        bufferSourceNode.playbackRate.setValueAtTime(this.props.playbackRate, 0);
+        bufferSourceNode.loop = true;
+        bufferSourceNode.connect(this.props.getFirstDestination());
+        bufferSourceNode.start(0);
+        await this.props.storeBufferSourceNode(bufferSourceNode);
     }
 
-    async togglePlaying() {
-        if (this.state.playing || !this.state.hasTape) {
-            await this.setState({ playing: false });
-            await this.pauseAudio();
-        } else {
-            await this.setState({ playing: true });
-            await this.playAudio();
-        }
+    async stop() {
+        this.props.sourceNode.stop();
     }
 
     onDragOver(event) {
@@ -56,11 +38,10 @@ class TapeRecorder extends React.Component {
 
     async fileLoaded(arrayBuffer) {
         const prom = new Promise(resolve => {
-            this.props.context.decodeAudioData(arrayBuffer, buffer => {
-                resolve(buffer);
-            });
+            this.props.context.decodeAudioData(arrayBuffer, resolve);
         });
-        return prom.then(buffer => this.setState({...this.state, buffer}));
+        const buffer = await prom;
+        await this.props.storeBuffer(buffer);
     }
 
     newFile(file) {
@@ -71,28 +52,27 @@ class TapeRecorder extends React.Component {
 
     onDrop(event) {
         let file = event.dataTransfer.files[0];
-        // If dropped items aren't files, reject them
         this.newFile(file);
-        this.setState({ zoomed: false, hasTape: true });
         event.preventDefault();
     }
 
-    eject(event) {
-        this.setState({ hasTape: false, playing: false, source: null });
+    setPlaybackRate(event, rate) {
+        if (this.props.source) {
+            this.props.source.playbackRate.setValueAtTime(rate, this.props.context.currentTime);
+        }
         event.stopPropagation();
     }
 
     render() {
         const classNames = [
             "tape-player",
-            this.state.hasTape ? "has-tape" : ' ',
-            this.state.playing ? "playing" : ' ',
+            this.props.buffer ? "has-tape" : ' ',
+            this.props.playing ? "playing" : ' ',
             this.state.zoomed ? "zoomed" : ' '
         ].join(" ");
 
         return <div
             className={ classNames }
-            onClick={ event => this.togglePlaying(event) }
             onDragOver={ event => this.onDragOver(event) }
             onDragLeave={ event => this.onDragLeave(event) }
             onDrop={ event => this.onDrop(event) }
@@ -102,6 +82,8 @@ class TapeRecorder extends React.Component {
                 <div className="middle"></div>
                 <div className="right"></div>
             </div>
+
+            <div className="speed-up" onClick={() => this.props.setPlaybackRate(this.props.playbackRate*1.005)}>>></div>
 
             <div className="small-reel">
                 <div className="middle circle"></div>
@@ -125,7 +107,7 @@ class TapeRecorder extends React.Component {
             <div className="tape-top"></div>
             <div className="tape-bottom"></div>
 
-            <div className="eject" onClick={ event => this.eject(event) }>⏏</div>
+            {/*<div className="eject" onClick={ event => this.eject(event) }>⏏</div>*/}
         </div>
     }
 }

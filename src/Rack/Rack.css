@@ -1,0 +1,48 @@
+.components-wrapper {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.components {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.add-buttons {
+    position: absolute;
+    bottom: 3vh;
+    left: 3vh;
+    display: flex;
+    place-content: center;
+}
+
+.add-buttons button {
+    border: 1px solid white;
+    border-radius: 1vh;
+    outline: 0;
+    background: transparent;
+    color: whitesmoke;
+    margin-right: 3vh;
+}
+
+.add-buttons button:active {
+    border: 1px solid white;
+    border-radius: 1vh;
+    outline: 0;
+    color: #333;
+    background: whitesmoke;
+}
+
+.rack {
+    border: 2px dashed #eee;
+    margin: 3vh;
+    max-width: 400px;
+    min-width: 400px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 85vh;
+    padding: 20px;
+}

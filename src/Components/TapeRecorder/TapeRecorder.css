@@ -255,3 +255,26 @@
     background: white;
     transition: ease all 0.1s;
 }
+
+.speed-up {
+    font-size: 8pt;
+    background: #666;
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 16px;
+    line-height: 1;
+    text-align: center;
+    box-shadow: 0 0 5px #333;
+    font-family: monospace;
+    position: absolute;
+    color: whitesmoke;
+    top: 20px;
+    left: 20px;
+    border-radius: 2px;
+}
+
+.speed-up:active {
+    background: coral;
+    color: whitesmoke;
+}

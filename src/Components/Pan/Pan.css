@@ -1,0 +1,14 @@
+.pan {
+    width: 100px;
+    height: 100px;
+    background: transparent;
+    border: 2px solid whitesmoke;
+    border-radius: 5px;
+    display: grid;
+    place-items: center;
+}
+
+.pan input {
+    width: 80px;
+    outline: 0;
+}

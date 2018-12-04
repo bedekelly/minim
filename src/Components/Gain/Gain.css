@@ -1,0 +1,10 @@
+.gain {
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg,#F5CE62,#E43603,#E85A19);;
+    font-family: "Consolas", monospace;
+    font-size: 24pt;
+    color: white;
+    border-radius: 5px;
+    border: 2px solid whitesmoke;
+}
