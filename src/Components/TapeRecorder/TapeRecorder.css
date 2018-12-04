@@ -30,6 +30,7 @@
     animation: rotating 2s linear infinite;
     animation-play-state: paused;
     border: 2px solid transparent;
+    will-change: transform;
 }
 
 .tape-player .big-reel {
@@ -44,6 +45,7 @@
     animation: rotating 2s linear infinite;
     animation-play-state: paused;
     border: 2px solid transparent;
+    will-change: transform;
 }
 
 .tape-player .buttons {
