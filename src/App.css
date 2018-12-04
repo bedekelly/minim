@@ -2,10 +2,18 @@
   box-sizing: border-box;
 }
 
+html,
+body {
+  position: fixed;
+  overflow: hidden;
+}
+
 body {
   background: #333;
   border: 5px solid;
   height: 100vh;
+  overflow-x: scroll;
+  width: 100vw;
   border-image:
           linear-gradient(
                   45deg,

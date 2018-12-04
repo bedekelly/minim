@@ -2,7 +2,11 @@ import React, {Component} from 'react';
 import uuid from "uuid4";
 import './App.css';
 import "stereo-panner-shim";
+import viewportFix from "viewport-units-buggyfill";
 import Rack from "./Rack/Rack";
+
+
+viewportFix.init();
 
 
 class App extends Component {
