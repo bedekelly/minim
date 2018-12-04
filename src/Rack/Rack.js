@@ -1,7 +1,7 @@
 import React from "react";
 import uuid from "uuid4";
 
-import { Gain, Filter, Pan, TapeRecorder, Batcave } from "../Components";
+import {Batcave, Filter, Gain, Pan, TapeRecorder} from "../Components";
 import batcaveWav from '../Components/Batcave/Batcave.wav';
 
 import './Rack.css';
@@ -44,8 +44,8 @@ class Rack extends React.Component {
         const node = context.createConvolver();
         const response = await fetch(batcaveWav);
         const arrayBuffer = await response.arrayBuffer();
-        const audioBuffer = await context.decodeAudioData(arrayBuffer);
-        node.buffer = audioBuffer;
+        const prom = new Promise(resolve => context.decodeAudioData(arrayBuffer, resolve));
+        node.buffer = await prom;
         const batcave = <Batcave context={ context } key={ uuid() } node={ node } />;
         await this.addEffectBefore(batcave,node, context.destination);
     }

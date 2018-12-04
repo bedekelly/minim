@@ -7552,6 +7552,16 @@ stealthy-require@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/stealthy-require/-/stealthy-require-1.1.1.tgz#35b09875b4ff49f26a777e509b3090a3226bf24b"
 
+stereo-panner-node@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/stereo-panner-node/-/stereo-panner-node-0.1.4.tgz#bc682cf5834179d45da535f9d211ed5cec023d2a"
+
+stereo-panner-shim@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/stereo-panner-shim/-/stereo-panner-shim-0.1.4.tgz#a2e04fe6d5147fa9afb2f1faad6a0f2fa8538e1f"
+  dependencies:
+    stereo-panner-node "^0.1.4"
+
 stream-browserify@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/stream-browserify/-/stream-browserify-2.0.1.tgz#66266ee5f9bdb9940a4e4514cafb43bb71e5c9db"
