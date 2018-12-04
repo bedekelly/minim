@@ -4,12 +4,8 @@
     border-radius: 5px;
     border: 2px solid whitesmoke;
     overflow: hidden;
-    margin: 3vh;
     transition: ease all 0.1s;
-}
-
-.filter:hover {
-    scale: 1.1;
+    margin-bottom: 3vh;
 }
 
 .filter input[type=range] {
@@ -31,7 +27,7 @@
     height: 100px;
     font-size: 96pt;
     width: 170px;
-    background: linear-gradient(to bottom right, red, blue);
+    background: linear-gradient(to top right, red, blue);
     border-radius: 0 75px 0 0;
     transform: translateX(-60px);
     z-index: -1;

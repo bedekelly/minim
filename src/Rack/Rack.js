@@ -1,7 +1,8 @@
 import React from "react";
 import uuid from "uuid4";
 
-import { Gain, Filter, Pan, TapeRecorder } from "../Components";
+import { Gain, Filter, Pan, TapeRecorder, Batcave } from "../Components";
+import batcaveWav from '../Components/Batcave/Batcave.wav';
 
 import './Rack.css';
 
@@ -36,6 +37,17 @@ class Rack extends React.Component {
         const node = context.createStereoPanner();
         const pan = <Pan context={ context } key={ uuid() } node={ node } />;
         await this.addEffectBefore(pan, node, context.destination);
+    }
+
+    async addBatcave() {
+        const { context } = this.props;
+        const node = context.createConvolver();
+        const response = await fetch(batcaveWav);
+        const arrayBuffer = await response.arrayBuffer();
+        const audioBuffer = await context.decodeAudioData(arrayBuffer);
+        node.buffer = audioBuffer;
+        const batcave = <Batcave context={ context } key={ uuid() } node={ node } />;
+        await this.addEffectBefore(batcave,node, context.destination);
     }
 
     addTapeRecorder() {
@@ -124,6 +136,14 @@ class Rack extends React.Component {
         );
     }
 
+    addBatcaveButton() {
+        return (
+            this.state.player
+                ? <button onClick={() => this.addBatcave()}>Batcave</button>
+                : null
+        );
+    }
+
     renderTapeRecorder() {
         if (this.state.player) return <TapeRecorder
             context={ this.props.context }
@@ -155,6 +175,7 @@ class Rack extends React.Component {
                 { this.addFilterButton() }
                 { this.addGainButton() }
                 { this.addPanButton() }
+                { this.addBatcaveButton() }
             </section>
         </section>
     }

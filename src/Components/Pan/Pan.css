@@ -6,6 +6,7 @@
     border-radius: 5px;
     display: grid;
     place-items: center;
+    margin-bottom: 3vh;
 }
 
 .pan input {
