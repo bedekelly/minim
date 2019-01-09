@@ -49,7 +49,7 @@ class TapeLooperAudio {
         this.bufferSourceNode.connect(this.parentRack.startOfFxChain);
     }
 
-    async stop() {
+    stop() {
         if (this.bufferSourceNode) {
             this.bufferSourceNode.disconnect();
             this.bufferSourceNode = null;
@@ -77,22 +77,22 @@ class TapeLooperAudio {
         this.bufferSourceNode = null;
     }
     
-    async speedBufferUpToPlaying() {
-        return await this._setPlaybackRate(this.playbackRate);
+    speedBufferUpToPlaying() {
+        return this._setPlaybackRate(this.playbackRate);
     }
     
-    async slowBufferToStop() {
-        return await this._setPlaybackRate(0);
+    slowBufferToStop() {
+        return this._setPlaybackRate(0);
     }
     
-    async _setPlaybackRate(newRate) {
+    _setPlaybackRate(newRate) {
         if (!this.bufferSourceNode) return;
         this.bufferSourceNode.playbackRate.linearRampToValueAtTime(
             newRate, this.context.currentTime+MS_SPEED_UP/1000);
         return new Promise((resolve, reject) => setTimeout(resolve, MS_SPEED_UP));
     }
     
-    async setPlaybackRate(newRate) {
+    setPlaybackRate(newRate) {
         this.playbackRate = newRate;
         return this._setPlaybackRate(newRate);
     }
