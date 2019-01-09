@@ -57,7 +57,7 @@ class App extends Component {
                 </Rack>
             ) }
             
-            <button className="play-all" onClick={() => this.playAll()}>Play All</button>
+            <button className="play-all" onMouseDown={() => this.playAll()}>Play All</button>
             <button className="pause-all" onClick={() => this.pauseAll()}>Pause All</button>
         </section>;
     }

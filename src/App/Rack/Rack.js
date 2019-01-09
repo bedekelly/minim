@@ -4,13 +4,9 @@ import { SourceTypes } from '../utils/SourceTypes';
 import { EffectTypes } from '../utils/EffectTypes'
 
 import { Source } from '../Components/Sources';
-import { Effect } from '../Components/Effects'
+import SortableEffectsList from './SortableEffectsList';
 
-import {
-  SortableContainer,
-  SortableElement,
-  arrayMove
-} from 'react-sortable-hoc';
+import { arrayMove } from 'react-sortable-hoc';
 
 import './Rack.css';
 
@@ -26,7 +22,7 @@ class Rack extends React.Component {
 
     addSource(sourceType) {
         const source = this.audioRack.addSource(sourceType);
-        this.setState({...this.state, source: { id: source, type: sourceType}});
+        this.setState({...this.state, source: { id: source, type: sourceType }});
     }
     
     addEffect(effectType) {
@@ -42,15 +38,6 @@ class Rack extends React.Component {
             audioGraph={this.graph}>
         </Source>
     }
-    
-    effectComponent({effectType, id}) {
-        return <Effect
-            effectType={effectType}
-            id={id}
-            key={id}
-            graph={this.graph}>
-        </Effect>
-    }
 
     onSortEnd({oldIndex, newIndex}) {
         this.audioRack.moveEffect({oldIndex, newIndex});
@@ -60,27 +47,13 @@ class Rack extends React.Component {
 
     render() {
         
-        const SortableEffect = SortableElement(Effect);
-        const SortableEffectsList = SortableContainer(({effects}) => 
-            <div className="sortable-container"> {
-                effects.map(({effectType, id}, index) => 
-                    <SortableEffect
-                        effectType={effectType}
-                        id={id}
-                        key={id}
-                        graph={this.graph}
-                        index={index}>
-                    </SortableEffect>
-                )
-            }
-            </div>
-        );
+        const EffectsList = SortableEffectsList(this.graph);
         
         return <section className={"rack"}>
             <div className="components-wrapper">
                 <section className={"components"}>
                     { this.sourceComponent() }
-                    { <SortableEffectsList 
+                    { <EffectsList 
                         effects={this.state.effects} 
                         onSortEnd={result => this.onSortEnd(result)}
                         axis="xy"
