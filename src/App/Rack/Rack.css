@@ -3,6 +3,14 @@
     overflow-y: auto;
 }
 
+.sortable-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
 .components {
     margin: 0 auto;
     display: flex;

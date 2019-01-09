@@ -6,6 +6,12 @@ import { EffectTypes } from '../utils/EffectTypes'
 import { Source } from '../Components/Sources';
 import { Effect } from '../Components/Effects'
 
+import {
+  SortableContainer,
+  SortableElement,
+  arrayMove
+} from 'react-sortable-hoc';
+
 import './Rack.css';
 
 
@@ -47,11 +53,35 @@ class Rack extends React.Component {
     }
 
     render() {
+        
+        const SortableEffect = SortableElement(Effect);
+        const SortableEffectsList = SortableContainer(({effects}) => 
+            <div className="sortable-container"> {
+                effects.map(({effectType, id}, index) => 
+                    <SortableEffect
+                        effectType={effectType}
+                        id={id}
+                        key={id}
+                        graph={this.graph}
+                        index={index}>
+                    </SortableEffect>
+                )
+            }
+            </div>
+        );
+        
         return <section className={"rack"}>
             <div className="components-wrapper">
                 <section className={"components"}>
                     { this.sourceComponent() }
-                    { this.state.effects.map(effect => this.effectComponent(effect)) }
+                    { <SortableEffectsList 
+                        effects={this.state.effects} 
+                        onSortEnd={({oldIndex, newIndex}) => {
+                            this.setState({
+                              effects: arrayMove(this.state.effects, oldIndex, newIndex),
+                          })}}
+                        axis="xy"
+                        /> }
                 </section>
             </div>
 
