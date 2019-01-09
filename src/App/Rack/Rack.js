@@ -52,6 +52,12 @@ class Rack extends React.Component {
         </Effect>
     }
 
+    onSortEnd({oldIndex, newIndex}) {
+        this.audioRack.moveEffect({oldIndex, newIndex});
+        this.setState({
+          effects: arrayMove(this.state.effects, oldIndex, newIndex),
+      })}
+
     render() {
         
         const SortableEffect = SortableElement(Effect);
@@ -76,10 +82,7 @@ class Rack extends React.Component {
                     { this.sourceComponent() }
                     { <SortableEffectsList 
                         effects={this.state.effects} 
-                        onSortEnd={({oldIndex, newIndex}) => {
-                            this.setState({
-                              effects: arrayMove(this.state.effects, oldIndex, newIndex),
-                          })}}
+                        onSortEnd={result => this.onSortEnd(result)}
                         axis="xy"
                         /> }
                 </section>

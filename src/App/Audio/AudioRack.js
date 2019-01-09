@@ -4,7 +4,7 @@ import TapeLooperAudio from './TapeLooperAudio';
 import { PanAudio, FilterAudio } from './Effects';
 import { EffectType } from '../utils/EffectTypes'
 import { SourceType } from '../utils/SourceTypes';
-
+import { arrayMove } from 'react-sortable-hoc';
 
 class AudioRack {
     constructor(audioGraph) {
@@ -22,6 +22,33 @@ class AudioRack {
     
     play() {
         this.source.play();
+    }
+    
+    outputOf(index) {
+        return (index >= this.effects.length-1) ? 
+            this.destination : this.effects[index+1];
+    }
+    
+    inputOf(index) {
+        return (index > 0) ? 
+            this.effects[index-1] : this.source;
+    }
+    
+    moveEffect({oldIndex, newIndex}) {
+        // A -> E -> B becomes A -> B.
+        const oldOutput = this.outputOf(oldIndex);
+        const oldInput = this.inputOf(oldIndex);
+        const effect = this.effects[oldIndex];
+        oldInput.routeTo(oldOutput);
+        
+        // Transform our effects array to match the components.
+        this.effects = arrayMove(this.effects, oldIndex, newIndex)
+
+        // C -> D becomes C -> E -> D.
+        const newInput = this.inputOf(newIndex);
+        const newOutput = this.outputOf(newIndex);
+        newInput.routeTo(effect);
+        effect.routeTo(newOutput);
     }
     
     addSource(sourceType) {
