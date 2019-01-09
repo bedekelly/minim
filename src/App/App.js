@@ -1,73 +1,65 @@
 import React, {Component} from 'react';
-import uuid from "uuid4";
-import './App.css';
 import "stereo-panner-shim";
 import viewportFix from "viewport-units-buggyfill";
+
 import Rack from "./Rack/Rack";
+import AudioGraph from './Audio/AudioGraph';
+
+import './App.css';
 
 
 viewportFix.init();
 
 
+/**
+ * Main "App" component responsible for rendering and controlling the whole webapp.
+ */
 class App extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { racks: [], context: null, playing: false }
-    }
-
-    async makeContext() {
-        if (this.state.context) return this.state.context;
-        const context = new (window.AudioContext || window.webkitAudioContext)();
-
-        // Unlock audio context for iOS devices.
-        if (context.state === 'suspended' && 'ontouchstart' in window) {
-            await context.resume();
-        }
-
-        await this.setState({...this.state, context});
-        window.globalContext = context;
-        return context;
-    }
-
-    async makeRack() {
-        const context = await this.makeContext();
-        return { context, key: uuid(), ref: React.createRef() };
+        this.state = { racks: [], playing: false }
+        this.audioGraph = new AudioGraph();
+        this.state = { loaded: false, racks: [] }
+        
+        // Only load this component after the audio graph has initialised.
+        this.audioGraph.initialise().then(() => this.setState({...this.state, loaded: true}));
     }
 
     async addRack() {
-        const rack = await this.makeRack();
+        const rack = await this.audioGraph.makeRack();
         return this.setState({ ...this.state, racks: [ ...this.state.racks, rack ] })
     }
 
-    async playAll() {
-        for (let { ref: { current: rack } } of this.state.racks) {
-            rack.play();
-        }
-        return this.setState({ ...this.state, playing: true });
+    playAll() {
+        if (this.state.playing) return;
+        this.audioGraph.play();
+        this.setState({playing: true})
     }
-
-    async stopAll() {
-        for (let { ref: { current: rack } } of this.state.racks) {
-            rack.stop();
-        }
-        return this.setState({ ...this.state, playing: false });
+    
+    pauseAll() {
+        if (!this.state.playing) return;
+        this.audioGraph.pause();
+        this.setState({playing: false});
     }
 
     render() {
-        return <section className="app">
-            <button className="add-rack" onClick={() => this.addRack()}>Add Rack</button>
-
-            { this.state.racks.map(
-                ({ key, context, ref }) =>
-                    <Rack key={ key } context={ context }
-                          playing={ this.state.playing } ref={ ref }/>
-            ) }
-
-            { this.state.playing
-                ? <button className="stop-all" onClick={() => this.stopAll()}>Stop All</button>
-                : <button className="play-all" onClick={() => this.playAll()}>Play All</button> }
-        </section>;
+        if (this.state.loaded) {
+            return <section className="app">
+                <button className="add-rack" onClick={() => this.addRack()}>Add Rack</button>
+                { this.state.racks.map(rack => 
+                    <Rack 
+                        key={rack.id} id={rack.id} audioGraph={this.audioGraph} 
+                        playing={this.state.playing}>
+                    </Rack>
+                ) }
+                
+                <button className="play-all" onClick={() => this.playAll()}>Play All</button>
+                <button className="pause-all" onClick={() => this.pauseAll()}>Pause All</button>
+            </section>;
+        } else {
+            return "Loading audio context";
+        }
     }
 }
 

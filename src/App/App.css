@@ -74,7 +74,7 @@ button {
   color: #333;
 }
 
-.stop-all {
+.pause-all {
   position: absolute;
   right: 21vh;
   bottom: 3vh;
@@ -90,7 +90,7 @@ button {
   padding: 1.5vh;
 }
 
-.stop-all:active {
+.pause-all:active {
   background: whitesmoke;
   color: #333;
 }

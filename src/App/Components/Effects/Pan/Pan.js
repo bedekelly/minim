@@ -3,11 +3,15 @@ import './Pan.css';
 
 
 class Pan extends React.Component {
-
+    
+    constructor(props) {
+        super(props);
+        this.panAudio = this.props.graph.effects[this.props.id];
+    }
+    
     onChange(event) {
         const newPan = (event.target.valueAsNumber / 50) - 1;
-        const context = this.props.context;
-        this.props.node.pan.setValueAtTime(newPan, context.currentTime);
+        this.panAudio.setValue(newPan);
     }
 
     render() {

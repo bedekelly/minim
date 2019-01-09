@@ -1,25 +1,17 @@
 import React from "react";
 
-import './TapeRecorder.css';
+import './TapeLooper.css';
 
 
-class TapeRecorder extends React.Component {
+class TapeLooper extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            zoomed: false
+            zoomed: false,
+            hasTape: false
         }
-    }
-
-    async play() {
-        const bufferSourceNode = this.props.context.createBufferSource();
-        bufferSourceNode.buffer = this.props.buffer;
-        bufferSourceNode.playbackRate.setValueAtTime(this.props.playbackRate, 0);
-        bufferSourceNode.loop = true;
-        bufferSourceNode.connect(this.props.getFirstDestination());
-        bufferSourceNode.start(0);
-        await this.props.storeBufferSourceNode(bufferSourceNode);
+        this.audio = this.props.audioGraph.sources[this.props.id];
     }
 
     async stop() {
@@ -36,12 +28,9 @@ class TapeRecorder extends React.Component {
         event.preventDefault();
     }
 
-    async fileLoaded(arrayBuffer) {
-        const prom = new Promise(resolve => {
-            this.props.context.decodeAudioData(arrayBuffer, resolve);
-        });
-        const buffer = await prom;
-        await this.props.storeBuffer(buffer);
+    fileLoaded(encodedBuffer) {
+        this.setState({ hasTape: true });
+        return this.audio.gotEncodedBuffer(encodedBuffer);
     }
 
     newFile(file) {
@@ -57,16 +46,14 @@ class TapeRecorder extends React.Component {
     }
 
     setPlaybackRate(event, rate) {
-        if (this.props.source) {
-            this.props.source.playbackRate.setValueAtTime(rate, this.props.context.currentTime);
-        }
+        this.audio.setPlaybackRate(rate);
         event.stopPropagation();
     }
 
     render() {
         const classNames = [
-            "tape-player",
-            this.props.buffer ? "has-tape" : ' ',
+            "tape-looper",
+            this.state.hasTape ? "has-tape" : ' ',
             this.props.playing ? "playing" : ' ',
             this.state.zoomed ? "zoomed" : ' '
         ].join(" ");
@@ -82,8 +69,9 @@ class TapeRecorder extends React.Component {
                 <div className="middle"></div>
                 <div className="right"></div>
             </div>
-
-            <div className="speed-up" onClick={() => this.props.setPlaybackRate(this.props.playbackRate*1.005)}>>></div>
+{
+            // <div className="speed-up" onClick={() => this.props.setPlaybackRate(this.props.playbackRate*1.005)}>>></div>
+}
 
             <div className="small-reel">
                 <div className="middle circle"></div>
@@ -112,4 +100,4 @@ class TapeRecorder extends React.Component {
     }
 }
 
-export default TapeRecorder;
+export default TapeLooper;

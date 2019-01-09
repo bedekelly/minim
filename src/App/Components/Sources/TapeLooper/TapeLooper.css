@@ -1,13 +1,13 @@
 @import url('https://fonts.googleapis.com/css?family=Parisienne');
 
 
-.tape-player * {
+.tape-looper * {
     transition: ease all 0.3s;
     user-select: none;
     -webkit-transform-style: preserve-3d;
 }
 
-.tape-player {
+.tape-looper {
     background: #ABD1B5;
     width: 300px;
     height: calc(62px * 3);
@@ -18,7 +18,7 @@
     margin: 3vh;
 }
 
-.tape-player .small-reel {
+.tape-looper .small-reel {
     width: 70px;
     height: 70px;
     background: white;
@@ -33,7 +33,7 @@
     will-change: transform;
 }
 
-.tape-player .big-reel {
+.tape-looper .big-reel {
     border-radius: 50%;
     height: 140px;
     width: 140px;
@@ -48,7 +48,7 @@
     will-change: transform;
 }
 
-.tape-player .buttons {
+.tape-looper .buttons {
     position: absolute;
     top: -15px;
     left: 10px;
@@ -56,7 +56,7 @@
     z-index: -1;
 }
 
-.tape-player .buttons > * {
+.tape-looper .buttons > * {
     display: inline-block;
     width: 20px;
     height: 5px;
@@ -67,12 +67,12 @@
     bottom: 0;
 }
 
-.tape-player .buttons > .left {
+.tape-looper .buttons > .left {
     background: #DE6449;
     height: 10px;
 }
 
-.tape-player .hole {
+.tape-looper .hole {
     position: absolute;
     top: calc(50% - 14px);
     left: calc(50% - 14px);
@@ -83,15 +83,15 @@
     transform: translateY(-37px);
 }
 
-.tape-player .hole.two {
+.tape-looper .hole.two {
     transform: rotateZ(120deg) translateY(-37px);
 }
 
-.tape-player .hole.three {
+.tape-looper .hole.three {
     transform: rotateZ(240deg) translateY(-37px);
 }
 
-.tape-player .middle-hole {
+.tape-looper .middle-hole {
     width: 30px;
     height: 30px;
     background: #333;
@@ -112,11 +112,11 @@
     }
 }
 
-.tape-player:hover {
+.tape-looper:hover {
     /*scale: 1.1;*/
 }
 
-.tape-player .circle {
+.tape-looper .circle {
     position: absolute;
     width: 10px;
     height: 10px;
@@ -129,47 +129,47 @@
     transform: translateY(25px);
 }
 
-.tape-player .middle.circle {
+.tape-looper .middle.circle {
     transform: translateY(0);
 }
 
-.tape-player .circle.one {
+.tape-looper .circle.one {
     transform: rotateZ(0deg) translateY(-25px);
 }
 
-.tape-player .circle.two {
+.tape-looper .circle.two {
     transform: rotateZ(40deg) translateY(-25px);
 }
 
-.tape-player .circle.three {
+.tape-looper .circle.three {
     transform: rotateZ(80deg) translateY(-25px);
 }
 
-.tape-player .circle.four {
+.tape-looper .circle.four {
     transform: rotateZ(120deg) translateY(-25px);
 }
 
-.tape-player .circle.five {
+.tape-looper .circle.five {
     transform: rotateZ(160deg) translateY(-25px);
 }
 
-.tape-player .circle.six {
+.tape-looper .circle.six {
     transform: rotateZ(200deg) translateY(-25px);
 }
 
-.tape-player .circle.seven {
+.tape-looper .circle.seven {
     transform: rotateZ(240deg) translateY(-25px);
 }
 
-.tape-player .circle.eight {
+.tape-looper .circle.eight {
     transform: rotateZ(280deg) translateY(-25px);
 }
 
-.tape-player .circle.nine {
+.tape-looper .circle.nine {
     transform: rotateZ(320deg) translateY(-25px);
 }
 
-.tape-player .signature {
+.tape-looper .signature {
     top: 20px;
     left: 25px;
     position: absolute;
@@ -180,15 +180,15 @@
     color: black;
 }
 
-.tape-player.playing > .small-reel, .tape-player.playing > .big-reel {
+.tape-looper.playing > .small-reel, .tape-looper.playing > .big-reel {
     animation-play-state: running;
 }
 
-.tape-player.playing > .buttons > .left {
+.tape-looper.playing > .buttons > .left {
     height: 5px;
 }
 
-.tape-player .vu-meter {
+.tape-looper .vu-meter {
     background: white;
     width: 60px;
     height: 38px;
@@ -199,7 +199,7 @@
     box-shadow: 0 0 4px inset;
 }
 
-.tape-player .tape-top {
+.tape-looper .tape-top {
     position: absolute;
     top: 62.7px;
     left: 34px;
@@ -211,12 +211,12 @@
     display: none;
 }
 
-.tape-player.has-tape > .small-reel, .tape-player.has-tape > .big-reel {
+.tape-looper.has-tape > .small-reel, .tape-looper.has-tape > .big-reel {
     border: 2px solid #333;
     z-index: 2;
 }
 
-.tape-player .tape-bottom {
+.tape-looper .tape-bottom {
     position: absolute;
     bottom: 25.5px;
     left: 60px;
@@ -229,15 +229,15 @@
 }
 
 
-.tape-player.has-tape > .tape-top, .tape-player.has-tape > .tape-bottom {
+.tape-looper.has-tape > .tape-top, .tape-looper.has-tape > .tape-bottom {
     display: inherit;
 }
 
-.tape-player .zoomed {
+.tape-looper .zoomed {
     /*transform: scale(1.3);*/
 }
 
-.tape-player .eject {
+.tape-looper .eject {
     background: #eee;
     border-radius: 2px;
     width: 20px;
@@ -253,7 +253,7 @@
     color: #333;
 }
 
-.tape-player .eject:hover {
+.tape-looper .eject:hover {
     background: white;
     transition: ease all 0.1s;
 }
