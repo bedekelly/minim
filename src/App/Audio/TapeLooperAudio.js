@@ -1,6 +1,6 @@
 import { SourceType } from '../utils/SourceTypes';
 
-const MS_SPEED_UP = 80;
+const MS_SPEED_UP = 100;
 
 class TapeLooperAudio {
 
@@ -86,6 +86,7 @@ class TapeLooperAudio {
     }
     
     async _setPlaybackRate(newRate) {
+        if (!this.bufferSourceNode) return;
         this.bufferSourceNode.playbackRate.linearRampToValueAtTime(
             newRate, this.context.currentTime+MS_SPEED_UP/1000);
         return new Promise((resolve, reject) => setTimeout(resolve, MS_SPEED_UP));
@@ -97,6 +98,9 @@ class TapeLooperAudio {
     }
     
     routeTo(destination) {
+        if (destination.node) {
+            destination = destination.node;
+        }
         this.destination = destination;
         if (this.bufferSourceNode) {
             this.bufferSourceNode.disconnect();

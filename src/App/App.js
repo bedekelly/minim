@@ -21,12 +21,16 @@ class App extends Component {
         this.state = { racks: [], playing: false }
         this.audioGraph = new AudioGraph();
         this.state = { loaded: false, racks: [] }
-        
-        // Only load this component after the audio graph has initialised.
-        this.audioGraph.initialise().then(() => this.setState({...this.state, loaded: true}));
+    }
+
+    async initialise() {
+        if (this.state.loaded) return;
+        await this.audioGraph.initialise();
+        await this.setState({...this.state, loaded: true});
     }
 
     async addRack() {
+        await this.initialise();
         const rack = await this.audioGraph.makeRack();
         return this.setState({ ...this.state, racks: [ ...this.state.racks, rack ] })
     }
@@ -44,22 +48,18 @@ class App extends Component {
     }
 
     render() {
-        if (this.state.loaded) {
-            return <section className="app">
-                <button className="add-rack" onClick={() => this.addRack()}>Add Rack</button>
-                { this.state.racks.map(rack => 
-                    <Rack 
-                        key={rack.id} id={rack.id} audioGraph={this.audioGraph} 
-                        playing={this.state.playing}>
-                    </Rack>
-                ) }
-                
-                <button className="play-all" onClick={() => this.playAll()}>Play All</button>
-                <button className="pause-all" onClick={() => this.pauseAll()}>Pause All</button>
-            </section>;
-        } else {
-            return "Loading audio context";
-        }
+        return <section className="app">
+            <button className="add-rack" onClick={() => this.addRack()}>Add Rack</button>
+            { this.state.racks.map(rack => 
+                <Rack 
+                    key={rack.id} id={rack.id} audioGraph={this.audioGraph} 
+                    playing={this.state.playing}>
+                </Rack>
+            ) }
+            
+            <button className="play-all" onClick={() => this.playAll()}>Play All</button>
+            <button className="pause-all" onClick={() => this.pauseAll()}>Pause All</button>
+        </section>;
     }
 }
 

@@ -1,7 +1,7 @@
 import uuid from "uuid4";
 
 import TapeLooperAudio from './TapeLooperAudio';
-import PanAudio from './Effects/Pan';
+import { PanAudio, FilterAudio } from './Effects';
 import { EffectType } from '../utils/EffectTypes'
 import { SourceType } from '../utils/SourceTypes';
 
@@ -49,9 +49,14 @@ class AudioRack {
         let effect;
         const lastOutput = this.currentOutput;
         switch(effectType) {
-            case EffectType.Pan:
-            default: {
+            case EffectType.Pan: {
                 effect = new PanAudio(this);
+                this.effects.push(effect);
+                break;
+            }
+            case EffectType.Filter:
+            default: {
+                effect = new FilterAudio(this);
                 this.effects.push(effect);
             }
         }

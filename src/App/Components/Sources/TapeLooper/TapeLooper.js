@@ -19,7 +19,7 @@ class TapeLooper extends React.Component {
     }
 
     onDragOver(event) {
-        this.setState({ zoomed: true });
+        // this.setState({ zoomed: true });
         event.preventDefault();
     }
 
@@ -44,10 +44,13 @@ class TapeLooper extends React.Component {
         this.newFile(file);
         event.preventDefault();
     }
-
-    setPlaybackRate(event, rate) {
+    
+    get playbackRate() {
+        return this.audio.playbackRate;
+    }
+    
+    setPlaybackRate(rate) {
         this.audio.setPlaybackRate(rate);
-        event.stopPropagation();
     }
 
     render() {
@@ -69,9 +72,8 @@ class TapeLooper extends React.Component {
                 <div className="middle"></div>
                 <div className="right"></div>
             </div>
-{
-            // <div className="speed-up" onClick={() => this.props.setPlaybackRate(this.props.playbackRate*1.005)}>>></div>
-}
+
+            <div className="speed-up" onClick={() => this.setPlaybackRate(this.playbackRate*1.005)}>>></div>
 
             <div className="small-reel">
                 <div className="middle circle"></div>
@@ -94,8 +96,6 @@ class TapeLooper extends React.Component {
 
             <div className="tape-top"></div>
             <div className="tape-bottom"></div>
-
-            {/*<div className="eject" onClick={ event => this.eject(event) }>⏏</div>*/}
         </div>
     }
 }

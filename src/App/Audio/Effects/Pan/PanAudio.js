@@ -1,17 +1,14 @@
-class PanAudio {
+import Effect from '../Effect';
+
+
+class PanAudio extends Effect {
     constructor(parentRack) {
-        this.parentRack = parentRack;
-        this.context = parentRack.graph.context;
+        super(parentRack);
         this.node = this.context.createStereoPanner();
     }
     
     setValue(value) {
         this.node.pan.setValueAtTime(value, 0);
-    }
-    
-    routeTo(destination) {
-        this.node.disconnect();
-        this.node.connect(destination);
     }
 }
 

@@ -56,9 +56,9 @@ class Rack extends React.Component {
             </div>
 
             <section className="add-buttons">
-                { SourceTypes.map(({type, text}) =>
+                { this.state.source ? null : SourceTypes.map(({type, text}) =>
                     <button key={text} onClick={() => this.addSource(type)}>{text}</button>
-                )}
+                ) }
                 { EffectTypes.map(({type, text}) => 
                     <button key={text} onClick={() => this.addEffect(type)}>{text}</button>
                 )}
