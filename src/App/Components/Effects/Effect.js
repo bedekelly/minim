@@ -5,16 +5,22 @@ import Filter from './Filter';
 import { EffectType } from '../../utils/EffectTypes';
 
 
+// Map effect types onto the component that should be rendered.
+const effectComponents = {
+    [EffectType.Pan]: Pan,
+    [EffectType.Filter]: Filter
+}
+
+
+/**
+ * Display an effect component for a given effect type.
+ */
 function Effect(props) {
-    switch (props.effectType) {
-        case EffectType.Pan: {
-            return <Pan key={props.id} {...props}></Pan>
-        }
-        case EffectType.Filter: {
-            return <Filter key={props.id} {...props}></Filter>
-        }
-        default: return null;
-    }
+    let defaultComponent = props => "no component found";
+    const Component = effectComponents[props.effectType] || defaultComponent;
+    return <div className="effect">
+        <Component key={props.id} {...props}></Component>
+    </div>
 }
 
 
