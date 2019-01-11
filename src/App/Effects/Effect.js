@@ -2,13 +2,15 @@ import React from 'react';
 
 import Pan from './Pan';
 import Filter from './Filter';
+import Gain from './Gain';
 import { EffectType } from './EffectTypes';
 
 
 // Map effect types onto the component that should be rendered.
 const effectComponents = {
     [EffectType.Pan]: Pan,
-    [EffectType.Filter]: Filter
+    [EffectType.Filter]: Filter,
+    [EffectType.Gain]: Gain
 }
 
 

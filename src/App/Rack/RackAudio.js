@@ -3,6 +3,7 @@ import uuid from "uuid4";
 import TapeLooperAudio from '../Sources/TapeLooper/TapeLooperAudio';
 import PanAudio from '../Effects/Pan/PanAudio';
 import FilterAudio from '../Effects/Filter/FilterAudio';
+import GainAudio from '../Effects/Gain/GainAudio';
 import { EffectType } from '../Effects/EffectTypes'
 import { SourceType } from '../Sources/SourceTypes';
 import { arrayMove } from 'react-sortable-hoc';
@@ -56,7 +57,7 @@ class RackAudio {
         const oldOutput = this.outputOf(oldIndex);
         const oldInput = this.inputOf(oldIndex);
         const effect = this.effects[oldIndex];
-        oldInput.routeTo(oldOutput);
+        if (oldInput) oldInput.routeTo(oldOutput);
 
         // Transform our effects array to match the components.
         this.effects = arrayMove(this.effects, oldIndex, newIndex);
@@ -64,7 +65,8 @@ class RackAudio {
         // C -> D becomes C -> E -> D.
         const newInput = this.inputOf(newIndex);
         const newOutput = this.outputOf(newIndex);
-        newInput.routeTo(effect);
+
+        if (newInput) newInput.routeTo(effect);
         effect.routeTo(newOutput);
     }
 
@@ -90,7 +92,8 @@ class RackAudio {
         // Make an EffectAudio and add it to this rack's effect.
         const effectAudios = {
             [EffectType.Pan]: PanAudio,
-            [EffectType.Filter]: FilterAudio
+            [EffectType.Filter]: FilterAudio,
+            [EffectType.Gain]: GainAudio
         };
         const defaultEffectAudio = FilterAudio;
         const EffectAudio = effectAudios[effectType] || defaultEffectAudio

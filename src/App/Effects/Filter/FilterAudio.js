@@ -1,5 +1,6 @@
 import EffectAudio from '../EffectAudio';
 
+
 class FilterAudio extends EffectAudio {
     constructor(parentRack) {
         super(parentRack);
@@ -8,14 +9,18 @@ class FilterAudio extends EffectAudio {
         filter.frequency.setValueAtTime(1000, this.context.currentTime);
         filter.Q.setValueAtTime(1.5, this.context.currentTime);
         filter.gain.setValueAtTime(3, this.context.currentTime);
-        this.sliderValue = 2500;
+        this._value = 2500;
     }
     
-    setValue(sliderValue) {
-        this.sliderValue = sliderValue;
-        const scaledValue = sliderValue;
-        this.node.frequency.setValueAtTime(scaledValue, this.context.currentTime);
+    set value(value) {
+        this.node.frequency.setValueAtTime(value, this.context.currentTime);
+        this._value = value;
+    }
+    
+    get value() {
+        return this._value;
     }
 }
+
 
 export default FilterAudio;

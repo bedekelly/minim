@@ -10,12 +10,12 @@ class Filter extends React.Component {
         super(props);
         this.filterAudio = this.props.graph.effects[this.props.id];
         this.state = {
-            value: this.filterAudio.sliderValue
+            value: this.filterAudio.value
         }
     }
-    
+
     frequencyChange(event) {
-        this.filterAudio.setValue(event.target.value);
+        this.filterAudio.value = event.target.value;
         this.setState({value: event.target.value})
     }
 
