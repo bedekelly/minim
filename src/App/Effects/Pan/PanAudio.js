@@ -1,7 +1,7 @@
-import Effect from '../Effect';
+import EffectAudio from '../EffectAudio';
 
 
-class PanAudio extends Effect {
+class PanAudio extends EffectAudio {
     constructor(parentRack) {
         super(parentRack);
         this.node = this.context.createStereoPanner();

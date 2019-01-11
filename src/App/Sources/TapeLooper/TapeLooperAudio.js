@@ -1,4 +1,4 @@
-import { SourceType } from '../utils/SourceTypes';
+import { SourceType } from '../SourceTypes';
 
 const MS_SPEED_UP = 100;
 
@@ -104,7 +104,7 @@ class TapeLooperAudio {
         this.destination = destination;
         if (this.bufferSourceNode) {
             this.bufferSourceNode.disconnect();
-            this.bufferSourceNode.connect(this.destination);
+            this.bufferSourceNode.connect(destination);
         }
     }
 }

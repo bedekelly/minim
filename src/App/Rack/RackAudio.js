@@ -1,12 +1,14 @@
 import uuid from "uuid4";
 
-import TapeLooperAudio from './TapeLooperAudio';
-import { PanAudio, FilterAudio } from './Effects';
-import { EffectType } from '../utils/EffectTypes'
-import { SourceType } from '../utils/SourceTypes';
+import TapeLooperAudio from '../Sources/TapeLooper/TapeLooperAudio';
+import PanAudio from '../Effects/Pan/PanAudio';
+import FilterAudio from '../Effects/Filter/FilterAudio';
+import { EffectType } from '../Effects/EffectTypes'
+import { SourceType } from '../Sources/SourceTypes';
 import { arrayMove } from 'react-sortable-hoc';
 
-class AudioRack {
+
+class RackAudio {
     constructor(audioGraph) {
         this.source = null;
         this.graph = audioGraph;
@@ -22,6 +24,21 @@ class AudioRack {
     
     play() {
         this.source.play();
+    }
+    
+    removeEffect(id) {
+        // Find and connect the old input and output of this effect.
+        const effectIndex = this.effects.findIndex(effect => effect.id === id);
+        const oldInput = this.inputOf(effectIndex);
+        const oldOutput = this.outputOf(effectIndex);
+        oldInput.routeTo(oldOutput);
+        
+        // Clean up the effect by disconnecting it.
+        const effect = this.effects[effectIndex];
+        effect.disconnect();
+        
+        // Remove the effect from this rack's list.
+        this.effects.splice(effectIndex, 1);
     }
     
     outputOf(index) {
@@ -52,13 +69,10 @@ class AudioRack {
     }
     
     addSource(sourceType) {
-        switch(sourceType) {
-            case SourceType.TapeLooper:
-            default: {
-                this.source = new TapeLooperAudio(this);
-            }
-        }
-
+        const sourceAudios = { [SourceType.TapeLooper]: TapeLooperAudio };
+        const defaultSourceAudio = TapeLooperAudio;
+        const Source = sourceAudios[sourceType] || defaultSourceAudio;
+        this.source = new Source(this);
         const id = uuid();
         this.graph.sources[id] = this.source;
         return id;
@@ -89,6 +103,7 @@ class AudioRack {
         }
         const id = uuid();
         this.graph.effects[id] = effect;
+        effect.id = id;
         
         if (lastOutput) {
             lastOutput.routeTo(effect);
@@ -99,4 +114,4 @@ class AudioRack {
     }
 }
 
-export default AudioRack;
+export default RackAudio;

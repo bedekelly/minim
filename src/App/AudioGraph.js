@@ -1,6 +1,6 @@
 import uuid from "uuid4";
 
-import AudioRack from './AudioRack';
+import RackAudio from './Rack/RackAudio';
 
 
 class AudioGraph {
@@ -41,7 +41,7 @@ class AudioGraph {
     }
     
     async makeRack() {
-        const rack = new AudioRack(this);
+        const rack = new RackAudio(this);
         const id = uuid();
         this.racks[id] = rack;
         return { id };
@@ -52,7 +52,7 @@ class AudioGraph {
     // 
     // setPlaybackRate(rate) {
     //     this.state.player.sourceNode.playbackRate.setValueAtTime(rate, 0);
-    //     return this.setState({...this.state, player: {...this.state.player, playbackRate: rate}});
+    //     return this.setState({ player: {...this.state.player, playbackRate: rate}});
     // }
     // 
     // async addEffectBefore(component, node, destination) {
@@ -72,7 +72,7 @@ class AudioGraph {
     //     node.connect(destination);
     // 
     //     // Add effect in the right place in our effects list.
-    //     this.setState({ ...this.state, effects: [...this.state.effects, { node, component }]});
+    //     this.setState({  effects: [...this.state.effects, { node, component }]});
     // }
     
     // async addFilter() {

@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import "stereo-panner-shim";
 import viewportFix from "viewport-units-buggyfill";
 
-import Rack from "./Rack/Rack";
-import AudioGraph from './Audio/AudioGraph';
+import Rack from "./Rack";
+import AudioGraph from './AudioGraph';
 
 import './App.css';
 
@@ -26,13 +26,13 @@ class App extends Component {
     async initialise() {
         if (this.state.loaded) return;
         await this.audioGraph.initialise();
-        await this.setState({...this.state, loaded: true});
+        await this.setState({loaded: true});
     }
 
     async addRack() {
         await this.initialise();
         const rack = await this.audioGraph.makeRack();
-        return this.setState({ ...this.state, racks: [ ...this.state.racks, rack ] })
+        return this.setState({ racks: [ ...this.state.racks, rack ] })
     }
 
     playAll() {

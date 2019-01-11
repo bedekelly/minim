@@ -1,9 +1,9 @@
 import React from "react";
 
-import { SourceTypes } from '../utils/SourceTypes';
-import { EffectTypes } from '../utils/EffectTypes'
+import { SourceTypes } from '../Sources/SourceTypes';
+import { EffectTypes } from '../Effects/EffectTypes'
 
-import { Source } from '../Components/Sources';
+import { Source } from '../Sources';
 import SortableEffectsList from './SortableEffectsList';
 
 import { arrayMove } from 'react-sortable-hoc';
@@ -22,12 +22,12 @@ class Rack extends React.Component {
 
     addSource(sourceType) {
         const source = this.audioRack.addSource(sourceType);
-        this.setState({...this.state, source: { id: source, type: sourceType }});
+        this.setState({ source: { id: source, type: sourceType }});
     }
     
     addEffect(effectType) {
         const effect = this.audioRack.addEffect(effectType);
-        this.setState({...this.state, effects: [...this.state.effects, {id: effect, effectType}]})
+        this.setState({ effects: [...this.state.effects, {id: effect, effectType}]})
     }
 
     sourceComponent() {
@@ -45,16 +45,21 @@ class Rack extends React.Component {
           effects: arrayMove(this.state.effects, oldIndex, newIndex),
       })}
 
+    removeEffect(id) {
+        this.audioRack.removeEffect(id);
+        const effectsToKeep = effect => effect.id !== id;
+        this.setState({effects: this.state.effects.filter(effectsToKeep)});
+    }
+
     render() {
-        
         const EffectsList = SortableEffectsList(this.graph);
-        
         return <section className={"rack"}>
             <div className="components-wrapper">
                 <section className={"components"}>
                     { this.sourceComponent() }
                     { <EffectsList 
-                        effects={this.state.effects} 
+                        effects={this.state.effects}
+                        removeEffect={id => this.removeEffect(id)}
                         onSortEnd={result => this.onSortEnd(result)}
                         axis="xy"
                         /> }

@@ -1,7 +1,11 @@
-class Effect {
+class EffectAudio {
     constructor(parentRack) {
         this.parentRack = parentRack;
         this.context = parentRack.graph.context;
+    }
+    
+    disconnect() {
+        this.node.disconnect();
     }
     
     routeTo(destination) {
@@ -19,4 +23,4 @@ class Effect {
 }
 
 
-export default Effect;
+export default EffectAudio;

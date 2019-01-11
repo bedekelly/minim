@@ -1,6 +1,6 @@
-import Effect from '../Effect';
+import EffectAudio from '../EffectAudio';
 
-class FilterAudio extends Effect {
+class FilterAudio extends EffectAudio {
     constructor(parentRack) {
         super(parentRack);
         const filter = this.node = this.context.createBiquadFilter();
