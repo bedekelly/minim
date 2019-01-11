@@ -31,7 +31,7 @@ class RackAudio {
         const effectIndex = this.effects.findIndex(effect => effect.id === id);
         const oldInput = this.inputOf(effectIndex);
         const oldOutput = this.outputOf(effectIndex);
-        oldInput.routeTo(oldOutput);
+        if (oldInput !== null) oldInput.routeTo(oldOutput);
 
         // Clean up the effect by disconnecting it.
         const effect = this.effects[effectIndex];
@@ -95,6 +95,7 @@ class RackAudio {
         const defaultEffectAudio = FilterAudio;
         const EffectAudio = effectAudios[effectType] || defaultEffectAudio
         let effect = new EffectAudio(this)
+        const lastOutput = this.currentOutput;
         this.effects.push(effect);
 
         // Add an ID to register this effect.
@@ -103,7 +104,6 @@ class RackAudio {
         effect.id = id;
 
         // Route the current output to this effect.
-        const lastOutput = this.currentOutput;
         if (lastOutput) lastOutput.routeTo(effect);
         effect.routeTo(this.destination);
         return id;

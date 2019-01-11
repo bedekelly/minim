@@ -8,19 +8,19 @@ class Pan extends React.Component {
         super(props);
         this.panAudio = this.props.graph.effects[this.props.id];
         this.state = {
-            value: this.panAudio.sliderValue
+            value: this.panAudio.value
         }
     }
     
     onChange(event) {
         const newPan = event.target.valueAsNumber;
-        this.panAudio.setValue(newPan);
+        this.panAudio.value = newPan;
         this.setState({value: newPan});
     }
 
     render() {
         return <div className="pan">
-            <input type="range" min={0} max={100} step={1} value={this.state.value} onChange={event=>this.onChange(event)}/>
+            <input type="range" min={-1} max={1} step={0.01} value={this.state.value} onChange={event=>this.onChange(event)}/>
         </div>
     }
 }
