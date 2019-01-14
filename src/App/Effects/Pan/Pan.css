@@ -1,15 +1,17 @@
 .pan {
     width: 100px;
     height: 100px;
-    background: transparent;
-    border: 2px solid whitesmoke;
+    background: #222;
+    border: 1px solid whitesmoke;
     border-radius: 5px;
     display: grid;
     place-items: center;
     margin-bottom: 3vh;
+    box-shadow: 0 0 20px;
 }
 
 .pan input {
+    margin-top: 20px;
     width: 80px;
     outline: 0;
 }

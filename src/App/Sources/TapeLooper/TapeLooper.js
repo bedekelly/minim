@@ -87,12 +87,14 @@ class TapeLooper extends React.Component {
                 <div className="circle eight"></div>
                 <div className="circle nine"></div>
             </div>
+            <div className="small-reel-shadow"></div>
             <div className="big-reel">
                 <div className="hole one"></div>
                 <div className="hole two"></div>
                 <div className="hole three"></div>
                 <div className="middle-hole"></div>
             </div>
+            <div className="big-reel-shadow"></div>
 
             <div className="tape-top"></div>
             <div className="tape-bottom"></div>

@@ -1,3 +1,33 @@
+.effect {
+  max-width: 100px;
+  position: relative;
+}
+
+
 .remove {
-    user-select: none;
+  user-select: none;
+  display: inline-block;
+  font-family: "Helvetica Neue", sans-serif;
+  position: absolute;
+  height: 23px;
+  width: 23px;
+  top: 0;
+  right: 0;
+  border: 0;
+  background: #222;
+  border: 1px solid whitesmoke;
+  border-bottom: none;
+  border-radius: 0 7px 0 0;
+  color: whitesmoke;
+  font-weight: bold;
+  text-align: center;
+  outline: 0;
+  padding: 0;
+  font-size: 10pt;
+  cursor: pointer;
+}
+
+
+.remove:active {
+  background: red;
 }

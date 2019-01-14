@@ -10,7 +10,7 @@ import { Effect } from '../Effects'
 import './EffectHandle.css';
 
 
-const DragHandle = SortableHandle(() => <div className="effect-drag-handle"></div>)
+const DragHandle = SortableHandle(() => <div className="effect-drag-handle"><span>☰</span></div>)
 const SortableEffect = SortableElement(props => <Effect {...props} handle={<DragHandle />} />);
 
 const SortableEffectsList = graph => SortableContainer(({effects, removeEffect}) => 

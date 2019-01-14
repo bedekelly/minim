@@ -1,5 +1,24 @@
 .effect-drag-handle {
-    width: 25px;
-    height: 25px;
-    background: red;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(100% - 22px);
+  height: 23px;
+  background: #222;
+  display: inline-block;
+  border-radius: 7px 0 0 0;
+  border: 1px solid whitesmoke;
+  color: white;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  cursor: move;
+  border-bottom: none;
+}
+
+.effect-drag-handle > * {
+  transform: translateX(calc(7px / 2));
+  user-select: none;
 }

@@ -1,11 +1,14 @@
 .filter {
     width: 100px;
     height: 100px;
-    border-radius: 5px;
-    border: 2px solid whitesmoke;
+    border-radius: 7px;
+    border: 1px solid whitesmoke;
     overflow: hidden;
     transition: ease all 0.1s;
     margin-bottom: 3vh;
+    padding-top: 25px;
+    background: #222;
+    box-shadow: 0 0 20px;
 }
 
 .filter input[type=range] {
@@ -24,7 +27,7 @@
 
 .filter input[type=range]::-webkit-slider-thumb {
     -webkit-appearance: none;
-    height: 100px;
+    height: 80px;
     font-size: 96pt;
     width: 170px;
     background: linear-gradient(to top right, red, blue);
