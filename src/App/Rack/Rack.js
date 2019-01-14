@@ -62,6 +62,7 @@ class Rack extends React.Component {
                         removeEffect={id => this.removeEffect(id)}
                         onSortEnd={result => this.onSortEnd(result)}
                         axis="xy"
+                        useDragHandle
                         /> }
                 </section>
             </div>

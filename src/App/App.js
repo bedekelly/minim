@@ -40,7 +40,7 @@ class App extends Component {
         this.audioGraph.play();
         this.setState({playing: true})
     }
-    
+
     pauseAll() {
         if (!this.state.playing) return;
         this.audioGraph.pause();
@@ -56,7 +56,7 @@ class App extends Component {
                     playing={this.state.playing}>
                 </Rack>
             ) }
-            
+        
             <button className="play-all" onMouseDown={() => this.playAll()}>Play All</button>
             <button className="pause-all" onClick={() => this.pauseAll()}>Pause All</button>
         </section>;

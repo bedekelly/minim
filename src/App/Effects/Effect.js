@@ -6,6 +6,8 @@ import Gain from './Gain';
 import { EffectType } from './EffectTypes';
 
 
+import './Effect.css';
+
 // Map effect types onto the component that should be rendered.
 const effectComponents = {
     [EffectType.Pan]: Pan,
@@ -21,6 +23,7 @@ function Effect(props) {
     let defaultComponent = props => "no component found";
     const Component = effectComponents[props.effectType] || defaultComponent;
     return <div className="effect">
+        { props.handle }
         <button className="remove" onClick={props.removeSelf}>X</button>
         <Component key={props.id} {...props}></Component>
     </div>

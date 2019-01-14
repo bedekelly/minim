@@ -1,7 +1,7 @@
 import React from "react";
 
 import './Gain.css';
-
+import Knob from '../../Knob/Knob';
 
 
 class Gain extends React.Component {
@@ -12,20 +12,15 @@ class Gain extends React.Component {
         this.state = {
             value: this.gainAudio.value
         }
-        console.log(this.state);
     }
     
     setGain(value) {
-        this.gainAudio.value = value;
         this.setState({ value });
+        this.gainAudio.value = value;
     }
 
     render() {
-        return <div className="gain">
-            <input type="range" className="slider" min={0} max={2} step={0.01}
-                   value={this.state.value}
-                   onChange={event => this.setGain(event.target.value)}/>
-        </div>;
+        return <Knob min={0} max={5} value={this.state.value} onChange={value => this.setGain(value)} />
     }
 }
 

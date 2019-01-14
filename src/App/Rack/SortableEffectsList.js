@@ -3,12 +3,15 @@ import React from 'react';
 import {
   SortableContainer,
   SortableElement,
+  SortableHandle
 } from 'react-sortable-hoc';
 
 import { Effect } from '../Effects'
+import './EffectHandle.css';
 
 
-const SortableEffect = SortableElement(Effect);
+const DragHandle = SortableHandle(() => <div className="effect-drag-handle"></div>)
+const SortableEffect = SortableElement(props => <Effect {...props} handle={<DragHandle />} />);
 
 const SortableEffectsList = graph => SortableContainer(({effects, removeEffect}) => 
     <div className="sortable-container"> {
@@ -20,6 +23,7 @@ const SortableEffectsList = graph => SortableContainer(({effects, removeEffect})
                 key={id}
                 graph={graph}
                 index={index}>
+                
             </SortableEffect>
         )
     }
