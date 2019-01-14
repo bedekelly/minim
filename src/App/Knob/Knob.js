@@ -76,8 +76,6 @@ class Knob extends React.Component {
      * Stop listening to the user's mouse movements.
      */
     function mouseUp(event) {
-        window.test = true;
-        console.log("Removing event listeners");
         document.removeEventListener("mouseup", mouseUp);
         document.removeEventListener("mousemove", mouseMoved)
     }
