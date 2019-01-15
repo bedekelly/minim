@@ -72,7 +72,7 @@ class TapeLooperAudio {
         // Calculate the time we should skip into the track next time we play it.
         // This is necessary if we want to use a new source node every time!
         const regularSpeedTimeElapsed = (this.context.currentTime - this.startTime);
-        this.currentTime += (regularSpeedTimeElapsed / this.playbackRate);
+        this.currentTime += (regularSpeedTimeElapsed * this.playbackRate);
         this.currentTime %= this.buffer.duration;
         this.bufferSourceNode = null;
     }
