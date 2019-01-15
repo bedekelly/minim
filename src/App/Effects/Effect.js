@@ -3,6 +3,7 @@ import React from 'react';
 import Pan from './Pan';
 import Filter from './Filter';
 import Gain from './Gain';
+import Compressor from './Compressor';
 import { EffectType } from './EffectTypes';
 
 
@@ -12,7 +13,8 @@ import './Effect.css';
 const effectComponents = {
     [EffectType.Pan]: Pan,
     [EffectType.Filter]: Filter,
-    [EffectType.Gain]: Gain
+    [EffectType.Gain]: Gain,
+    [EffectType.Compressor]: Compressor
 }
 
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import './Knob.css';
 
 const PIXEL_TOLERANCE = 100;
 

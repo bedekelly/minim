@@ -1,8 +1,7 @@
 .effect {
-  max-width: 100px;
   position: relative;
+  margin-bottom: 3vh;
 }
-
 
 .remove {
   user-select: none;

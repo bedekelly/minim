@@ -4,6 +4,7 @@ import TapeLooperAudio from '../Sources/TapeLooper/TapeLooperAudio';
 import PanAudio from '../Effects/Pan/PanAudio';
 import FilterAudio from '../Effects/Filter/FilterAudio';
 import GainAudio from '../Effects/Gain/GainAudio';
+import CompressorAudio from '../Effects/Compressor/CompressorAudio';
 import { EffectType } from '../Effects/EffectTypes'
 import { SourceType } from '../Sources/SourceTypes';
 import { arrayMove } from 'react-sortable-hoc';
@@ -93,7 +94,8 @@ class RackAudio {
         const effectAudios = {
             [EffectType.Pan]: PanAudio,
             [EffectType.Filter]: FilterAudio,
-            [EffectType.Gain]: GainAudio
+            [EffectType.Gain]: GainAudio,
+            [EffectType.Compressor]: CompressorAudio
         };
         const defaultEffectAudio = FilterAudio;
         const EffectAudio = effectAudios[effectType] || defaultEffectAudio

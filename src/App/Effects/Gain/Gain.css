@@ -6,22 +6,5 @@
   display: grid;
   place-items: center;
   box-shadow: 0 0 20px;
-}
-
-.knob {
-  background: whitesmoke;
-  border-radius: 50%;
-  margin-top: 20px;
-  width: 50px;
-  height: 50px;
-  box-shadow: 0 0 10px;
-  cursor: pointer;
-}
-
-.notch {
-  position: absolute;
-  left: calc(50% - 1px);
-  background: #333;
-  width: 2px;
-  height: 25px;
+  padding-top: 23px;
 }
