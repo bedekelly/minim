@@ -20,10 +20,12 @@ class Gain extends React.Component {
     }
 
     render() {
-        return <Knob min={0} max={5} 
-            value={this.state.value} 
-            onChange={value => this.setGain(value)} 
-            />
+        return <div className="gain">
+            <Knob min={0} max={5} 
+                value={this.state.value} 
+                onChange={value => this.setGain(value)} 
+                />
+        </div>
     }
 }
 

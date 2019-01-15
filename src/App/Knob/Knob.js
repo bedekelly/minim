@@ -100,11 +100,10 @@ class Knob extends React.Component {
   }
   
   render() {
-    return <div className="gain">
-      <div className="knob" style={this.knobStyle()} onMouseDown={ event => this.onMouseDown(event) }>
+    return <div className="knob" style={this.knobStyle()} 
+            onMouseDown={ event => this.onMouseDown(event) }>
         <div className="notch"></div>
       </div>
-    </div>
   }
 }
 
