@@ -22,6 +22,7 @@ class TapeLooperAudio {
         const prom = new Promise(resolve => {
             context.decodeAudioData(arrayBuffer, resolve);
         });
+        this.currentTime = 0;
         this.buffer = await prom;
     }
 
