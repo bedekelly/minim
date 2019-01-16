@@ -282,7 +282,7 @@
     transition: ease all 0.1s;
 }
 
-.speed-up {
+.button {
     font-size: 8pt;
     background: #666;
     display: grid;
@@ -295,12 +295,20 @@
     font-family: monospace;
     position: absolute;
     color: whitesmoke;
-    top: 20px;
-    left: 20px;
     border-radius: 2px;
+    top: 20px;
+    cursor: pointer;
 }
 
-.speed-up:active {
+.button:active {
     background: coral;
     color: whitesmoke;
+}
+
+.speed-up {
+    left: 20px;
+}
+
+.editor-button {
+    left: 60px;
 }

@@ -1,6 +1,7 @@
 import React from "react";
 
 import './TapeLooper.css';
+import Editor from '../../Editor/Editor.js';
 
 
 class TapeLooper extends React.Component {
@@ -52,6 +53,18 @@ class TapeLooper extends React.Component {
     setPlaybackRate(rate) {
         this.audio.setPlaybackRate(rate);
     }
+    
+    openEditor() {
+        this.setState({editorOpen: true});
+    }
+    
+    closeEditor() {
+        this.setState({editorOpen: false});
+    }
+    
+    editor() {
+        return <Editor close={() => this.closeEditor()} audio={this.audio}></Editor>
+    }
 
     render() {
         const classNames = [
@@ -73,7 +86,8 @@ class TapeLooper extends React.Component {
                 <div className="right"></div>
             </div>
 
-            <div className="speed-up" onClick={() => this.setPlaybackRate(this.playbackRate*1.005)}>>></div>
+            <div className="button speed-up" onClick={() => this.setPlaybackRate(this.playbackRate*1.005)}>>></div>
+            { this.state.hasTape ? <div className="button editor-button" onClick={() => this.openEditor()}>~</div> : null }
 
             <div className="small-reel">
                 <div className="middle circle"></div>
@@ -98,6 +112,8 @@ class TapeLooper extends React.Component {
 
             <div className="tape-top"></div>
             <div className="tape-bottom"></div>
+            
+            { this.state.editorOpen ? this.editor() : null}
         </div>
     }
 }

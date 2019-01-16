@@ -1,0 +1,99 @@
+.bar {
+  transition: all 0.07s ease;
+}
+
+.editor {
+  width: 700px;
+  height: 400px;
+  background: lightblue;
+  border-radius: 7px;
+  box-shadow: 0 0 40px;
+  display: grid;
+  place-items: center;
+  position: fixed;
+  top: calc(50vh - 200px);
+  left: calc(50vw - 350px);
+  z-index: 100;
+}
+
+.frame {
+  position: relative;
+  background: white;
+  width: 650px;
+  height: 350px;
+  border-radius: 7px;
+  box-shadow: 0 0 10px inset;
+  padding: 0 20px;
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+}
+
+.left-section {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: red;
+  opacity: 0.2;
+  width: 15vw;
+  height: 100%;
+  border-radius: 7px 0 0 7px;
+}
+
+.left-section > .bar {
+  position: absolute;
+  border-radius: 5px;
+  box-sizing: border-box;
+  right: -2px;
+  top: 15%;
+  height: 70%;
+  width: 5px;
+  background: black;
+  cursor: ew-resize;
+}
+
+.left-section > .bar:hover {
+  width: 10px;
+  right: -5px;
+}
+
+.right-section {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: red;
+  opacity: 0.2;
+  width: 15vw;
+  height: 100%;
+  border-radius: 0 7px 7px 0;
+}
+
+.right-section > .bar {
+  position: absolute;
+  border-radius: 5px;
+  box-sizing: border-box;
+  left: -2px;
+  top: 15%;
+  height: 70%;
+  width: 5px;
+  background: black;
+  cursor: ew-resize;
+}
+
+.right-section > .bar:hover {
+  width: 10px;
+  left: -5px;
+}
+
+
+.blurbackground {
+    position: fixed;
+    z-index: 100;
+    background: #222;
+    opacity: 0.65;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    transition: ease all 0.1s;
+}
