@@ -75,6 +75,9 @@ class Editor extends React.Component {
         const minY = this.canvasHeight;
         const maxY = 0;
         
+        // Try to fix anti-aliasing.
+        context.translate(0.5, 0.5);
+
         context.beginPath();
         const middleY = this.canvasHeight / 2;
         context.moveTo(0, middleY);
