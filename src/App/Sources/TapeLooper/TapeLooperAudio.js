@@ -14,6 +14,9 @@ class TapeLooperAudio {
         this.playbackRate = 1;
         this.type = SourceType.TapeLooper;
         this.realism = true;
+        this._loopStart = 0;
+        this._loopEnd = undefined;
+        this.node = null;
     }
 
     async gotEncodedBuffer(arrayBuffer) {
@@ -29,11 +32,14 @@ class TapeLooperAudio {
     async play() {
         // Create and setup a source node which reads from an audio buffer.
         // Note: this DOES need to happen every time we resume audio!
-        const bufferSourceNode = this.bufferSourceNode = this.context.createBufferSource();
+        const bufferSourceNode = this.node = this.context.createBufferSource();
         bufferSourceNode.buffer = this.buffer;
         bufferSourceNode.loop = true;
+        bufferSourceNode.loopStart = this._loopStart;
+        if (this._loopEnd !== undefined) bufferSourceNode.loopEnd = this._loopEnd;
         bufferSourceNode.connect(this.parentRack.startOfFxChain);
         bufferSourceNode.start(0, this.currentTime);
+        this.node = bufferSourceNode;
         
         // Store the current time so we can pause/resume later.
         this.startTime = this.context.currentTime;
@@ -45,21 +51,62 @@ class TapeLooperAudio {
         }
     }
 
+    set loopStart(value) {
+        this._loopStart = value;
+        this.node.loopStart = value;
+    }
+    
+    get loopStart() {
+        return this._loopStart;
+    }
+    
+    get duration() {
+        return this.buffer.duration;
+    }
+    
+    set loopEnd(value) {
+        this._loopEnd = value;
+        this.node.loopEnd = value;
+    }
+    
+    get loopEnd() {
+        // Web Audio represents "no loop end" with a value of zero, so we need to change
+        // this to the duration of the buffer for design purposes.
+        return this.node && this.node.loopEnd ? this.node.loopEnd : this.buffer.duration;
+    }
+
     updateOutput() {
-        this.bufferSourceNode.disconnect();
-        this.bufferSourceNode.connect(this.parentRack.startOfFxChain);
+        this.node.disconnect();
+        this.node.connect(this.parentRack.startOfFxChain);
     }
 
     stop() {
-        if (this.bufferSourceNode) {
-            this.bufferSourceNode.disconnect();
-            this.bufferSourceNode = null;
+        if (this.node) {
+            this.node.disconnect();
+            this.node = null;
         }
         this.startTime = 0;
     }
+    
+    get relativeCurrentTime() {
+        
+        if (this.node == null) {
+            // We don't actually have an AudioBufferSourceNode, but
+            // we can say the "current time" is the time we paused at.
+            return this.currentTime;
+        }
+        
+        // Otherwise, calculate the current time based on the audiocontext.
+        const audioContextCurrentTime = this.context.currentTime;
+        let relativeCurrentTime = this.currentTime;
+        const regularSpeedTimeElapsed = (audioContextCurrentTime - this.startTime);
+        relativeCurrentTime += (regularSpeedTimeElapsed * this.playbackRate);
+        relativeCurrentTime %= this.duration;
+        return relativeCurrentTime;
+    }
 
     async pause() {
-        if(!this.buffer || !this.bufferSourceNode) {
+        if(!this.buffer || !this.node) {
             console.warn("Tried to pause without a buffer or bufferSourceNode");
             return;
         };
@@ -68,14 +115,12 @@ class TapeLooperAudio {
             await this.slowBufferToStop();
         }
 
-        this.bufferSourceNode.disconnect();
+        this.node.disconnect();
         
         // Calculate the time we should skip into the track next time we play it.
         // This is necessary if we want to use a new source node every time!
-        const regularSpeedTimeElapsed = (this.context.currentTime - this.startTime);
-        this.currentTime += (regularSpeedTimeElapsed * this.playbackRate);
-        this.currentTime %= this.buffer.duration;
-        this.bufferSourceNode = null;
+        this.currentTime = this.relativeCurrentTime;
+        this.node = null;
     }
     
     speedBufferUpToPlaying() {
@@ -87,8 +132,8 @@ class TapeLooperAudio {
     }
     
     _setPlaybackRate(newRate) {
-        if (!this.bufferSourceNode) return;
-        this.bufferSourceNode.playbackRate.linearRampToValueAtTime(
+        if (!this.node) return;
+        this.node.playbackRate.linearRampToValueAtTime(
             newRate, this.context.currentTime+MS_SPEED_UP/1000);
         return new Promise((resolve, reject) => setTimeout(resolve, MS_SPEED_UP));
     }
@@ -103,9 +148,9 @@ class TapeLooperAudio {
             destination = destination.node;
         }
         this.destination = destination;
-        if (this.bufferSourceNode) {
-            this.bufferSourceNode.disconnect();
-            this.bufferSourceNode.connect(destination);
+        if (this.node) {
+            this.node.disconnect();
+            this.node.connect(destination);
         }
     }
 }

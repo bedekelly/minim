@@ -24,13 +24,59 @@ class Editor extends React.Component {
         this.audio = props.audio;
         this.canvasRef = React.createRef();
         this.state = { ready: false };
+        this.nextAnimationId = null;
     }
     
     componentDidMount() {
         this.context = this.canvasRef.current.getContext("2d");
         this.canvasWidth = this.canvasRef.current.width;
         this.canvasHeight = this.canvasRef.current.height;
+        
+        // These calls block the main thread :(
         this.renderWaveformToCanvas();
+        this.animatePlayHead();
+    }
+    
+    animatePlayHead() {
+        const that = this;
+        const { audio, context, waveformImage } = this;
+        const canvas = this.canvasRef.current;
+        const { width, height } = canvas;
+
+        const triangleBase = 5;
+        const triangleHeight = 7;
+
+        function animate() {
+            const x = linMap(audio.relativeCurrentTime, 0, audio.duration, 0, width);
+            context.clearRect(0, 0, width, height);
+            context.putImageData(waveformImage, 0, 0);
+            context.strokeStyle = "green";
+            context.lineWidth = "1px";
+
+            context.beginPath()
+            
+            // Top triangle:
+            context.moveTo(x-triangleBase/2, 0);
+            context.lineTo(x, triangleHeight);
+            context.lineTo(x+triangleBase/2, 0);
+            context.lineTo(x-triangleBase/2, 0);
+            context.moveTo(x, triangleHeight);
+            
+            // Main play line:
+            context.lineTo(x, height-triangleHeight);
+            
+            // Bottom triangle:
+            context.lineTo(x-triangleBase/2, height);
+            context.lineTo(x+triangleBase/2, height);
+            context.lineTo(x, height-triangleHeight);
+            
+            // Draw and request animation callback.
+            context.stroke();
+            context.fill();
+            that.nextAnimationId = requestAnimationFrame(animate);
+        }
+        
+        this.nextAnimationId = requestAnimationFrame(animate);
     }
     
     // Return a buffer's min and max values, and a resampled buffer.
@@ -69,6 +115,7 @@ class Editor extends React.Component {
 
     renderWaveformToCanvas() {
         const width = this.canvasWidth;
+        const height = this.canvasHeight;
         const leftChannel = this.audio.buffer.getChannelData(0);
         const { resampledMin, resampledMax, resampledBuffer } = Editor.analyse(leftChannel, width);
         const context = this.context;
@@ -88,12 +135,39 @@ class Editor extends React.Component {
             context.lineTo(x, y);
         }
         context.stroke();
-        
+        this.waveformImage = context.getImageData(0, 0, width, height);
         this.setState({ ready: true });
     }
 
+    cancelAnimations() {
+        window.cancelAnimationFrame(this.nextAnimationId);
+    }
+
     close() {
+        this.cancelAnimations();
         this.props.close();
+    }
+
+    leftAreaStyle() {
+        if (!this.state.ready) return { width: "20px" };
+        const { loopStart, duration } = this.audio;
+        const leftBound = 20;
+        const rightBound = this.canvasWidth - 20;
+        const width = linMap(loopStart, 0, duration, leftBound, rightBound);
+        return {
+            width: `${ width }px`
+        }
+    }
+    
+    rightAreaStyle() {
+        if (!this.state.ready) return { width: "20px" };
+        const { loopEnd, duration } = this.audio;
+        const leftBound = 20;
+        const rightBound = this.canvasWidth - 20;
+        const width = this.canvasWidth - linMap(loopEnd, 0, duration, leftBound, rightBound);
+        return {
+            width: `${ width }px`
+        }
     }
 
     render() {
@@ -101,13 +175,13 @@ class Editor extends React.Component {
             <div className="blurbackground" onClick={ () => this.close() }></div>
             <div className="editor">
               <div className="frame">
-                <div className="left-section">
+                <div className="left-section" style={ this.leftAreaStyle() }>
                   <div className="bar"></div>
                 </div>
                 <canvas style={
                     { visible: this.state.ready }
                 } ref={this.canvasRef} width="610px" height="300px" className="waveform"></canvas>
-                <div className="right-section">
+                <div className="right-section" style={ this.rightAreaStyle() }>
                   <div className="bar"></div>
                 </div>
               </div>

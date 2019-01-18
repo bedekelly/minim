@@ -33,11 +33,11 @@
   position: absolute;
   top: 0;
   left: 0;
-  background: red;
-  opacity: 0.2;
-  width: 15vw;
+  background: rgba(255, 0, 0, 0.2);
+  width: 20px;
   height: 100%;
   border-radius: 7px 0 0 7px;
+  z-index: 1;
 }
 
 .left-section .bar {
@@ -45,26 +45,18 @@
   border-radius: 5px;
   box-sizing: border-box;
   right: -2px;
-  top: 15%;
-  height: 70%;
-  width: 5px;
+  height: 100%;
+  width: 2px;
   background: black;
   cursor: ew-resize;
-  z-index: 1;
-}
-
-.left-section .bar:hover {
-  width: 10px;
-  right: -5px;
 }
 
 .right-section {
   position: absolute;
   top: 0;
   right: 0;
-  background: red;
-  opacity: 0.2;
-  width: 15vw;
+  background: rgba(255, 0, 0, 0.2);
+  width: 20px;
   height: 100%;
   border-radius: 0 7px 7px 0;
 }
@@ -74,16 +66,10 @@
   border-radius: 5px;
   box-sizing: border-box;
   left: -2px;
-  top: 15%;
-  height: 70%;
-  width: 5px;
+  height: 100%;
+  width: 2px;
   background: black;
   cursor: ew-resize;
-}
-
-.right-section .bar:hover {
-  width: 10px;
-  left: -5px;
 }
 
 
