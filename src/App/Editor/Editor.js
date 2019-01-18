@@ -23,6 +23,7 @@ class Editor extends React.Component {
         super(props);
         this.audio = props.audio;
         this.canvasRef = React.createRef();
+        this.playHeadCanvasRef = React.createRef();
         this.state = { ready: false };
         this.nextAnimationId = null;
     }
@@ -39,21 +40,22 @@ class Editor extends React.Component {
     
     animatePlayHead() {
         const that = this;
-        const { audio, context, waveformImage } = this;
+        const { audio, waveformImage } = this;
         const canvas = this.canvasRef.current;
         const { width, height } = canvas;
+        const context = this.playHeadCanvasRef.current.getContext("2d");
 
         const triangleBase = 5;
         const triangleHeight = 7;
 
         function animate() {
             const x = linMap(audio.relativeCurrentTime, 0, audio.duration, 0, width);
-            context.clearRect(0, 0, width, height);
-            context.putImageData(waveformImage, 0, 0);
             context.strokeStyle = "green";
             context.lineWidth = "1px";
 
-            context.beginPath()
+            context.clearRect(0, 0, width, height);
+
+            context.beginPath();
             
             // Top triangle:
             context.moveTo(x-triangleBase/2, 0);
@@ -178,9 +180,12 @@ class Editor extends React.Component {
                 <div className="left-section" style={ this.leftAreaStyle() }>
                   <div className="bar"></div>
                 </div>
-                <canvas style={
-                    { visible: this.state.ready }
-                } ref={this.canvasRef} width="610px" height="300px" className="waveform"></canvas>
+                <div className="canvases">
+                    <canvas style={
+                        { visible: this.state.ready }
+                    } ref={this.canvasRef} width="610px" height="300px" className="waveform"></canvas>
+                    <canvas width="610px" height="300px" ref={this.playHeadCanvasRef} className="play-head"></canvas>
+                </div>
                 <div className="right-section" style={ this.rightAreaStyle() }>
                   <div className="bar"></div>
                 </div>
