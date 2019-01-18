@@ -14,3 +14,51 @@
   width: 2px;
   height: 25px;
 }
+
+.value {
+  box-sizing: border-box;
+  position: absolute;
+  top: 0;
+  margin-left: 65px;
+  left: 0;
+  background: #00aabb;
+  border-radius: .4em;
+  text-align: center;
+  font-family: monospace;
+  font-size: 16pt;
+  line-height: 1;
+  width: 70px;
+  height: 50px;
+  padding: 15px;
+  user-select: none;
+  }
+
+.knob-group {
+  position: relative;
+}
+
+.value:after {
+    content: '';
+	position: absolute;
+	left: 0;
+	top: 50%;
+	width: 0;
+	height: 0;
+	border: 10px solid transparent;
+	border-right-color: #00aabb;
+	border-left: 0;
+	margin-top: -10px;
+	margin-left: -10px;
+    z-index: 50;
+}
+
+.value.bottom:after {
+  content: '';
+  position: absolute;
+  top: -20px;
+  left: calc(50% - 10px);
+  width: 0;
+  height: 0;
+  border: 10px solid transparent;
+  border-bottom-color: #00aabb;
+}

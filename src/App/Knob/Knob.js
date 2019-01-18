@@ -101,10 +101,15 @@ class Knob extends React.Component {
   }
   
   render() {
-    return <div className="knob" style={this.knobStyle()} 
-            onMouseDown={ event => this.onMouseDown(event) }>
-        <div className="notch"></div>
-      </div>
+    return <React.Fragment>
+        <div className="knob-group">
+            <div className="knob" style={this.knobStyle()} 
+                onMouseDown={ event => this.onMouseDown(event) }>
+                <div className="notch"></div>
+            </div>
+            <div class="value">{ this.props.value.toFixed(1) }</div>
+        </div>
+    </React.Fragment>
   }
 }
 
