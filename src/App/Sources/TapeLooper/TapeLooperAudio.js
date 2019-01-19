@@ -13,7 +13,7 @@ class TapeLooperAudio {
         this.startTime = 0;
         this.playbackRate = 1;
         this.type = SourceType.TapeLooper;
-        this.realism = true;
+        this.realism = false;
         this._loopStart = 0;
         this._loopEnd = undefined;
         this.node = null;
@@ -35,15 +35,19 @@ class TapeLooperAudio {
         const bufferSourceNode = this.node = this.context.createBufferSource();
         bufferSourceNode.buffer = this.buffer;
         bufferSourceNode.loop = true;
+        // console.log("Loop starting at ", this._loopStart);
         bufferSourceNode.loopStart = this._loopStart;
-        if (this._loopEnd !== undefined) bufferSourceNode.loopEnd = this._loopEnd;
+        if (this._loopEnd !== undefined) 
+            bufferSourceNode.loopEnd = this._loopEnd;
+        else
+            bufferSourceNode.loopEnd = this.buffer.duration / this.playbackRate;
         bufferSourceNode.connect(this.parentRack.startOfFxChain);
         bufferSourceNode.start(0, this.currentTime);
         this.node = bufferSourceNode;
-        
+
         // Store the current time so we can pause/resume later.
         this.startTime = this.context.currentTime;
-        
+
         if(this.realism) {
             // Start with a playback rate of 0 then speed up.
             bufferSourceNode.playbackRate.setValueAtTime(0, 0);
@@ -53,7 +57,7 @@ class TapeLooperAudio {
 
     set loopStart(value) {
         this._loopStart = value;
-        this.node.loopStart = value;
+        if (this.node) this.node.loopStart = value;
     }
     
     get loopStart() {
