@@ -8,14 +8,15 @@ class TapeLooperAudio {
         this.buffer = null;
         this.parentRack = parentRack;
         this.graph = parentRack.graph;
+        this.paused = true;
         this.context = this.graph.context;
-        this.currentTime = 0;
-        this.startTime = 0;
+        this.absoluteStartTime = 0;
+        this.relativeStartTime = 0;
         this.playbackRate = 1;
         this.type = SourceType.TapeLooper;
         this.realism = false;
         this._loopStart = 0;
-        this._loopEnd = undefined;
+        this._loopEnd = 0;
         this.node = null;
     }
 
@@ -25,11 +26,14 @@ class TapeLooperAudio {
         const prom = new Promise(resolve => {
             context.decodeAudioData(arrayBuffer, resolve);
         });
-        this.currentTime = 0;
+        this.relativeStartTime = 0;
+        this.absoluteStartTime = context.currentTime;
         this.buffer = await prom;
+        this.loopEnd = this.buffer.duration;
     }
 
     async play() {
+        this.paused = false;
         // Create and setup a source node which reads from an audio buffer.
         // Note: this DOES need to happen every time we resume audio!
         const bufferSourceNode = this.node = this.context.createBufferSource();
@@ -42,11 +46,11 @@ class TapeLooperAudio {
         else
             bufferSourceNode.loopEnd = this.buffer.duration / this.playbackRate;
         bufferSourceNode.connect(this.parentRack.startOfFxChain);
-        bufferSourceNode.start(0, this.currentTime);
+        bufferSourceNode.start(0, this.relativeStartTime);
         this.node = bufferSourceNode;
 
         // Store the current time so we can pause/resume later.
-        this.startTime = this.context.currentTime;
+        this.absoluteStartTime = this.context.currentTime;
 
         if(this.realism) {
             // Start with a playback rate of 0 then speed up.
@@ -56,27 +60,33 @@ class TapeLooperAudio {
     }
 
     set loopStart(value) {
-        this._loopStart = value;
+        this.relativeStartTime = this.relativeCurrentTime;
+        this.absoluteStartTime = this.context.currentTime;
         if (this.node) this.node.loopStart = value;
+        this._loopStart = value;
+        this.inLoop = this.checkInLoop();
     }
-    
+
     get loopStart() {
         return this._loopStart;
     }
-    
+
     get duration() {
         return this.buffer.duration;
     }
-    
+
     set loopEnd(value) {
+        this.relativeStartTime = this.relativeCurrentTime;
+        this.absoluteStartTime = this.context.currentTime;
+        if (this.node) this.node.loopEnd = value;
         this._loopEnd = value;
-        this.node.loopEnd = value;
+        this.inLoop = this.checkInLoop();
     }
-    
+
     get loopEnd() {
         // Web Audio represents "no loop end" with a value of zero, so we need to change
         // this to the duration of the buffer for design purposes.
-        return this.node && this.node.loopEnd ? this.node.loopEnd : this.buffer.duration;
+        return this._loopEnd;
     }
 
     updateOutput() {
@@ -89,27 +99,50 @@ class TapeLooperAudio {
             this.node.disconnect();
             this.node = null;
         }
-        this.startTime = 0;
+        this.relativeStartTime = 0;
+    }
+    
+    checkInLoop() {
+        // Assume playback rate is constant for the last chunk.
+        // This precludes using linearRampToValueAtTime.
+        console.log("Checking in loop...")
+        const absoluteCurrentTime = this.context.currentTime;
+        const { loopStart, loopEnd, playbackRate, relativeStartTime, absoluteStartTime, duration } = this;
+        const wallClockTimeElapsed = (absoluteCurrentTime - absoluteStartTime);
+        const relativeTimeElapsed = wallClockTimeElapsed * playbackRate;
+        const songPositionWithoutLoopMarkers = (relativeStartTime + relativeTimeElapsed) % duration;
+        
+        // console.log({ loopStart, songPositionWithoutLoopMarkers, loopEnd });
+        const result = loopStart < songPositionWithoutLoopMarkers && songPositionWithoutLoopMarkers < loopEnd; 
+        console.log({ result });
+        return result;
     }
     
     get relativeCurrentTime() {
-        
-        if (this.node == null) {
-            // We don't actually have an AudioBufferSourceNode, but
-            // we can say the "current time" is the time we paused at.
-            return this.currentTime;
+        if (this.paused) {
+            return this.relativeStartTime;
         }
         
-        // Otherwise, calculate the current time based on the audiocontext.
-        const audioContextCurrentTime = this.context.currentTime;
-        let relativeCurrentTime = this.currentTime;
-        const regularSpeedTimeElapsed = (audioContextCurrentTime - this.startTime);
-        relativeCurrentTime += (regularSpeedTimeElapsed * this.playbackRate);
-        relativeCurrentTime %= this.duration;
-        return relativeCurrentTime;
+        // Assume playback rate is constant for the last chunk.
+        // This precludes using linearRampToValueAtTime.
+        const absoluteCurrentTime = this.context.currentTime;
+        const { loopStart, loopEnd, playbackRate, relativeStartTime, absoluteStartTime, duration } = this;
+        const wallClockTimeElapsed = (absoluteCurrentTime - absoluteStartTime);
+        const relativeTimeElapsed = wallClockTimeElapsed * playbackRate;
+        const songPositionWithoutLoopMarkers = (relativeStartTime + relativeTimeElapsed) % duration;
+        
+        if (this.inLoop) {
+            // If so, calculate the time given that we've been in the loop for some time.
+            return (relativeStartTime + relativeTimeElapsed - loopStart) % (loopEnd - loopStart) + loopStart;
+        } else {
+            this.inLoop = this.checkInLoop();
+            return songPositionWithoutLoopMarkers;
+        }
     }
 
     async pause() {
+        this.relativeStartTime = this.relativeCurrentTime;
+        this.paused = true;
         if(!this.buffer || !this.node) {
             console.warn("Tried to pause without a buffer or bufferSourceNode");
             return;
@@ -123,7 +156,7 @@ class TapeLooperAudio {
         
         // Calculate the time we should skip into the track next time we play it.
         // This is necessary if we want to use a new source node every time!
-        this.currentTime = this.relativeCurrentTime;
+        this.absoluteStartTime = this.context.currentTIme;
         this.node = null;
     }
     

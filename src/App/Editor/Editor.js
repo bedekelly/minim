@@ -2,6 +2,7 @@ import React from 'react';
 
 import './Editor.css';
 import LoopStartBar from './LoopStartBar';
+import LoopEndBar from './LoopEndBar';
 
 
 /**
@@ -25,7 +26,7 @@ class Editor extends React.Component {
         this.audio = props.audio;
         this.canvasRef = React.createRef();
         this.playHeadCanvasRef = React.createRef();
-        this.state = { ready: false, loopStart: this.audio.loopStart };
+        this.state = { ready: false, loopStart: this.audio.loopStart, loopEnd: this.audio.loopEnd };
         this.nextAnimationId = null;
     }
     
@@ -40,12 +41,23 @@ class Editor extends React.Component {
     }
     
     set loopStart(value) {
+        console.log("Setting new loop start to ", value);
         this.setState({ loopStart: value });
         this.audio.loopStart = value;
     }
-    
+
     get loopStart() {
         return this.state.loopStart;
+    }
+    
+    set loopEnd(value) {
+        console.log("Setting new loop end to ", value);
+        this.setState({ loopEnd: value });
+        this.audio.loopEnd = value;
+    }
+    
+    get loopEnd() {
+        return this.state.loopEnd;
     }
     
     animatePlayHead() {
@@ -178,6 +190,11 @@ class Editor extends React.Component {
         // console.log("Got new loop start value: ", value);
         this.loopStart = value;
     }
+    
+    onLoopEndChange(value) {
+        // console.log("Got new loop start value: ", value);
+        this.loopEnd = value;
+    }
 
     render() {
         return <React.Fragment>
@@ -196,9 +213,13 @@ class Editor extends React.Component {
                     } ref={this.canvasRef} width="610px" height="300px" className="waveform"></canvas>
                     <canvas width="610px" height="300px" ref={this.playHeadCanvasRef} className="play-head"></canvas>
                 </div>
-                <div className="right-section" style={ this.rightAreaStyle() }>
-                  <div className="bar" onMouseDown={event => this.rightBarMouseDown(event)}></div>
-                </div>
+                { this.state.ready && <LoopEndBar
+                    audio={ this.audio }
+                    padding={ 20 }
+                    canvas={ this.canvasRef.current }
+                    value={ this.state.loopEnd }
+                    onChange={ value => this.onLoopEndChange(value) }
+                    ></LoopEndBar>}
               </div>
             </div>
         </React.Fragment>

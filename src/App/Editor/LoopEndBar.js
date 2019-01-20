@@ -34,17 +34,18 @@ function boundedLinMap(value, fromLower, fromUpper, toLower, toUpper) {
 }
 
 
-class LoopStartBar extends React.Component {
+class LoopEndBar extends React.Component {
     
     constructor(props) {
         super(props);
         this.props = props;
-        const { loopStart, duration } = props.audio;
+        const { loopEnd, duration } = props.audio;
         const leftBound = 0;
         const rightBound = props.canvas.width;
-        const width = props.padding + linMap(loopStart, 0, duration, leftBound, rightBound);
+        const width = props.padding + linMap(loopEnd, 0, duration, rightBound, leftBound);
         this.state = { width };
     }
+    
     
     render() {
         const props = this.props;
@@ -56,13 +57,13 @@ class LoopStartBar extends React.Component {
                 document.removeEventListener("mouseup", onMouseUp);
                 const duration = props.audio.duration;
                 const value = boundedLinMap(that.state.width, 20, props.canvas.width+20, 0, duration);
-                props.onChange(value);
+                props.onChange(duration - value);
             }
             
             function onMouseMove(event) {
                 // Find the bounded position of the mouse relative to the canvas.
-                const canvasAbsoluteLeft = props.canvas.getBoundingClientRect().left;
-                let x = event.clientX - canvasAbsoluteLeft;
+                const canvasAbsoluteRight = props.canvas.getBoundingClientRect().right;
+                let x = canvasAbsoluteRight - event.clientX;
                 x = boundedLinMap(x, 0, props.canvas.width, 20, props.canvas.width+20);
                 that.setState({ width: x })
             }
@@ -71,7 +72,7 @@ class LoopStartBar extends React.Component {
             document.addEventListener("mouseup", onMouseUp);
         }
         
-        return <div className="left-section" style={ { width: `${this.state.width}px` } }>
+        return <div className="right-section" style={ { width: `${this.state.width}px` } }>
           <div className="bar" onMouseDown={onMouseDown}></div>
         </div> 
     }
@@ -79,4 +80,4 @@ class LoopStartBar extends React.Component {
 }
 
 
-export default LoopStartBar;
+export default LoopEndBar;
