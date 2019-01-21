@@ -15,9 +15,11 @@
 
 .rice button:active {
   box-shadow: 0 0 3px #2E3E4C;
+  background: white;
 }
 
 .rice {
+  margin: 3vh;
   background: #6A8EAE;
   box-sizing: border-box;
   padding: 20px;

@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import './Knob.css';
 
 const PIXEL_TOLERANCE = 100;
@@ -106,6 +108,14 @@ class Knob extends React.Component {
         <div className="notch"></div>
       </div>
   }
+}
+
+
+Knob.propTypes = {
+    value: PropTypes.number.isRequired,
+    min: PropTypes.number.isRequired,
+    max: PropTypes.number.isRequired,
+    onChange: PropTypes.func.isRequired
 }
 
 
