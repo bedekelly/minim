@@ -1,6 +1,7 @@
 import uuid from "uuid4";
 
 import TapeLooperAudio from '../Sources/TapeLooper/TapeLooperAudio';
+import RiceAudio from '../Sources/Rice/RiceAudio';
 import PanAudio from '../Effects/Pan/PanAudio';
 import FilterAudio from '../Effects/Filter/FilterAudio';
 import GainAudio from '../Effects/Gain/GainAudio';
@@ -72,7 +73,7 @@ class RackAudio {
     }
 
     addSource(sourceType) {
-        const sourceAudios = { [SourceType.TapeLooper]: TapeLooperAudio };
+        const sourceAudios = { [SourceType.TapeLooper]: TapeLooperAudio, [SourceType.Rice]: RiceAudio };
         const defaultSourceAudio = TapeLooperAudio;
         const Source = sourceAudios[sourceType] || defaultSourceAudio;
         this.source = new Source(this);

@@ -22,13 +22,13 @@
   margin: 3vh;
   background: #6A8EAE;
   box-sizing: border-box;
-  padding: 20px;
+  padding: 20px 20px 0 20px;
   width: 300px;
   height: 200px;
   border-radius: 7px;
   box-shadow: 0 0 50px;
   display: grid;
-  grid-template-rows: 5fr 3fr;
+  grid-template-rows: 5fr 4fr;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-areas:
     "waveform waveform waveform"
@@ -44,8 +44,8 @@
 
 .rice .wave {
   background: whitesmoke;
-  width: 90%;
-  height: 75%;
+  width: 270px;
+  height: 75px;
   border-radius: 7px;
   box-shadow: 0 0 10px 3px #2E3E4C inset;
 }
@@ -65,16 +65,6 @@
   user-select: none;
 }
 
-.rice .length {
-  display: grid;
-  place-items: center;
-}
-
-.rice .space {
-  display: grid;
-  place-items: center;
-}
-
 .rice .knob {
   width: 30px;
   height: 30px;
@@ -88,4 +78,13 @@
 
 .rice .notch {
     height: 15px;
+}
+
+.rice .empty-waveform {
+    width: 260px;
+    height: 95px;
+    background: whitesmoke;
+    border-radius: 7px;
+    padding: 10px;
+    box-shadow: 0 0 10px inset;
 }
