@@ -49,7 +49,20 @@ class Knob extends React.Component {
   onMouseDown(event) {
     const initialY = event.clientY;
     const { min, max, onChange, value } = this.props;
-    
+
+    // Don't set any listeners after a right-click.
+    if (event.button !== 0) {
+        event.preventDefault();
+        return;
+    }
+
+    // Alt-click means we should start listening for MIDI events.
+    if (event.altKey) {
+        event.preventDefault();
+        this.props.midiLearn();
+        return;
+    }
+
     /**
      * Calculate the new value for the knob given how far the
      * user's mouse has moved.
