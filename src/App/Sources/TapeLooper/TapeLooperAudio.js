@@ -42,6 +42,7 @@ class TapeLooperAudio {
         bufferSourceNode.buffer = this.buffer;
         bufferSourceNode.loop = true;
         bufferSourceNode.loopStart = this._loopStart;
+        
         if (this._loopEnd !== undefined) 
             bufferSourceNode.loopEnd = this._loopEnd;
         else
@@ -57,6 +58,8 @@ class TapeLooperAudio {
             // Start with a playback rate of 0 then speed up.
             bufferSourceNode.playbackRate.setValueAtTime(0, 0);
             this.speedBufferUpToPlaying()
+        } else {
+            bufferSourceNode.playbackRate.setValueAtTime(this.playbackRate, 0);
         }
     }
 

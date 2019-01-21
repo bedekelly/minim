@@ -3,9 +3,9 @@ import React from 'react';
 
 export default class TapeComponents extends React.Component {
     componentShouldUpdate(newProps, newState) {
-        
+        return false;
     }
-    
+
     render() {
         return <React.Fragment>
             <div className="small-reel">
