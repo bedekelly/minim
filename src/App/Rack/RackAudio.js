@@ -42,6 +42,9 @@ class RackAudio {
 
         // Remove the effect from this rack's list.
         this.effects.splice(effectIndex, 1);
+        
+        // Unregister component for MIDI messages.
+        this.graph.unregisterComponent(id);
     }
 
     outputOf(index) {

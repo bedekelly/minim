@@ -38,13 +38,9 @@ class Gain extends React.Component {
     }
     
     componentDidMount() {
-        this.props.graph.components[this.props.id] = {
+        this.props.graph.registerComponent(this.props.id, {
             setGain: value => this.setGain(value, "midi")
-        }
-    }
-    
-    componentWillUnmount() {
-        this.props.graph.unregisterComponent(this.props.id);
+        });
     }
     
     setGain(value, midi) {

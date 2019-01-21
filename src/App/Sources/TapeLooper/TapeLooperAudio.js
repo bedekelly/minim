@@ -34,6 +34,8 @@ class TapeLooperAudio {
 
     async play() {
         this.paused = false;
+        if (!this.buffer) return;
+        
         // Create and setup a source node which reads from an audio buffer.
         // Note: this DOES need to happen every time we resume audio!
         const bufferSourceNode = this.node = this.context.createBufferSource();
@@ -71,7 +73,8 @@ class TapeLooperAudio {
     }
 
     get duration() {
-        return this.buffer.duration;
+        if (this.buffer) return this.buffer.duration;
+        else return 0;
     }
 
     set loopEnd(value) {
@@ -191,7 +194,11 @@ class TapeLooperAudio {
     
     setPlaybackRate(newRate) {
         this.playbackRate = newRate;
-        return this._setPlaybackRate(newRate);
+        if (this.node) {
+            this.relativeStartTime = this.relativeCurrentTime;
+            this.absoluteStartTime = this.context.currentTime;
+            this.node.playbackRate.setValueAtTime(newRate, 0);
+        }
     }
     
     routeTo(destination) {

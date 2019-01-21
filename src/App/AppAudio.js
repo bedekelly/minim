@@ -47,16 +47,21 @@ class AppAudio {
         // this.selectedRack.midi(message)
     }
 
+
+    registerComponent(id, handlers) {
+        this.components[id] = handlers;
+    }
+
     unregisterComponent(componentId) {
         for (let input of Object.keys(this.midiHandlers)) {
             for (let control of Object.keys(this.midiHandlers[input])) {
                 const handler = this.midiHandlers[input][control]
-                debugger
                 if (handler.id === componentId ) {
                     delete this.midiHandlers[input][control];
                 }
             }
         }
+        delete this.components[componentId];
     }
 
     async setupMidi() {

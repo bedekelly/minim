@@ -43,12 +43,31 @@ export default class Rice extends React.Component {
         event.preventDefault();
     }
 
+    componentDidMount() {
+        this.props.appAudio.registerComponent(this.props.id, {
+            setLength: value => this.setLength(value, "midi"),
+            setSpace: value => this.setSpace(value, "midi")
+        });
+    }
+
+    midiLearn(control) {
+        this.props.appAudio.midiLearn(this.props.id, control);
+    }
+    
+    setLength(length) {
+        this.setState({ length });
+    }
+    
+    setSpace(space) {
+        this.setState({ space });
+    }
+
     render() {
         return <div className="rice" onDrop={ event => this.onDrop(event) } onDragOver={ event => this.onDragOver(event)}>
           <div className="waveform">
               { this.audio.buffer 
                   ? <WaveformDisplay width={ 240 } height={ 75 } buffer={ this.audio.buffer } audioId={ this.audio.audioId }/>
-                  : <div className="empty-waveform"></div>
+                  : <div className="empty-waveform">Drag a sound file here!</div>
               }
           </div>
           <div className="randomise control">
@@ -60,7 +79,8 @@ export default class Rice extends React.Component {
              min={ this.MIN_LENGTH }
              max={ this.MAX_LENGTH }
              value={ this.state.length }
-             onChange={ length => this.setState({ length }) }
+             onChange={ length => this.setLength(length) }
+             midiLearn={ () => this.midiLearn("setLength") }
             />
             <span>Length</span>
           </div>
@@ -69,7 +89,8 @@ export default class Rice extends React.Component {
              min={ this.MIN_SPACE }
              max={ this.MAX_SPACE }
              value={ this.state.space }
-             onChange={ space => this.setState({ space }) }
+             onChange={ space => this.setSpace(space) }
+             midiLearn={ () => this.midiLearn("setSpace") }
             />
             <span>Space</span>
           </div>

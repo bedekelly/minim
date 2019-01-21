@@ -17,6 +17,10 @@ export default class RiceAudio {
         this.audioId = uuid();
     }
 
+    play() {}
+    
+    pause() {}
+
     routeTo(destination) {
         console.log("Rice audio routed to ", destination);
     }

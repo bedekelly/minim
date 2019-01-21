@@ -2,17 +2,23 @@ import React from "react";
 
 import './TapeLooper.css';
 import Editor from '../../Editor/Editor.js';
-
+import TapeComponents from './TapeComponents';
+import Knob from '../../Knob';
 
 class TapeLooper extends React.Component {
 
+    PLAYBACK_MIN = 0;
+    PLAYBACK_MAX = 2;
+
     constructor(props) {
         super(props);
+        this.audio = this.props.appAudio.sources[this.props.id];
         this.state = {
             zoomed: false,
-            hasTape: false
+            hasTape: false,
+            playbackRate: this.audio.playbackRate
         }
-        this.audio = this.props.appAudio.sources[this.props.id];
+        
     }
 
     async stop() {
@@ -47,11 +53,12 @@ class TapeLooper extends React.Component {
     }
     
     get playbackRate() {
-        return this.audio.playbackRate;
+        return this.state.playbackRate;
     }
     
     setPlaybackRate(rate) {
         this.audio.setPlaybackRate(rate);
+        this.setState({ playbackRate: rate });
     }
     
     openEditor() {
@@ -86,32 +93,17 @@ class TapeLooper extends React.Component {
                 <div className="right"></div>
             </div>
 
-            <div className="button speed-up" onClick={() => this.setPlaybackRate(this.playbackRate*1.005)}>>></div>
+            <Knob 
+                min={ this.PLAYBACK_MIN } 
+                max={ this.PLAYBACK_MAX } 
+                value={ this.state.playbackRate }
+                onChange={ value => this.setPlaybackRate(value) }
+                midiLearn={ () => this.midiLearn() }>
+            </Knob>
+            <p className="speed-title">Speed</p>
             { this.state.hasTape ? <div className="button editor-button" onClick={() => this.openEditor()}>~</div> : null }
 
-            <div className="small-reel">
-                <div className="middle circle"></div>
-                <div className="circle one"></div>
-                <div className="circle two"></div>
-                <div className="circle three"></div>
-                <div className="circle four"></div>
-                <div className="circle five"></div>
-                <div className="circle six"></div>
-                <div className="circle seven"></div>
-                <div className="circle eight"></div>
-                <div className="circle nine"></div>
-            </div>
-            <div className="small-reel-shadow"></div>
-            <div className="big-reel">
-                <div className="hole one"></div>
-                <div className="hole two"></div>
-                <div className="hole three"></div>
-                <div className="middle-hole"></div>
-            </div>
-            <div className="big-reel-shadow"></div>
-
-            <div className="tape-top"></div>
-            <div className="tape-bottom"></div>
+            <TapeComponents></TapeComponents>
             
             { this.state.editorOpen ? this.editor() : null}
         </div>

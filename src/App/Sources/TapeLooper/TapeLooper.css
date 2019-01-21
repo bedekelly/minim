@@ -309,3 +309,24 @@
 .editor-button {
     left: 60px;
 }
+
+
+.tape-looper .knob {
+    margin-top: 20px;
+    margin-left: 20px;
+    width: 25px;
+    height: 25px;
+    background: whitesmoke;
+}
+
+.tape-looper .knob .notch {
+    height: 12px;
+}
+
+.tape-looper .speed-title {
+    color: whitesmoke;
+    font-family: monospace;
+    font-size: 10pt;
+    font-style: italic;
+    margin: 5px 0 0 12px;
+}
