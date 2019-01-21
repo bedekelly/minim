@@ -5,6 +5,7 @@
   "dependencies": {
     "audio-context-polyfill": "^1.0.0",
     "promise-decode-audio-data": "^0.4.1",
+    "prop-types": "^15.6.2",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "react-draggable": "^3.0.5",
