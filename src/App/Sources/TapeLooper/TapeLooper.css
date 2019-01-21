@@ -1,8 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Parisienne');
 
-
-
-
 .tape-looper * {
     transition: ease all 0.3s;
     user-select: none;

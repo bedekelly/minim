@@ -1,0 +1,89 @@
+.rice button {
+  box-shadow: 0 0 10px #2E3E4C;
+  outline: 0;
+  font-size: 24pt;
+  border: none;
+  cursor: pointer;
+  background: whitesmoke;
+  height: 30px;
+  width: 30px;
+  margin-top: 5px;
+  margin-bottom: 7px;
+  padding: 0px;
+  border-radius: 5px;
+}
+
+.rice button:active {
+  box-shadow: 0 0 3px #2E3E4C;
+}
+
+.rice {
+  background: #6A8EAE;
+  box-sizing: border-box;
+  padding: 20px;
+  width: 300px;
+  height: 200px;
+  border-radius: 7px;
+  box-shadow: 0 0 50px;
+  display: grid;
+  grid-template-rows: 5fr 3fr;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-areas:
+    "waveform waveform waveform"
+    "dice length space";
+}
+
+.rice .waveform {
+  border-radius: 7px;
+  grid-area: waveform;
+  display: grid;
+  place-items: center;
+}
+
+.rice .wave {
+  background: whitesmoke;
+  width: 90%;
+  height: 75%;
+  border-radius: 7px;
+  box-shadow: 0 0 10px 3px #2E3E4C inset;
+}
+
+.rice .control {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: monospace;
+  font-size: 11pt;
+  font-weight: 200;
+  color: whitesmoke;
+}
+
+.rice .control > span {
+  user-select: none;
+}
+
+.rice .length {
+  display: grid;
+  place-items: center;
+}
+
+.rice .space {
+  display: grid;
+  place-items: center;
+}
+
+.rice .knob {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: whitesmoke;
+  box-shadow: 0 0 10px #2E3E4C;
+  cursor: pointer;
+  margin-top: 5px;
+  margin-bottom: 6px;
+}
+
+.rice .notch {
+    height: 15px;
+}
