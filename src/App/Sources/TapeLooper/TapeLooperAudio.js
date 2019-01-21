@@ -76,11 +76,30 @@ class TapeLooperAudio {
     }
 
     set loopEnd(value) {
-        this.relativeStartTime = this.relativeCurrentTime;
+        // If we're in the loop now, and the loop-end value is set to
+        // a time before the current play-head, the source node will
+        // warp back to the start. We reflect that change in any
+        // request for the relative current time.
+        const inLoopNow = this.checkInLoop();
+        const relativeCurrentTime = this.relativeCurrentTime;
+        if (inLoopNow && relativeCurrentTime > value) {
+            this.relativeStartTime = this._loopStart;
+            console.log(this._loopStart);
+        } else {
+            this.relativeStartTime = relativeCurrentTime;
+        }
+
+        // Set the absolute start time to now.
         this.absoluteStartTime = this.context.currentTime;
+
+        // Set the audio node's loop end value.
         if (this.node) this.node.loopEnd = value;
+        
+        // Update our local variable to reflect loop end.
         this._loopEnd = value;
-        this.inLoop = this.checkInLoop();
+        
+        // Update whether we're inside the loop now or not.
+        this.inLoop = inLoopNow;
     }
 
     get loopEnd() {
