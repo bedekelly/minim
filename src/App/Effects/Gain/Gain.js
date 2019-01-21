@@ -22,7 +22,7 @@ function linMap(value, fromLower, fromUpper, toLower, toUpper) {
 class Gain extends React.Component {
     
     MIN_GAIN = 0;
-    MAX_GAIN = 10;
+    MAX_GAIN = 5;
     
     constructor(props) {
         super(props);
@@ -41,6 +41,10 @@ class Gain extends React.Component {
         this.props.graph.components[this.props.id] = {
             setGain: value => this.setGain(value, "midi")
         }
+    }
+    
+    componentWillUnmount() {
+        this.props.graph.unregisterComponent(this.props.id);
     }
     
     setGain(value, midi) {

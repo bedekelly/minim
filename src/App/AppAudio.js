@@ -33,16 +33,30 @@ class AppAudio {
             // Reset our state so controllers work normally again.
             this.learningMidi = false;
             this.midiLearnTarget = null;
-
         } else {
             if (!this.midiHandlers[input.id] || !this.midiHandlers[input.id][control]) {
                 console.log("Unhandled midi input: ", { input: input.id, control });
                 return;
             }
             const { id, handler } = this.midiHandlers[input.id][control];
+            
+            // We've deleted the component but received an input for it -
+            // time to delete the MIDI handler for it too.
             this.components[id][handler](value);
         }
         // this.selectedRack.midi(message)
+    }
+
+    unregisterComponent(componentId) {
+        for (let input of Object.keys(this.midiHandlers)) {
+            for (let control of Object.keys(this.midiHandlers[input])) {
+                const handler = this.midiHandlers[input][control]
+                debugger
+                if (handler.id === componentId ) {
+                    delete this.midiHandlers[input][control];
+                }
+            }
+        }
     }
 
     async setupMidi() {
