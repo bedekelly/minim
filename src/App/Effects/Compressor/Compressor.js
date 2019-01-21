@@ -14,7 +14,6 @@ class Compressor extends React.Component {
     }
     
     change(key, value) {
-        console.log("Changing", key, "to", value);
         this.compressorAudio[key] = value;
         this.setState({[key]: value})
     }

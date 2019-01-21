@@ -39,7 +39,6 @@ class TapeLooperAudio {
         const bufferSourceNode = this.node = this.context.createBufferSource();
         bufferSourceNode.buffer = this.buffer;
         bufferSourceNode.loop = true;
-        // console.log("Loop starting at ", this._loopStart);
         bufferSourceNode.loopStart = this._loopStart;
         if (this._loopEnd !== undefined) 
             bufferSourceNode.loopEnd = this._loopEnd;
@@ -84,7 +83,6 @@ class TapeLooperAudio {
         const relativeCurrentTime = this.relativeCurrentTime;
         if (inLoopNow && relativeCurrentTime > value) {
             this.relativeStartTime = this._loopStart;
-            console.log(this._loopStart);
         } else {
             this.relativeStartTime = relativeCurrentTime;
         }
@@ -124,17 +122,14 @@ class TapeLooperAudio {
     checkInLoop() {
         // Assume playback rate is constant for the last chunk.
         // This precludes using linearRampToValueAtTime.
-        console.log("Checking in loop...")
         const absoluteCurrentTime = this.context.currentTime;
         const { loopStart, loopEnd, playbackRate, relativeStartTime, absoluteStartTime, duration } = this;
         const wallClockTimeElapsed = (absoluteCurrentTime - absoluteStartTime);
         const relativeTimeElapsed = wallClockTimeElapsed * playbackRate;
         const songPositionWithoutLoopMarkers = (relativeStartTime + relativeTimeElapsed) % duration;
-        
-        // console.log({ loopStart, songPositionWithoutLoopMarkers, loopEnd });
-        const result = loopStart < songPositionWithoutLoopMarkers && songPositionWithoutLoopMarkers < loopEnd; 
-        console.log({ result });
-        return result;
+        const afterLoopStart = loopStart < songPositionWithoutLoopMarkers;
+        const beforeLoopEnd = songPositionWithoutLoopMarkers < loopEnd;
+        return afterLoopStart && beforeLoopEnd;
     }
     
     get relativeCurrentTime() {

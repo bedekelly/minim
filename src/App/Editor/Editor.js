@@ -41,7 +41,6 @@ class Editor extends React.Component {
     }
     
     set loopStart(value) {
-        console.log("Setting new loop start to ", value);
         this.setState({ loopStart: value });
         this.audio.loopStart = value;
     }
@@ -51,7 +50,6 @@ class Editor extends React.Component {
     }
     
     set loopEnd(value) {
-        console.log("Setting new loop end to ", value);
         this.setState({ loopEnd: value });
         this.audio.loopEnd = value;
     }
@@ -72,12 +70,9 @@ class Editor extends React.Component {
 
         function animate() {
             const x = linMap(audio.relativeCurrentTime, 0, audio.duration, 0, width);
-            if (x > width) {
-                debugger;
-            }
+
             context.strokeStyle = "green";
             context.lineWidth = "1px";
-
             context.clearRect(0, 0, width, height);
 
             context.beginPath();
@@ -187,12 +182,10 @@ class Editor extends React.Component {
     }
 
     onLoopStartChange(value) {
-        // console.log("Got new loop start value: ", value);
         this.loopStart = value;
     }
     
     onLoopEndChange(value) {
-        // console.log("Got new loop start value: ", value);
         this.loopEnd = value;
     }
 
