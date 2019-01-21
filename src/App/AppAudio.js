@@ -14,7 +14,7 @@ class AppAudio {
     }
 
     async setupMidi() {
-        const midiAccess = await navigator.requestMidiAccess({ sysex: false })
+        const midiAccess = await navigator.requestMIDIAccess({ sysex: false })
         debugger;
     }
 

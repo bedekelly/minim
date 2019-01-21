@@ -19,7 +19,7 @@ export default class Rice extends React.Component {
             length: 50,
             space: 50
         }
-        this.audio = this.props.audioGraph.sources[this.props.id];
+        this.audio = this.props.appAudio.sources[this.props.id];
     }
     
     onDrop(event) {

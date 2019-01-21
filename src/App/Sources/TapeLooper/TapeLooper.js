@@ -12,7 +12,7 @@ class TapeLooper extends React.Component {
             zoomed: false,
             hasTape: false
         }
-        this.audio = this.props.audioGraph.sources[this.props.id];
+        this.audio = this.props.appAudio.sources[this.props.id];
     }
 
     async stop() {

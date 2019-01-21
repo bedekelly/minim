@@ -12,9 +12,9 @@ import { arrayMove } from 'react-sortable-hoc';
 
 
 class RackAudio {
-    constructor(audioGraph) {
+    constructor(appAudio) {
         this.source = null;
-        this.graph = audioGraph;
+        this.graph = appAudio;
         this.effects = [];
 
         // Todo: global fx rack

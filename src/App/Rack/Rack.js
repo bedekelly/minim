@@ -16,7 +16,7 @@ class Rack extends React.Component {
     constructor(props) {
         super(props);
         this.state = { source: null, effects: [] };
-        this.graph = this.props.audioGraph;
+        this.graph = this.props.appAudio;
         this.audioRack = this.graph.racks[this.props.id];
     }
 
@@ -35,7 +35,7 @@ class Rack extends React.Component {
             sourceType={this.state.source.type} 
             playing={this.props.playing} 
             id={this.state.source.id} 
-            audioGraph={this.graph}>
+            appAudio={this.graph}>
         </Source>
     }
 
