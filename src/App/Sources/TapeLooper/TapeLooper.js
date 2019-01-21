@@ -5,6 +5,21 @@ import Editor from '../../Editor/Editor.js';
 import TapeComponents from './TapeComponents';
 import Knob from '../../Knob';
 
+
+/**
+ * Linearly map a value from one range to another.
+ */
+function linMap(value, fromLower, fromUpper, toLower, toUpper) {
+    const lowerRange = fromUpper - fromLower;
+    const upperRange = toUpper - toLower;
+    const magnitudeThroughLowerRange = (value - fromLower);
+    const fractionThroughRange = magnitudeThroughLowerRange / lowerRange;
+    const magnitudeThroughUpperRange = fractionThroughRange * upperRange;
+    const valueInUpperRange = toLower + magnitudeThroughUpperRange;
+    return valueInUpperRange;
+}
+
+
 class TapeLooper extends React.Component {
 
     PLAYBACK_MIN = 0;
@@ -56,7 +71,10 @@ class TapeLooper extends React.Component {
         return this.state.playbackRate;
     }
     
-    setPlaybackRate(rate) {
+    setPlaybackRate(rate, midi) {
+        if (midi) {
+            rate = linMap(rate, 0, 127, this.PLAYBACK_MIN, this.PLAYBACK_MAX);
+        }
         this.audio.setPlaybackRate(rate);
         this.setState({ playbackRate: rate });
     }
@@ -71,6 +89,16 @@ class TapeLooper extends React.Component {
     
     editor() {
         return <Editor close={() => this.closeEditor()} audio={this.audio}></Editor>
+    }
+    
+    componentDidMount() {
+        this.props.appAudio.registerComponent(this.props.id, {
+            setPlaybackRate: value => this.setPlaybackRate(value, "midi")
+        });
+    }
+
+    midiLearn(control) {
+        this.props.appAudio.midiLearn(this.props.id, control);
     }
 
     render() {
@@ -98,7 +126,7 @@ class TapeLooper extends React.Component {
                 max={ this.PLAYBACK_MAX } 
                 value={ this.state.playbackRate }
                 onChange={ value => this.setPlaybackRate(value) }
-                midiLearn={ () => this.midiLearn() }>
+                midiLearn={ () => this.midiLearn("setPlaybackRate") }>
             </Knob>
             <p className="speed-title">Speed</p>
             { this.state.hasTape ? <div className="button editor-button" onClick={() => this.openEditor()}>~</div> : null }

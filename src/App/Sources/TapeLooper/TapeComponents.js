@@ -2,7 +2,7 @@ import React from 'react';
 
 
 export default class TapeComponents extends React.Component {
-    componentShouldUpdate(newProps, newState) {
+    shouldComponentUpdate(newProps, newState) {
         return false;
     }
 
