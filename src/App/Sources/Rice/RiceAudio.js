@@ -7,8 +7,8 @@ const randomChoice = array => array[Math.floor(Math.random() * array.length)];
 export default class RiceAudio {
     constructor(parentRack) {
         this.parentRack = parentRack;
-        this.graph = parentRack.graph;
-        this.context = this.graph.context;
+        this.appAudio = parentRack.appAudio;
+        this.context = this.appAudio.context;
         this.maxLength = 5;
         this.length = 0.3;
         this.overlap = 0.4;

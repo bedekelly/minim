@@ -7,9 +7,9 @@ class TapeLooperAudio {
     constructor(parentRack) {
         this.buffer = null;
         this.parentRack = parentRack;
-        this.graph = parentRack.graph;
+        this.appAudio = parentRack.appAudio;
         this.paused = true;
-        this.context = this.graph.context;
+        this.context = this.appAudio.context;
         this.absoluteStartTime = 0;
         this.relativeStartTime = 0;
         this.playbackRate = 1;

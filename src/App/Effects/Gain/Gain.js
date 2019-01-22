@@ -26,7 +26,7 @@ class Gain extends React.Component {
     
     constructor(props) {
         super(props);
-        this.gainAudio = this.props.graph.effects[this.props.id];
+        this.gainAudio = this.props.appAudio.effects[this.props.id];
         this.state = {
             value: this.gainAudio.value
         }
@@ -34,11 +34,11 @@ class Gain extends React.Component {
     
     midiLearn() {
         console.log("MIDI learning...")
-        this.props.graph.midiLearn(this.props.id, "setGain");
+        this.props.appAudio.midiLearn(this.props.id, "setGain");
     }
     
     componentDidMount() {
-        this.props.graph.registerComponent(this.props.id, {
+        this.props.appAudio.registerComponent(this.props.id, {
             setGain: value => this.setGain(value, "midi")
         });
     }

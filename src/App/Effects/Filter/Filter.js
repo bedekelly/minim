@@ -8,7 +8,7 @@ class Filter extends React.Component {
     
     constructor(props) {
         super(props);
-        this.filterAudio = this.props.graph.effects[this.props.id];
+        this.filterAudio = this.props.appAudio.effects[this.props.id];
         this.state = {
             value: this.filterAudio.value
         }

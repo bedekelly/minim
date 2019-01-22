@@ -13,7 +13,7 @@ import './EffectHandle.css';
 const DragHandle = SortableHandle(() => <div className="effect-drag-handle"><span>☰</span></div>)
 const SortableEffect = SortableElement(props => <Effect {...props} handle={<DragHandle />} />);
 
-const SortableEffectsList = graph => SortableContainer(({effects, removeEffect}) => 
+const SortableEffectsList = appAudio => SortableContainer(({effects, removeEffect}) => 
     <div className="sortable-container"> {
         effects.map(({effectType, id}, index) => 
             <SortableEffect
@@ -21,7 +21,7 @@ const SortableEffectsList = graph => SortableContainer(({effects, removeEffect})
                 id={id}
                 removeSelf={() => removeEffect(id)}
                 key={id}
-                graph={graph}
+                appAudio={appAudio}
                 index={index}>
                 
             </SortableEffect>

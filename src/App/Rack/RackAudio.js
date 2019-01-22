@@ -14,11 +14,11 @@ import { arrayMove } from 'react-sortable-hoc';
 class RackAudio {
     constructor(appAudio) {
         this.source = null;
-        this.graph = appAudio;
+        this.appAudio = appAudio;
         this.effects = [];
 
         // Todo: global fx rack
-        this.destination = this.graph.context.destination;
+        this.destination = this.appAudio.context.destination;
     }
 
     pause() {
@@ -44,7 +44,7 @@ class RackAudio {
         this.effects.splice(effectIndex, 1);
         
         // Unregister component for MIDI messages.
-        this.graph.unregisterComponent(id);
+        this.appAudio.unregisterComponent(id);
     }
 
     outputOf(index) {
@@ -81,7 +81,7 @@ class RackAudio {
         const Source = sourceAudios[sourceType] || defaultSourceAudio;
         this.source = new Source(this);
         const id = uuid();
-        this.graph.sources[id] = this.source;
+        this.appAudio.sources[id] = this.source;
         return id;
     }
 
@@ -109,7 +109,7 @@ class RackAudio {
 
         // Add an ID to register this effect.
         const id = uuid();
-        this.graph.effects[id] = effect;
+        this.appAudio.effects[id] = effect;
         effect.id = id;
 
         // Route the current output to this effect.

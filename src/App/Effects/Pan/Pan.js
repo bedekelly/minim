@@ -6,7 +6,7 @@ class Pan extends React.Component {
     
     constructor(props) {
         super(props);
-        this.panAudio = this.props.graph.effects[this.props.id];
+        this.panAudio = this.props.appAudio.effects[this.props.id];
         this.state = {
             value: this.panAudio.value
         }

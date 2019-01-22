@@ -1,7 +1,7 @@
 class EffectAudio {
     constructor(parentRack) {
         this.parentRack = parentRack;
-        this.context = parentRack.graph.context;
+        this.context = parentRack.appAudio.context;
     }
     
     disconnect() {

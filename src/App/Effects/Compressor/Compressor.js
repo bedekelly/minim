@@ -6,7 +6,7 @@ class Compressor extends React.Component {
     
     constructor(props) {
         super(props);
-        this.compressorAudio = this.props.graph.effects[this.props.id];
+        this.compressorAudio = this.props.appAudio.effects[this.props.id];
         const {
             threshold, knee, ratio, attack, release
         } = this.compressorAudio;
