@@ -7,19 +7,19 @@ import WaveformDisplay from './WaveformDisplay';
 
 export default class Rice extends React.Component {
 
-    MIN_SPACE = 0.1
-    MAX_SPACE = 100
-
-    MIN_LENGTH = 0.1
-    MAX_LENGTH = 100
-
+    MIN_LENGTH = 0.03
+    MAX_LENGTH = 0.5
+    
+    MIN_SPACE = -0.8
+    MAX_SPACE = 0.5
+    
     constructor(props) {
         super(props);
-        this.state = {
-            length: 50,
-            space: 50
-        }
         this.audio = this.props.appAudio.sources[this.props.id];
+        this.state = {
+            length: this.audio.length,
+            space: this.audio.spacing / this.audio.length
+        }
     }
     
     onDrop(event) {
@@ -55,24 +55,26 @@ export default class Rice extends React.Component {
     }
     
     setLength(length) {
+        this.audio.setLength(length);
         this.setState({ length });
     }
     
     setSpace(space) {
+        this.audio.setSpace(space);
         this.setState({ space });
     }
 
     render() {
         return <div className="rice" onDrop={ event => this.onDrop(event) } onDragOver={ event => this.onDragOver(event)}>
-          <div className="waveform">
+          <div className="waveform" onClick={ () => this.audio.randomise() }>
               { this.audio.buffer 
                   ? <WaveformDisplay width={ 240 } height={ 75 } buffer={ this.audio.buffer } audioId={ this.audio.audioId }/>
                   : <div className="empty-waveform">Drag a sound file here!</div>
               }
           </div>
           <div className="randomise control">
-            <button></button>
-            <span>Random</span>
+            <button onClick={ () => this.audio.noteOn() }></button>
+            <span>Play</span>
           </div>
           <div className="length control">
             <Knob
