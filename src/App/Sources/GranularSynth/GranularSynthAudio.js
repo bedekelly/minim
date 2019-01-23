@@ -4,7 +4,7 @@ import uuid from 'uuid4';
 const randomChoice = array => array[Math.floor(Math.random() * array.length)];
 
 
-export default class RiceAudio {
+export default class GranularSynthAudio {
     constructor(parentRack) {
         this.parentRack = parentRack;
         this.appAudio = parentRack.appAudio;
@@ -85,6 +85,6 @@ export default class RiceAudio {
     pause() {}
 
     routeTo(destination) {
-        console.log("Rice audio routed to ", destination);
+        console.log("GranularSynth audio routed to ", destination);
     }
 }

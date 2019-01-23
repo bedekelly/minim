@@ -1,16 +1,18 @@
 const SourceType = Object.freeze({
     TapeLooper: Symbol("TapeLooper"),
-    Rice: Symbol("Rice")
+    GranularSynth: Symbol("GranularSynth")
 });
 
 const SourceTypes = [
     { 
         type: SourceType.TapeLooper,
-        text: "Add Tape Looper"
+        text: "Tape Looper", 
+        image: "https://lorempixel.com/200/120"
     },
     {
-        type: SourceType.Rice,
-        text: "Add Rice"
+        type: SourceType.GranularSynth,
+        text: "Granular Synth",
+        image: "https://lorempixel.com/200/120"
     }
 ]
 

@@ -7,10 +7,10 @@ const EffectType = Object.freeze({
 
 
 const EffectTypes = [
-    {type: EffectType.Pan, text: "Add Pan"},
-    {type:EffectType.Filter, text: "Add Filter"},
-    {type: EffectType.Gain, text: "Add Gain"},
-    {type: EffectType.Compressor, text: "Add Comp"}
+    {type: EffectType.Pan, text: "Add Pan", image: "https://lorempixel.com/200/120"},
+    {type: EffectType.Filter, text: "Add Filter", image: "https://lorempixel.com/200/120"},
+    {type: EffectType.Gain, text: "Add Gain", image: "https://lorempixel.com/200/120"},
+    {type: EffectType.Compressor, text: "Add Comp", image: "https://lorempixel.com/200/120"}
 ];
 
 

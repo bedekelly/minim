@@ -93,4 +93,5 @@
     font-family: monospace;
     font-size: 18pt;
     color: #666;
+    user-select: none;
 }

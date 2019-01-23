@@ -1,11 +1,11 @@
 import React from 'react';
-import './Rice.css';
+import './GranularSynth.css';
 
 import Knob from '../../Knob';
 import WaveformDisplay from './WaveformDisplay';
 
 
-export default class Rice extends React.Component {
+export default class GranularSynth extends React.Component {
 
     MIN_LENGTH = 0.03
     MAX_LENGTH = 0.5

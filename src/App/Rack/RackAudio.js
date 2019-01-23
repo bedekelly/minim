@@ -1,7 +1,7 @@
 import uuid from "uuid4";
 
 import TapeLooperAudio from '../Sources/TapeLooper/TapeLooperAudio';
-import RiceAudio from '../Sources/Rice/RiceAudio';
+import GranularSynthAudio from '../Sources/GranularSynth/GranularSynthAudio';
 import PanAudio from '../Effects/Pan/PanAudio';
 import FilterAudio from '../Effects/Filter/FilterAudio';
 import GainAudio from '../Effects/Gain/GainAudio';
@@ -12,6 +12,7 @@ import { arrayMove } from 'react-sortable-hoc';
 
 
 class RackAudio {
+    
     constructor(appAudio) {
         this.source = null;
         this.appAudio = appAudio;
@@ -76,7 +77,7 @@ class RackAudio {
     }
 
     addSource(sourceType) {
-        const sourceAudios = { [SourceType.TapeLooper]: TapeLooperAudio, [SourceType.Rice]: RiceAudio };
+        const sourceAudios = { [SourceType.TapeLooper]: TapeLooperAudio, [SourceType.GranularSynth]: GranularSynthAudio };
         const defaultSourceAudio = TapeLooperAudio;
         const Source = sourceAudios[sourceType] || defaultSourceAudio;
         this.source = new Source(this);
@@ -92,7 +93,7 @@ class RackAudio {
     get currentOutput() {
         return this.effects[this.effects.length-1] || this.source;
     }
-
+    
     addEffect(effectType) {
         // Make an EffectAudio and add it to this rack's effect.
         const effectAudios = {

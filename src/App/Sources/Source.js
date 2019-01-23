@@ -1,7 +1,7 @@
 import React from 'react';
 
 import TapeLooper from './TapeLooper';
-import Rice from './Rice';
+import GranularSynth from './GranularSynth';
 import { SourceType } from './SourceTypes';
 
 
@@ -10,8 +10,8 @@ function Source(props) {
         case SourceType.TapeLooper: {
             return <TapeLooper {...props}></TapeLooper>
         }
-        case SourceType.Rice: {
-            return <Rice {...props}></Rice>
+        case SourceType.GranularSynth: {
+            return <GranularSynth {...props}></GranularSynth>
         }
         default: return null;
     }
