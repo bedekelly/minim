@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Montserrat:400,400i,700");
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,800");
 @import url("https://fonts.googleapis.com/css?family=Lato:400,400i,700");
 @import url("https://fonts.googleapis.com/css?family=Lora:400,400i,700");
 
@@ -16,10 +16,10 @@
 .picker {
     user-select: none;
     position: absolute;
-    left: 5vw;
+    left: 25vw;
     top: 5vh;
-    width: 90vw;
-    min-width: 90vw;
+    width: 50vw;
+    min-width: 50vw;
     background: #222;
     border-radius: 7px;
     box-shadow: 0 0 40px;
@@ -29,6 +29,20 @@
     height: 90vh;
 }
 
+.picker h1 {
+    margin: 0;
+    color: #444;
+    padding: 0;
+    font-family: "Montserrat";
+    font-size: 48pt;
+    position: absolute;
+    top: 4vmax;
+    left: 4vmax;
+    text-transform: uppercase;
+    font-weight: bold;
+    background: whitesmoke;
+}
+
 .picker .items {
   display: flex;
   background: whitesmoke;
@@ -36,7 +50,7 @@
   box-shadow: 0 0 4vmax inset;
   min-width: 100%;
   min-height: 100%;
-  padding-top: 20px;
+  padding-top: 120px;
   padding-bottom: 20px;
   overflow-y: scroll;
   flex-wrap: wrap;
