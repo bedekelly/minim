@@ -30,7 +30,6 @@ class MPC extends React.Component {
     }
 
     fileLoaded(encodedBuffer, index) {
-        this.setState({ hasTape: true });
         return this.audio.loadBufferToPad(encodedBuffer, index);
     }
 
@@ -42,8 +41,12 @@ class MPC extends React.Component {
 
     onDrop(event, index) {
         event.preventDefault()
-        let file = event.dataTransfer.files[0];
-        this.newFile(file, index);
+        const { files } = event.dataTransfer;
+        for (let file of files) {
+            this.newFile(file, index);
+            console.log("Loading file to index " + index);
+            if (--index < 0) break;
+        }
     }
 
     showPad(pad, index) {
