@@ -4,12 +4,15 @@ import TapeLooper from './TapeLooper';
 import TapeLooperAudio from './TapeLooper/TapeLooperAudio';
 import MPC from './MPC';
 import MPCAudio from './MPC/MPCAudio';
+import Ambience from './Ambience';
+import AmbienceAudio from './Ambience/AmbienceAudio';
 
 
 const SourceType = Object.freeze({
     TapeLooper: Symbol("TapeLooper"),
     GranularSynth: Symbol("GranularSynth"),
-    MPC: Symbol("MPC")
+    MPC: Symbol("MPC"),
+    Ambience: Symbol("Ambience")
 });
 
 
@@ -34,6 +37,13 @@ const SourceTypes = [
         image: "https://lorempixel.com/300/240",
         component: MPC,
         audio: MPCAudio
+    },
+    {
+        type: SourceType.Ambience,
+        text: "Ambient Sounds",
+        image: "https://lorempixel.com/300/240",
+        component: Ambience,
+        audio: AmbienceAudio
     }
 ]
 

@@ -279,7 +279,7 @@
     transition: ease all 0.1s;
 }
 
-.button {
+.tape-looper .button {
     font-size: 8pt;
     background: #666;
     display: grid;
@@ -297,16 +297,16 @@
     cursor: pointer;
 }
 
-.button:active {
+.tape-looper .button:active {
     background: coral;
     color: whitesmoke;
 }
 
-.speed-up {
+.tape-looper .speed-up {
     left: 20px;
 }
 
-.editor-button {
+.tape-looper .editor-button {
     left: 60px;
 }
 

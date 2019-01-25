@@ -1,0 +1,66 @@
+.ambience {
+  width: 300px;
+  height: 200px;
+  background: #789355;
+  border-radius: 7px;
+  box-shadow: 0 0 40px;
+  display: grid;
+  place-items: center;
+  position: relative;
+  user-select: none;
+  margin: 3vh;
+}
+
+.ambience img {
+  position: absolute;
+  top: 10%;
+  left: 7.5%;
+  width: 85%;
+  height: 80%;
+  box-shadow: 0 0 10px inset;
+  border-radius: 4px;
+  z-index: 1;
+}
+
+.inset-shadow {
+  position: absolute;
+  top: 10%;
+  left: 7.5%;
+  width: 85%;
+  height: 80%;
+  box-shadow: 0 0 10px inset;
+  border-radius: 4px;
+  z-index: 2;
+}
+
+.button {
+  border-radius: 50%;
+  background: whitesmoke;
+  width: 30px;
+  height: 30px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  font-weight: bold;
+  position: absolute;
+  top: calc(50% - 15px);
+  box-shadow: 0 0 5px;
+  padding: 0;
+  cursor: pointer;
+}
+
+.button.left {
+  left: 12.5%;
+}
+
+.button.right {
+  right: 12.5%;
+}
+
+.ambience img.blurred-image {
+  top: 10.5%;
+  left: 8%;
+  width: 84%;
+  height: 79%;
+  filter: blur(3px);
+}
