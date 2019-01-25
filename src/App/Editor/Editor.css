@@ -1,6 +1,8 @@
-.bar {
-  transition: all 0.07s ease;
+.editor * {
+    transition: none;
 }
+
+
 
 .editor {
   width: 700px;
