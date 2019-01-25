@@ -16,17 +16,13 @@ class MPC extends React.Component {
         this.audio.playPad(index);
     }
 
-    async lightPad(index, lit) {
+    lightPad(index, lit) {
         const pads = this.state.pads.map((p, i) => {
             if (i === index) {
                 return { ...p, lit }
             } else return p;
         })
-        console.log("Before:")
-        console.log(this.state);
-        await this.setState({ pads })
-        console.log("After:")
-        console.log(this.state);
+        this.setState({ pads })
     }
 
     fileLoaded(encodedBuffer, index) {
