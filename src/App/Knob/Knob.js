@@ -46,81 +46,119 @@ function boundedLinMap(value, fromLower, fromUpper, toLower, toUpper) {
  */
 class Knob extends React.Component {
 
-  onMouseDown(event) {
-    const initialY = event.clientY;
-    const { min, max, onChange, value } = this.props;
+  constructor(props) {
+    super(props);
+    this.precision = props.precision || 1;
+    this.pixelDiff = 0;
+    this.knobRef = React.createRef();
+    this.state = { dragging: false };
+  }
 
-    // Don't set any listeners after a right-click.
-    if (event.button !== 0) {
+    onMouseDown(event) {
+        const initialY = event.clientY;
+        const { min, max, onChange, value } = this.props;
+        const that = this;
+
+        // Don't set any listeners after a right-click.
+        if (event.button !== 0) {
+            event.preventDefault();
+            return;
+        }
+
+        // Alt-click means we should start listening for MIDI events.
+        if (event.altKey) {
+            event.preventDefault();
+            this.props.midiLearn();
+            return;
+        }
+
+        /**
+         * Calculate the new value for the knob given how far the
+         * user's mouse has moved.
+         */
+        function mouseMoved(event) {
+            /*
+            The mouse can move up to PIXEL_TOLERANCE pixels up and down.
+            Let's say it starts at 50 and moves to 30, where pixel_tolerance is 100.
+            It's moved +20 pixels out of a possible 100 (pixels go down).
+            We'll say that's a +20% change.
+            Let's say our knob values go from 300 to 700.
+            We map that +20% change onto the range (-400, +400) to get +80.
+            Our new value is therefore current_value+80.
+            */
+
+            const mouseY = event.clientY;
+            const pixelDiff = initialY - mouseY;  // Flip the y axis – for us, up really means up.
+            that.pixelDiff = pixelDiff;
+            const valueBreadth = max - min;
+            const valueDiff = linMap(pixelDiff, -PIXEL_TOLERANCE, PIXEL_TOLERANCE, -valueBreadth, valueBreadth);
+            const newValue = bounded(value + valueDiff, min, max);
+            onChange(newValue);
+            event.preventDefault()
+            event.stopPropagation();
+        }
+        
+        /**
+         * Stop listening to the user's mouse movements.
+         */
+        function mouseUp(event) {
+            document.removeEventListener("mouseup", mouseUp);
+            document.removeEventListener("mousemove", mouseMoved);
+            that.setState({ dragging: false });
+        }
+        
+        document.addEventListener("mousemove", mouseMoved);
+        document.addEventListener("mouseup", mouseUp);
         event.preventDefault();
-        return;
-    }
-
-    // Alt-click means we should start listening for MIDI events.
-    if (event.altKey) {
-        event.preventDefault();
-        this.props.midiLearn();
-        return;
-    }
-
-    /**
-     * Calculate the new value for the knob given how far the
-     * user's mouse has moved.
-     */
-    function mouseMoved(event) {
-        /*
-        The mouse can move up to PIXEL_TOLERANCE pixels up and down.
-        Let's say it starts at 50 and moves to 30, where pixel_tolerance is 100.
-        It's moved +20 pixels out of a possible 100 (pixels go down).
-        We'll say that's a +20% change.
-        Let's say our knob values go from 300 to 700.
-        We map that +20% change onto the range (-400, +400) to get +80.
-        Our new value is therefore current_value+80.
-        */
-
-        const mouseY = event.clientY;
-        const pixelDiff = initialY - mouseY;  // Flip the y axis – for us, up really means up.
-        const valueBreadth = max - min;
-        const valueDiff = linMap(pixelDiff, -PIXEL_TOLERANCE, PIXEL_TOLERANCE, -valueBreadth, valueBreadth);
-        const newValue = bounded(value + valueDiff, min, max);
-        onChange(newValue);
-        event.preventDefault()
         event.stopPropagation();
+        
+        this.setState({ dragging: true });
     }
-    
+  
     /**
-     * Stop listening to the user's mouse movements.
-     */
-    function mouseUp(event) {
-        document.removeEventListener("mouseup", mouseUp);
-        document.removeEventListener("mousemove", mouseMoved)
+    * Utility method to calculate the knob's "rotate" transform
+    * property, given its current value.
+    */
+    knobStyle() {
+        const { value, min, max } = this.props;
+        const angle = boundedLinMap(value, min, max, -Math.PI, Math.PI);
+        const style = {
+          transform: `rotate(${angle}rad)`
+        };
+        return style;
     }
     
-    document.addEventListener("mousemove", mouseMoved);
-    document.addEventListener("mouseup", mouseUp);
-    event.preventDefault();
-    event.stopPropagation();
-  }
+    knobValueStyle() {
+        const { x, y, height, width } = this.knobRef.current.getBoundingClientRect();
+        // Hack: for some reason width is showing as 300 for a 25px knob?!
+        let realWidth = width !== 50 ? 25 : 50;
+        const yDiff = this.showBottom ? height + 20 : -70;
+        return {
+            top: `${y + yDiff}px`,
+            left: `${x - 50 + realWidth/2}px`
+        }
+    }
   
-  /**
-   * Utility method to calculate the knob's "rotate" transform
-   * property, given its current value.
-   */
-  knobStyle() {
-    const { value, min, max } = this.props;
-    const angle = boundedLinMap(value, min, max, -Math.PI, Math.PI);
-    const style = {
-      transform: `rotate(${angle}rad)`
-    };
-    return style;
-  }
+    get showBottom() {
+        return this.pixelDiff > 0;
+    }
   
-  render() {
-    return <div className="knob" style={this.knobStyle()} 
-            onMouseDown={ event => this.onMouseDown(event) }>
-        <div className="notch"></div>
-      </div>
-  }
+    render() {
+        const valueClass = "value " + (this.pixelDiff > 0 ? "bottom" : "top");
+        return <React.Fragment>
+            <div className="knob" ref={ this.knobRef } onMouseDown={ event => this.onMouseDown(event) }>
+                { this.state.dragging && 
+                    <div 
+                     style={ this.knobValueStyle() } 
+                     className={ valueClass }>
+                         { this.props.value.toFixed(this.precision) }
+                     </div> }
+                 <div className="knob-inner" style={this.knobStyle()} >
+                     <div className="notch"></div>
+                 </div>
+            </div>
+        </React.Fragment>
+    }
 }
 
 

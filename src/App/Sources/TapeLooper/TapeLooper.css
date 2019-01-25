@@ -311,9 +311,20 @@
 }
 
 
+.tape-looper .knob > * {
+    transition: none;
+}
+
 .tape-looper .knob {
-    margin-top: 20px;
-    margin-left: 20px;
+    top: 20px;
+    left: 20px;
+    width: 25px;
+    height: 25px;
+    position: relative;
+    z-index: 4;
+}
+
+.tape-looper .knob-inner {
     width: 25px;
     height: 25px;
     background: whitesmoke;
@@ -328,5 +339,5 @@
     font-family: monospace;
     font-size: 10pt;
     font-style: italic;
-    margin: 5px 0 0 12px;
+    margin: 22px 0 0 12px;
 }

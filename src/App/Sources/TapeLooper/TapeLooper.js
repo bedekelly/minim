@@ -124,6 +124,7 @@ class TapeLooper extends React.Component {
             <Knob 
                 min={ this.PLAYBACK_MIN } 
                 max={ this.PLAYBACK_MAX } 
+                precision={ 2 }
                 value={ this.state.playbackRate }
                 onChange={ value => this.setPlaybackRate(value) }
                 midiLearn={ () => this.midiLearn("setPlaybackRate") }>
