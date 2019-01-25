@@ -4,6 +4,7 @@ import Pan from './Pan';
 import Filter from './Filter';
 import Gain from './Gain';
 import Compressor from './Compressor';
+import Reverb from './Reverb';
 import { EffectType } from './EffectTypes';
 
 
@@ -14,7 +15,8 @@ const effectComponents = {
     [EffectType.Pan]: Pan,
     [EffectType.Filter]: Filter,
     [EffectType.Gain]: Gain,
-    [EffectType.Compressor]: Compressor
+    [EffectType.Compressor]: Compressor,
+    [EffectType.Reverb]: Reverb
 }
 
 

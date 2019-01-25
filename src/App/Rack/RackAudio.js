@@ -4,6 +4,7 @@ import PanAudio from '../Effects/Pan/PanAudio';
 import FilterAudio from '../Effects/Filter/FilterAudio';
 import GainAudio from '../Effects/Gain/GainAudio';
 import CompressorAudio from '../Effects/Compressor/CompressorAudio';
+import ReverbAudio from '../Effects/Reverb/ReverbAudio';
 import { EffectType } from '../Effects/EffectTypes'
 import { SourceTypes } from '../Sources/SourceTypes';
 import { arrayMove } from 'react-sortable-hoc';
@@ -100,7 +101,8 @@ class RackAudio {
             [EffectType.Pan]: PanAudio,
             [EffectType.Filter]: FilterAudio,
             [EffectType.Gain]: GainAudio,
-            [EffectType.Compressor]: CompressorAudio
+            [EffectType.Compressor]: CompressorAudio,
+            [EffectType.Reverb]: ReverbAudio
         };
         const defaultEffectAudio = FilterAudio;
         const EffectAudio = effectAudios[effectType] || defaultEffectAudio
