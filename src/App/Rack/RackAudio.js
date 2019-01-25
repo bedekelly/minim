@@ -1,13 +1,11 @@
 import uuid from "uuid4";
 
-import TapeLooperAudio from '../Sources/TapeLooper/TapeLooperAudio';
-import GranularSynthAudio from '../Sources/GranularSynth/GranularSynthAudio';
 import PanAudio from '../Effects/Pan/PanAudio';
 import FilterAudio from '../Effects/Filter/FilterAudio';
 import GainAudio from '../Effects/Gain/GainAudio';
 import CompressorAudio from '../Effects/Compressor/CompressorAudio';
 import { EffectType } from '../Effects/EffectTypes'
-import { SourceType } from '../Sources/SourceTypes';
+import { SourceTypes } from '../Sources/SourceTypes';
 import { arrayMove } from 'react-sortable-hoc';
 
 
@@ -28,6 +26,10 @@ class RackAudio {
 
     play() {
         this.source.play();
+    }
+
+    midiMessage(message) {
+        this.source && this.source.midiMessage(message);
     }
 
     removeEffect(id) {
@@ -77,13 +79,11 @@ class RackAudio {
     }
 
     addSource(sourceType) {
-        const sourceAudios = { [SourceType.TapeLooper]: TapeLooperAudio, [SourceType.GranularSynth]: GranularSynthAudio };
-        const defaultSourceAudio = TapeLooperAudio;
-        const Source = sourceAudios[sourceType] || defaultSourceAudio;
-        this.source = new Source(this);
+        const { audio, component } = SourceTypes.find(t => t.type === sourceType);
+        this.source = new audio(this);
         const id = uuid();
         this.appAudio.sources[id] = this.source;
-        return id;
+        return { id, component };
     }
 
     get startOfFxChain() {

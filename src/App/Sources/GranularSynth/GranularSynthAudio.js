@@ -85,6 +85,13 @@ export default class GranularSynthAudio {
     pause() {}
 
     routeTo(destination) {
-        console.log("GranularSynth audio routed to ", destination);
+        if (destination.node) {
+            destination = destination.node;
+        }
+        this.destination = destination;
+        if (this.node) {
+            this.node.disconnect();
+            this.node.connect(destination);
+        }
     }
 }

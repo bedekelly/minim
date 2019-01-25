@@ -3,7 +3,6 @@ import React from "react";
 import { SourceTypes } from '../Sources/SourceTypes';
 import { EffectTypes } from '../Effects/EffectTypes'
 
-import { Source } from '../Sources';
 import SortableEffectsList from './SortableEffectsList';
 
 import { SourceModal, EffectsModal } from './Modals';
@@ -19,7 +18,7 @@ class Rack extends React.Component {
         super(props);
         this.state = { source: null, effects: [], sourceModalOpen: false, effectsModalOpen: false };
         this.appAudio = this.props.appAudio;
-        this.audioRack = this.appAudio.racks[this.props.id];
+        this.rackAudio = this.appAudio.racks[this.props.id];
     }
     
     openSourceModal() {
@@ -31,33 +30,34 @@ class Rack extends React.Component {
     }
 
     addSource(sourceType) {
-        const source = this.audioRack.addSource(sourceType);
-        this.setState({ sourceModalOpen: false, source: { id: source, type: sourceType }});
+        const { id, component } = this.rackAudio.addSource(sourceType);
+        this.setState({ sourceModalOpen: false, source: { id, component, type: sourceType }});
     }
     
     addEffect(effectType) {
-        const effect = this.audioRack.addEffect(effectType);
+        const effect = this.rackAudio.addEffect(effectType);
         this.setState({ effectsModalOpen: false, effects: [...this.state.effects, {id: effect, effectType}]})
     }
 
     sourceComponent() {
-        if (this.state.source) return <Source 
+        const Component = this.state.source && this.state.source.component;
+        if (Component) return <Component
             sourceType={this.state.source.type} 
             playing={this.props.playing} 
             id={this.state.source.id} 
             appAudio={this.appAudio}>
-        </Source>
+        </Component>
         else return <div className="add-source" onClick={ () => this.openSourceModal() }></div>
     }
     
     onSortEnd({oldIndex, newIndex}) {
-        this.audioRack.moveEffect({oldIndex, newIndex});
+        this.rackAudio.moveEffect({oldIndex, newIndex});
         this.setState({
           effects: arrayMove(this.state.effects, oldIndex, newIndex),
       })}
 
     removeEffect(id) {
-        this.audioRack.removeEffect(id);
+        this.rackAudio.removeEffect(id);
         const effectsToKeep = effect => effect.id !== id;
         this.setState({effects: this.state.effects.filter(effectsToKeep)});
     }

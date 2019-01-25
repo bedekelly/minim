@@ -12,20 +12,21 @@ class AppAudio {
         this.components = {};
         this.context = null;
         this.midiHandlers = {};
+        this.selectedRack = null;
         this.learningMidi = false;
         this.midiLearnTarget = null;
         this.setupMidi();
     }
 
     onMidiMessage(input, message) {
-        if (message.data[0] >> 4 !== 11) {
-            console.log("Non-control message, returning.");
+        let control, value;
+        let isControlMessage = (message.data[0] >> 4 !== 11)
+        if (isControlMessage) {
+            control = message.data[1];
+            value = message.data[2];
         }
 
-        const control = message.data[1];
-        const value = message.data[2];
-
-        if (this.learningMidi) {
+        if (isControlMessage && this.learningMidi) {
             // Assign the control to the current midi learn target.
             if (this.midiHandlers[input.id] === undefined) this.midiHandlers[input.id] = {};
             this.midiHandlers[input.id][control] = this.midiLearnTarget;
@@ -33,18 +34,13 @@ class AppAudio {
             // Reset our state so controllers work normally again.
             this.learningMidi = false;
             this.midiLearnTarget = null;
-        } else {
-            if (!this.midiHandlers[input.id] || !this.midiHandlers[input.id][control]) {
-                console.log("Unhandled midi input: ", { input: input.id, control });
-                return;
-            }
+        } else if (isControlMessage && this.midiHandlers[input.id] && this.midiHandlers[input.id][control]) {
             const { id, handler } = this.midiHandlers[input.id][control];
-            
-            // We've deleted the component but received an input for it -
-            // time to delete the MIDI handler for it too.
             this.components[id][handler](value);
+        } else {
+            const rack = this.racks[this.selectedRack];
+            rack && rack.midiMessage(message)
         }
-        // this.selectedRack.midi(message)
     }
 
 
@@ -108,6 +104,7 @@ class AppAudio {
         const rack = new RackAudio(this);
         const id = uuid();
         this.racks[id] = rack;
+        this.selectedRack = id;
         return { id };
     }
 }

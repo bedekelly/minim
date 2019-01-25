@@ -1,0 +1,38 @@
+.mpc {
+  background: #4A6C6F;
+  width: 300px;
+  height: 300px;
+  border-radius: 7px;
+  box-shadow: 0 0 40px black;
+  display: grid;
+  grid-template-rows: repeat(4, 1fr);
+  grid-template-columns: repeat(4, 1fr);
+  padding: 15px;
+  box-sizing: border-box;
+  direction: rtl;
+  margin: 3vh;
+}
+
+
+.pad {
+  background: #C0BCB5;
+  direction: ltr;
+  align-self: center;
+  justify-self: center;
+  width: 70%;
+  height: 70%;;
+  border-radius: 4px;
+  box-shadow: 0 0 10px 3px #444, 0 0 20px inset white;
+  border: none;
+  outline: 0;
+  cursor: pointer;
+}
+
+
+.pad:active {
+    background: #ED474A;
+}
+
+.pad.lit {
+    background: #ED474A;
+}
