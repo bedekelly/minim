@@ -33,7 +33,7 @@ class Rack extends React.Component {
         const { id, component } = this.rackAudio.addSource(sourceType);
         this.setState({ sourceModalOpen: false, source: { id, component, type: sourceType }});
     }
-    
+
     addEffect(effectType) {
         const effect = this.rackAudio.addEffect(effectType);
         this.setState({ effectsModalOpen: false, effects: [...this.state.effects, {id: effect, effectType}]})

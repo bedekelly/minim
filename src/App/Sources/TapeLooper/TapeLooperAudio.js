@@ -20,6 +20,11 @@ class TapeLooperAudio {
         this.node = null;
     }
 
+    midiMessage(message) {
+        console.log("Tape looper ignoring MIDI message: ", message);
+        console.log(message.data);
+    }
+
     async gotEncodedBuffer(arrayBuffer) {
         await this.stop();
         const context = this.context;
