@@ -146,14 +146,14 @@ class Knob extends React.Component {
     render() {
         const valueClass = "value " + (this.pixelDiff > 0 ? "bottom" : "top");
         return <React.Fragment>
-            <div className="knob" ref={ this.knobRef } onMouseDown={ event => this.onMouseDown(event) }>
+            <div className="knob" ref={ this.knobRef }>
                 { this.state.dragging && 
                     <div 
                      style={ this.knobValueStyle() } 
                      className={ valueClass }>
                          { this.props.value.toFixed(this.precision) }
                      </div> }
-                 <div className="knob-inner" style={this.knobStyle()} >
+                 <div className="knob-inner" style={this.knobStyle()} onMouseDown={ event => this.onMouseDown(event) }>
                      <div className="notch"></div>
                  </div>
             </div>

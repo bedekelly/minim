@@ -1,6 +1,6 @@
 .reverb {
   width: 100px;
-  height: 100px;
+  height: 123px;
   background: #2E4057;
   border-radius: 7px;
   display: grid;
@@ -14,6 +14,7 @@
 .reverb .reverb-inner {
   width: 100%;
   position: relative;
+  padding-top: 23px;
 }
 
 .reverb img {
