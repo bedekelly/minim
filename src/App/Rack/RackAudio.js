@@ -13,7 +13,7 @@ import { arrayMove } from 'react-sortable-hoc';
 
 
 class RackAudio {
-    
+
     constructor(appAudio) {
         this.source = null;
         this.sequencer = new SequencerAudio(appAudio.context);
@@ -22,14 +22,26 @@ class RackAudio {
 
         // Todo: global fx rack
         this.destination = this.appAudio.context.destination;
+
+        const notes = [
+            { data: [144, 36, 123], beat: 0, offset: 0 },
+            { data: [144, 36], beat: 1, offset: 0 },
+            { data: [144, 36], beat: 2, offset: 0},
+            { data: [144, 36], beat: 3, offset: 0},
+            { data: [144, 38], beat: 3, offset: 50}
+        ];
+        this.sequencer.bpm = 200;
+        this.sequencer.addNotes(notes);
     }
 
     pause() {
-        this.source.pause();
+        this.sequencer.pause();
+        this.source && this.source.pause();
     }
 
     play() {
-        this.source.play();
+        this.sequencer.play();
+        this.source && this.source.play();
     }
 
     midiMessage(message) {
@@ -87,6 +99,7 @@ class RackAudio {
         this.source = new audio(this);
         const id = uuid();
         this.appAudio.sources[id] = this.source;
+        this.sequencer.sendNotesTo(this.source);
         return { id, component };
     }
 

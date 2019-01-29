@@ -73,13 +73,13 @@ class AppAudio {
     }
 
     play() {
-        for (let source of Object.values(this.sources)) {
+        for (let source of Object.values(this.racks)) {
             source.play();
         }
     }
 
     pause() {
-        for (let source of Object.values(this.sources)) {
+        for (let source of Object.values(this.racks)) {
             source.pause();
         }
     }

@@ -1,61 +1,51 @@
+function close(a, b, delta) {
+    return Math.abs(a - b) < delta;
+}
+
+
+function includesClose(iterable, value, delta) {
+    for (let test of iterable) {
+        if (close(test, value, delta)) return true;
+    }
+    return false;
+}
+
+
 export default class SequencerAudio {
     constructor(context) {
-        this.notes = [
-            {
-                data: "one",
-                beat: 0,
-                offset: 0,
-                scheduledTimes: []
-            },
-            {
-                data: "two",
-                beat: 1,
-                offset: 0,
-                scheduledTimes: []
-            },
-            {
-                data: "three",
-                beat: 2,
-                offset: 10,
-                scheduledTimes: []
-            },
-            {
-                data: "four",
-                beat: 3,
-                offset: -25,
-                scheduledTimes: []
-            }
-        ];
         this.context = context;
-        this.timeSignature = 4;
-        this.bpm = 60;
-        this.barsLookahead = 3;
-        this.scheduleTicksPerBar = 1;
+        this._timeSignature = 4;
+        this._bpm = 60;
+        this.barsLookahead = 1;
+        this.scheduleTicksPerBar = 3;
         this.interval = null;
         this.startTime = null;
         this.relativeStartTime = 0;
-        
-        
+        this.soundSource = null;
+        this.notes = [];
+        this.playing = false;
+        this.closenessDelta = this.timePerBeat / 100;
+
         // Bind methods for cleaner passing.
         this.scheduleNextNBars = this.scheduleNextNBars.bind(this);
     }
 
     get timePerBeat() {
-        return 60 / this.bpm;
+        return 60 / this._bpm;
     }
 
     get totalBarTime() {
-        return this.timeSignature * this.timePerBeat;
+        return this._timeSignature * this.timePerBeat;
     }
 
     get scheduleInterval() {
         return 1000 * this.totalBarTime / this.scheduleTicksPerBar;
     }
-    
+
     get currentProgressIntoBar() {
         return (
-            this.context.currentTime + 
-            this.relativeStartTime - 
+            this.context.currentTime +
+            this.relativeStartTime -
             this.startTime
         ) % this.totalBarTime
     }
@@ -80,18 +70,18 @@ export default class SequencerAudio {
             note.scheduledTimes = note.scheduledTimes.slice(sliceIndex);
         }
     }
-    
+
     scheduleNextNBars() {
-        
+
         this.cleanupFulfilledNotes();
-        
+
         const newNotesToSchedule = [];
         const currentTime = this.context.currentTime;
-        
+
         // Look-ahead some number of bars for scheduling safety.
         const scheduleBlockStart = this.startOfCurrentBar;
-        for (let bar = 0; bar < this.barsLookahead; bar++) {
-            
+        for (let bar = 0; bar <= this.barsLookahead; bar++) {
+
             // Calculate the absolute start-time of each bar.
             const barStart = scheduleBlockStart + bar * this.totalBarTime;
             for (let note of this.notes) {
@@ -103,9 +93,9 @@ export default class SequencerAudio {
                     + beat * this.timePerBeat 
                     + offset/100 * this.timePerBeat
                 );
-
                 // Check if we've already scheduled this note.
-                const noteAlreadyScheduled = scheduledTimes.includes(noteScheduledTime);
+                const noteAlreadyScheduled = includesClose(
+                    scheduledTimes, noteScheduledTime, this.closenessDelta);
 
                 // If the note hasn't already been scheduled, do so now.
                 if (!noteAlreadyScheduled && noteScheduledTime >= currentTime) {
@@ -119,13 +109,15 @@ export default class SequencerAudio {
     }
 
     bulkSchedule(notes) {
-        for (let { data, time } of notes) {
-            console.log("To implement: Scheduling note", data, "at", time - this.startTime);
-        }
+        this.soundSource && this.soundSource.scheduleNotes && this.soundSource.scheduleNotes(notes);
+        // for (let { data, time } of notes) {
+            // console.log("To implement: Scheduling note", data, "at", time - this.startTime);
+        // }
     }
 
     cancelAllNotes() {
-        console.log("Implement on sound source: cancel all notes.")
+        // console.log("Implement on sound source: cancel all notes.")
+        this.soundSource && this.soundSource.cancelAllNotes && this.soundSource.cancelAllNotes();
     }
 
     startScheduling() {
@@ -149,14 +141,23 @@ export default class SequencerAudio {
         this.startScheduling();
     }
 
-    set beatsPerMinute(value) {
-        this._bpm = value;
-        this.startAgainFromNow();
+    get bpm() {
+        return this._bpm;
     }
 
+    set bpm(value) {
+        this._bpm = value;
+        this.closenessDelta = this.timePerBeat / 100;
+        if (this.playing) this.startAgainFromNow();
+    }
+    
+    get timeSignature() {
+        return this._timeSignature;
+    }
+    
     set timeSignature(value) {
         this._timeSignature = value;
-        this.startAgainFromNow();
+        if (this.playing) this.startAgainFromNow();
     }
 
     addNote({ data, beat, offset}) {
@@ -166,6 +167,13 @@ export default class SequencerAudio {
         this.startAgainFromNow();
     }
     
+    addNotes(notes) {
+        for (let { data, beat, offset } of notes) {
+            this.notes.push({ data, beat, offset, scheduledTimes: []});
+        }
+        if (this.playing) this.startAgainFromNow();
+    }
+
     removeNote({ data, beat, offset }) {
         // Again, this is super inefficient. Can we ask our sound
         // sources to cancel a particular note instead?
@@ -179,18 +187,23 @@ export default class SequencerAudio {
     }
 
     play() {
+        this.playing = true;
         this.startTime = this.context.currentTime;
-        this.relativeStartTime = 0;
         this.startScheduling();
     }
 
     pause() {
+        this.playing = false;
         this.cancelAllNotes();
         this.cancelCurrentScheduler();
     }
-
-    resume() {
-        this.startTime = this.context.currentTime;
-        this.startScheduling();
+    
+    stop() {
+        this.pause();
+        this.relativeStartTime = 0;
+    }
+    
+    sendNotesTo(source) {
+        this.soundSource = source;
     }
 }
