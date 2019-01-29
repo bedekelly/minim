@@ -167,6 +167,7 @@ Knob.propTypes = {
     min: PropTypes.number.isRequired,
     max: PropTypes.number.isRequired,
     onChange: PropTypes.func.isRequired,
+    default: PropTypes.number.isRequired,
     midiLearn: PropTypes.func.isRequired
 }
 

@@ -1,13 +1,12 @@
 .effect-drag-handle {
   position: absolute;
   top: 0;
-  left: 0;
-  width: calc(100% - 22px);
+  left: 23px;
+  width: calc(100% - 22px - 23px);
   height: 23px;
   background: #222;
   display: inline-block;
-  border-radius: 7px 0 0 0;
-  border: 1px solid whitesmoke;
+  border-top: 1px solid whitesmoke;
   color: white;
   padding: 0;
   display: flex;
@@ -15,10 +14,13 @@
   justify-content: center;
   line-height: 1;
   cursor: move;
-  border-bottom: none;
+  z-index: 1;
 }
 
-.effect-drag-handle > * {
-  transform: translateX(calc(7px / 2));
+.effect-drag-handle > span {
   user-select: none;
+}
+
+.being-dragged {
+    z-index: 5;
 }

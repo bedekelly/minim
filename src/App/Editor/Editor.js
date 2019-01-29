@@ -4,6 +4,13 @@ import './Editor.css';
 import LoopStartBar from './LoopStartBar';
 import LoopEndBar from './LoopEndBar';
 
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSyncAlt } from '@fortawesome/free-solid-svg-icons';
+import { faFastBackward, faFastForward, faPlay, faPause } from '@fortawesome/pro-solid-svg-icons';
+
+library.add(faSyncAlt, faFastBackward, faFastForward, faPlay, faPause);
+
 
 /**
  * Linearly map a value from one range to another.
@@ -190,10 +197,31 @@ class Editor extends React.Component {
     }
 
     render() {
+        
+        const playPause = this.props.playing ? this.props.pause : this.props.play;
+        
         return <React.Fragment>
             <div className="blurbackground" onClick={ () => this.close() }></div>
             <div className="editor">
+            <div className="controls">
+              <button className="rewind" onMouseDown={ this.props.rewind }>
+                  <FontAwesomeIcon icon={["fas", "fast-backward"]}></FontAwesomeIcon>
+              </button>
+              <button className="loop" onMouseDown={ this.props.toggleLoop }>
+                  <FontAwesomeIcon icon="sync-alt"></FontAwesomeIcon>
+              </button>
+              <button className="playpause" onMouseDown={ playPause }>
+                  { this.props.playing ? 
+                      <FontAwesomeIcon icon={["fas", "pause"]}></FontAwesomeIcon>
+                      : <FontAwesomeIcon icon={["fas", "play"]}></FontAwesomeIcon>
+                  }
+              </button>
+              <button className="fastforward" onMouseDown={ this.props.fastForward }>
+                  <FontAwesomeIcon icon={["fas", "fast-forward"]}></FontAwesomeIcon>
+              </button>
+            </div> 
               <div className="frame">
+                  
                 { this.state.ready && <LoopStartBar 
                     audio={ this.audio } 
                     padding={ 20 } 

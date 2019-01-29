@@ -39,13 +39,13 @@ class ReverbAudio extends EffectAudio {
             return await context.decodeAudioData(arrayBuffer);
         } catch (e) {
             console.log(e);
-            debugger;
         }
     }
 
-    loadAllFiles() {
+    async loadAllFiles() {
         const that = this;
-        this.reverbs.forEach(async ({ sound, image }, index) => {
+        const filesLoaded = this.reverbs.map(async ({ sound, image }, index) => {
+            console.log("Starting to load buffer for ", index);
             const buffer = await ReverbAudio.fetchAndLoadAudio(sound, that.context);
             console.log("Loaded buffer for ", index);
             that.reverbs[index] = { sound, image, buffer };
@@ -54,6 +54,8 @@ class ReverbAudio extends EffectAudio {
                 that.node.buffer = buffer;
             }
         })
+        await Promise.all(filesLoaded);
+        console.log("All files loaded!");
     }
 }
 

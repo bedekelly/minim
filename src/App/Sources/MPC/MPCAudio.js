@@ -9,6 +9,14 @@ export default class MPCAudio {
         this.node.connect(parentRack.startOfFxChain);
     }
     
+    play() {
+        console.log("MPCAudio received signal to play; ignoring.");
+    }
+    
+    pause() {
+        console.log("MPCAudio received signal to pause; ignoring.");
+    }
+    
     midiMessage(message) {
         const lightPad = this.lightPad || (() => {});
         const { data } = message;
@@ -48,8 +56,8 @@ export default class MPCAudio {
     }
     
     routeTo(destination) {
-        if (destination.node) {
-            destination = destination.node;
+        if (destination.input) {
+            destination = destination.input;
         }
         this.destination = destination;
         if (this.node) {

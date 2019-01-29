@@ -6,6 +6,7 @@ import Gain from './Gain';
 import Compressor from './Compressor';
 import Reverb from './Reverb';
 import { EffectType } from './EffectTypes';
+import Knob from '../Knob';
 
 
 import './Effect.css';
@@ -23,14 +24,36 @@ const effectComponents = {
 /**
  * Display an effect component for a given effect type.
  */
-function Effect(props) {
-    let defaultComponent = props => "no component found";
-    const Component = effectComponents[props.effectType] || defaultComponent;
-    return <div className="effect">
-        { props.handle }
-        <button className="remove" onClick={props.removeSelf}>X</button>
-        <Component key={props.id} {...props}></Component>
-    </div>
+class Effect extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.changeWet = this.changeWet.bind(this);
+        this.audio = this.props.appAudio.effects[this.props.id];
+        this.state = { wet: this.audio.wet };
+        this.props = props;
+    }
+    
+    changeWet(value) {
+        this.audio.wet = value;
+        this.setState({ wet: value });
+    }
+
+    render() {
+        const props = this.props;
+        let defaultComponent = props => "no component found";
+        const Component = effectComponents[props.effectType] || defaultComponent;
+        return <div className="effect">
+            <div className="wetdry">
+                <Knob min={0} max={1} value={this.state.wet} onChange={this.changeWet}></Knob>
+            </div>
+            { props.handle }
+            <button className="remove" onClick={props.removeSelf}>X</button>
+            <Component key={props.id} {...props}></Component>
+        </div>
+    }
+    
+
 }
 
  

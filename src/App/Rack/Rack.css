@@ -9,6 +9,7 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-around;
+    z-index: 3;
 }
 
 .components {

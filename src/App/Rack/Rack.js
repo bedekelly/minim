@@ -87,6 +87,7 @@ class Rack extends React.Component {
                             onSortEnd={ result => this.onSortEnd(result) }
                             axis="xy"
                             useDragHandle
+                            helperClass={"being-dragged"}
                             /> }
                         <div className="add-effect" onClick={ () => this.openEffectsModal() }></div>
                     </section>

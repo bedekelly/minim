@@ -2,8 +2,6 @@
     transition: none;
 }
 
-
-
 .editor {
   width: 700px;
   height: 400px;
@@ -103,3 +101,34 @@ canvas.play-head {
     width: 610px;
     height: 300px;
 }
+
+.editor .controls {
+  height: 40px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: 2;
+  transform: translateX(-50%);
+  background: lightblue;
+  border-radius: 0 0 7px 7px;
+}
+
+
+.editor .controls > button {
+  width: 50px;
+  box-sizing: border-box;
+  display: inline-block;
+  height: 100%;
+  background: whitesmoke;
+  border: 5px solid lightblue;
+  outline: 0;
+  cursor: pointer;
+  border-radius: 7px;
+  padding-top: 6.5px;
+}
+
+.editor .controls > button:active {
+  background: radial-gradient(ellipse at center, #dd2c35 0%, lightgrey 160%);
+  color: whitesmoke;
+}
+

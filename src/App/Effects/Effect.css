@@ -25,9 +25,47 @@
   font-size: 10pt;
   cursor: pointer;
   z-index: 1;
+  border-left: 0;
 }
 
 
 .remove:active {
   background: red;
+}
+
+
+.wetdry .knob-inner {
+    width: 12px;
+    height: 12px;
+    background: transparent;
+    border: 1px solid whitesmoke;
+}
+
+.wetdry > .knob .notch {
+    height: 5px;
+    width: 1px;
+    background: whitesmoke;
+}
+
+.wetdry {
+    background: #222;
+    height: 23px;
+    width: 23px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 1px solid whitesmoke;
+    border-radius: 7px 0 0 0;
+    display: grid;
+    border-bottom: none;
+    border-right: none;
+    place-items: center;
+    z-index: 1;
+}
+
+.wetdry .knob {
+    display: grid;
+    place-items: center;
+    width: 23px;
+    height: 23px;
 }

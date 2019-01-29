@@ -7,7 +7,7 @@ class PanAudio extends EffectAudio {
         this.node = this.context.createStereoPanner();
         this._value = 0;
     }
-    
+
     set value(value) {
         this.node.pan.setValueAtTime(value, 0);
         this._value = value;

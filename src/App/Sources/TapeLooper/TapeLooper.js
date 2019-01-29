@@ -88,7 +88,16 @@ class TapeLooper extends React.Component {
     }
     
     editor() {
-        return <Editor close={() => this.closeEditor()} audio={this.audio}></Editor>
+        return <Editor 
+                close={() => this.closeEditor()} 
+                audio={this.audio}
+                playing={ this.props.playing }
+                play={ () => console.log("play") }
+                pause={ () => console.log("Pause") }
+                toggleLoop={ () => console.log("Loop toggle") }
+                rewind={ () => console.log("Rewind") }
+                fastForward={ () => console.log("Fast-forward") }
+               ></Editor>
     }
     
     componentDidMount() {

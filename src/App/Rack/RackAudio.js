@@ -88,7 +88,7 @@ class RackAudio {
     }
 
     get startOfFxChain() {
-        return (this.effects[0] && this.effects[0].node) || this.destination;
+        return (this.effects[0] && this.effects[0].input) || this.destination;
     }
 
     get currentOutput() {

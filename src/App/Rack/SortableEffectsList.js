@@ -23,7 +23,6 @@ const SortableEffectsList = appAudio => SortableContainer(({effects, removeEffec
                 key={id}
                 appAudio={appAudio}
                 index={index}>
-                
             </SortableEffect>
         )
     }

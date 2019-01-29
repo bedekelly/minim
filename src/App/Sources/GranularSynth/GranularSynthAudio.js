@@ -85,8 +85,8 @@ export default class GranularSynthAudio {
     pause() {}
 
     routeTo(destination) {
-        if (destination.node) {
-            destination = destination.node;
+        if (destination.input) {
+            destination = destination.input;
         }
         this.destination = destination;
         if (this.node) {
