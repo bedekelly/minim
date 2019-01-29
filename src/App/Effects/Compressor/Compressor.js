@@ -18,6 +18,14 @@ class Compressor extends React.Component {
         this.setState({[key]: value})
     }
     
+    temporaryDry() {
+        this.compressorAudio.temporaryDry();
+    }
+    
+    temporaryDryOff() {
+        this.compressorAudio.temporaryDryOff();
+    }
+    
     render() {
         return <div className="compressor">
           <div className="control">
@@ -43,7 +51,9 @@ class Compressor extends React.Component {
           </div>
 
           <div className="control">
-            <button className="active"></button>
+            <button className="active" 
+                onMouseDown={() => this.temporaryDry()}
+                onMouseUp={() => this.temporaryDryOff()}></button>
             <div className="knob-title">Toggle</div>
           </div>
           

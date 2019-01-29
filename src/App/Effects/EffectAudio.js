@@ -38,6 +38,15 @@ class EffectAudio {
         this.dryNode.disconnect();
         this.dryNode.connect(destination);
     }
+    
+    temporaryDry() {
+        this.oldWet = this.wet;
+        this.wet = 0;
+    }
+    
+    temporaryDryOff() {
+        this.wet = this.oldWet;
+    }
 }
 
 
