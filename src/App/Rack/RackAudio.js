@@ -5,6 +5,8 @@ import FilterAudio from '../Effects/Filter/FilterAudio';
 import GainAudio from '../Effects/Gain/GainAudio';
 import CompressorAudio from '../Effects/Compressor/CompressorAudio';
 import ReverbAudio from '../Effects/Reverb/ReverbAudio';
+import SequencerAudio from './SequencerAudio';
+
 import { EffectType } from '../Effects/EffectTypes'
 import { SourceTypes } from '../Sources/SourceTypes';
 import { arrayMove } from 'react-sortable-hoc';
@@ -14,6 +16,7 @@ class RackAudio {
     
     constructor(appAudio) {
         this.source = null;
+        this.sequencer = new SequencerAudio(appAudio.context);
         this.appAudio = appAudio;
         this.effects = [];
 
