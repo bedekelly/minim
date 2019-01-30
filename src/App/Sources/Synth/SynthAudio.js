@@ -268,9 +268,11 @@ export default class SynthAudio {
         console.log("SynthAudio got pause message: ignoring.");
     }
 
-    routeTo(output) {
-        console.log("Todo: Routing synth audio to ", output);
-        this._output = output;
+    routeTo(destination) {
+        if (destination.input) {
+            destination = destination.input;
+        }
+        this._output = destination;
         if (this.output) this.output.disconnect();
         this.output = this.context.createGain();
         this.mainMix.connect(this.output);
