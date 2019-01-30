@@ -60,7 +60,6 @@ export default class SynthAudio {
         
         const pitchOne = midiToPitch(note);
         const pitchTwo = midiToPitch(note + 12);
-        console.log({ pitchOne, pitchTwo });
         
         // Create two oscillators.
         const oscOne = this.context.createOscillator();
