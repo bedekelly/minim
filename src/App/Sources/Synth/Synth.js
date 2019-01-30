@@ -19,10 +19,16 @@ class Synth extends React.Component {
                 release: this.audio.ampEnvelope.release
             },
             osc1: {
-                waveform: this.audio.osc1.waveform
+                waveform: this.audio.osc1.waveform,
+                octave: this.audio.osc1.octave,
+                semi: this.audio.osc1.semi,
+                tune: this.audio.osc2.tune
             },
             osc2: {
-                waveform: this.audio.osc2.waveform
+                waveform: this.audio.osc2.waveform,
+                octave: this.audio.osc2.octave,
+                semi: this.audio.osc2.semi,
+                tune: this.audio.osc2.tune
             },
             lfo: {
                 rate: this.audio.lfo.rate,
@@ -61,12 +67,14 @@ class Synth extends React.Component {
     
     changeOsc1Waveform(waveform) {
         this.audio.osc1.waveform = waveform;
-        this.setState({ osc1: { waveform }})
+        const osc1 = this.state.osc1;
+        this.setState({ osc1: { ...osc1, waveform }})
     }
     
     changeOsc2Waveform(waveform) {
         this.audio.osc2.waveform = waveform;
-        this.setState({ osc2: { waveform }})
+        const osc2 = this.state.osc2;
+        this.setState({ osc2: { ...osc2, waveform }})
     }
     
     changeLFODestination(destination) {
@@ -81,16 +89,61 @@ class Synth extends React.Component {
         this.setState({ lfo: { ...lfo, rate }});
     }
     
+    changeOsc1Octave(value) {
+        value = Math.round(value);
+        this.audio.osc1.octave = value;
+        const osc1 = this.state.osc1;
+        this.setState({ osc1: { ...osc1, octave: value }})
+    }
+    
+    changeOsc1Semi(value) {
+        value = Math.round(value);
+        this.audio.osc1.semi = value;
+        const osc1 = this.state.osc1;
+        this.setState({ osc1: { ...osc1, semi: value }})
+    }
+    
+    changeOsc1Tune(value) {
+        value = Math.round(value);
+        this.audio.osc1.tune = value;
+        const osc1 = this.state.osc1;
+        this.setState({ osc1: { ...osc1, tune: value }})
+    }
+    
+    changeOsc2Octave(value) {
+        value = Math.round(value);
+        this.audio.osc2.octave = value;
+        const osc2 = this.state.osc2;
+        this.setState({ osc2: { ...osc2, octave: value }})
+    }
+    
+    changeOsc2Semi(value) {
+        value = Math.round(value);
+        this.audio.osc2.semi = value;
+        const osc2 = this.state.osc2;
+        this.setState({ osc2: { ...osc2, semi: value }})
+    }
+    
+    changeOsc2Tune(value) {
+        value = Math.round(value);
+        this.audio.osc2.tune = value;
+        const osc2 = this.state.osc2;
+        this.setState({ osc2: { ...osc2, tune: value }})
+    }
+    
     render() {
         return (
             <div className="synth">
               <div className="comp osc one">
                 <div className="knobs">
-                  <div className="knob"></div>
+                  <Knob min={-3} max={3} value={this.state.osc1.octave} precision={ 0 }
+                        onChange={ value => this.changeOsc1Octave(value) }></Knob>
                   <div className="label">Oct</div>
-                  <div className="knob"></div>
+                  <Knob min={-12} max={12} value={this.state.osc1.semi} precision={ 0 }
+                        onChange={ value => this.changeOsc1Semi(value) }></Knob>
                   <div className="label">Semi</div>
-                  <div className="knob"></div>
+                  <Knob min={-50} max={50} value={this.state.osc1.tune} precision={ 0 }
+                        onChange={ value => this.changeOsc1Tune(value) }></Knob>
                   <div className="label">Tune</div>
                 </div>
 
@@ -141,11 +194,14 @@ class Synth extends React.Component {
               </div>
               <div className="comp osc two">
                 <div className="knobs">
-                  <div className="knob"></div>
+                  <Knob min={-3} max={3} value={this.state.osc2.octave} precision={ 0 }
+                        onChange={ value => this.changeOsc2Octave(value) }></Knob>
                   <div className="label">Oct</div>
-                  <div className="knob"></div>
+                  <Knob min={-12} max={12} value={this.state.osc2.semi} precision={ 0 }
+                        onChange={ value => this.changeOsc2Semi(value) }></Knob>
                   <div className="label">Semi</div>
-                  <div className="knob"></div>
+                  <Knob min={-50} max={50} value={this.state.osc2.tune} precision={ 0 }
+                        onChange={ value => this.changeOsc2Tune(value) }></Knob>
                   <div className="label">Tune</div>
                 </div>
 

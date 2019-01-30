@@ -48,7 +48,7 @@ class Knob extends React.Component {
 
   constructor(props) {
     super(props);
-    this.precision = props.precision || 1;
+    this.precision = props.precision === undefined ? 1 : props.precision;
     this.pixelDiff = 0;
     this.knobRef = React.createRef();
     this.state = { dragging: false };

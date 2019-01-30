@@ -18,21 +18,21 @@ export default class SynthAudio {
 
     constructor(parentAudio) {
         this.context = parentAudio.appAudio.context;
-        this.oscOneGain = this.context.createGain();
-        this.oscOneGain.gain.setValueAtTime(FULL_VOLUME, 0);
-        this.oscTwoGain = this.context.createGain();
-        this.oscTwoGain.gain.setValueAtTime(FULL_VOLUME, 0)
         this.mainMix = this.context.createGain();
-        this.oscOneGain.connect(this.mainMix);
-        this.oscTwoGain.connect(this.mainMix);
         this.notes = {};
 
         this.osc1 = {
-            waveform: "sine"
+            waveform: "sine",
+            octave: 0,
+            semi: 0,
+            tune: 0
         };
 
         this.osc2 = {
-            waveform: ""
+            waveform: "",
+            octave: 0,
+            semi: 0,
+            tune: 0
         };
 
         this.ampEnvelope = {
@@ -44,10 +44,8 @@ export default class SynthAudio {
         
         this.lfo = {
             rate: 3,
-            destination: "pitch"
+            destination: ""
         };
-        
-        
         
         this.lfoNode = this.context.createOscillator();
         this.lfoNode.frequency.setValueAtTime(this.lfo.rate, 0);
@@ -84,51 +82,62 @@ export default class SynthAudio {
     set lfoDestination(value) {
         this.lfo.destination = value;
         
-        if (value === "amplitude") {
-            this.pitchLfo.disconnect();
-            this.ampLfo.connect(this.mainMix.gain);
-        } else {
-            this.ampLfo.disconnect();
+        switch (value) {
+            case "amplitude": {
+                this.pitchLfo.disconnect();
+                this.ampLfo.connect(this.mainMix.gain);
+                break;
+            }
+            
+            case "pitch": {
+                this.ampLfo.disconnect();
+                break;
+            }
+            
+            default: {
+                this.pitchLfo.disconnect();
+                this.ampLfo.disconnect();
+            }
         }
     }
 
     noteOnAtTime(note, time) {
-        const pitchOne = midiToPitch(note);
-        const pitchTwo = midiToPitch(note + 12);
+        const oscOneNote = note + this.osc1.octave * 12 + this.osc1.semi + this.osc1.tune/100;
+        const oscTwoNote = note + this.osc2.octave * 12 + this.osc2.semi + this.osc2.tune/100;
+        const pitchOne = midiToPitch(oscOneNote);
+        const pitchTwo = midiToPitch(oscTwoNote);
         
         // Create two oscillators.
         const oscOne = this.context.createOscillator();
         oscOne.type = this.osc1.waveform;
         const oscTwo = this.context.createOscillator();
         oscTwo.type = this.osc2.waveform;
-        
+
         // If LFO is controlling pitch, link it up.
         if (this.lfo.destination === "pitch") {
             this.pitchLfo.connect(oscOne.detune);
             this.pitchLfo.connect(oscTwo.detune);
         }
-        
+
         // Create a gain for each oscillator.
         const oscOneGain = this.context.createGain();
         oscOneGain.gain.setValueAtTime(0.5, time);
         const oscTwoGain = this.context.createGain();
-        const o2gainValue = oscTwo.type !== "" ? 0.5 : 0;
-        oscTwoGain.gain.setValueAtTime(o2gainValue, time);
-        
+        oscTwoGain.gain.setValueAtTime(0.5, time);
+
         // Create a gain to follow the amp envelope.
         const oscAmpGain = this.context.createGain();
         oscAmpGain.gain.setValueAtTime(0, time);
         
         // Connect the graph.
         oscOne.connect(oscOneGain);
-        oscTwo.connect(oscTwoGain);
+        if (this.osc2.waveform !== "") oscTwo.connect(oscTwoGain);
         oscOneGain.connect(oscAmpGain);
         oscTwoGain.connect(oscAmpGain);
         oscAmpGain.connect(this.mainMix);
 
-        for (let [osc, gain, pitch] of [[oscOne, oscOneGain, pitchOne], [oscTwo, oscTwoGain, pitchTwo]]) {
+        for (let [osc, pitch] of [[oscOne, pitchOne], [oscTwo, pitchTwo]]) {
             osc.frequency.setValueAtTime(pitch, time);
-            osc.connect(gain);
             osc.start(time);
             
             // Apply our amp envelope:

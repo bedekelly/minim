@@ -361,6 +361,11 @@
     width: 1px;
 }
 
-.comp.lfo .knob-inner {
+.synth .knob-inner {
     box-shadow: none;
+}
+
+.osc .knob .notch {
+    height: 9px;
+    width: 1px;
 }
