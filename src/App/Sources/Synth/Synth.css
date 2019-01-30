@@ -64,6 +64,12 @@
   grid-area: filter-freq;
 }
 
+.comp.filter-freq .label.res {
+    width: 45px;
+    grid-area: qlabel;
+    justify-self: center;
+}
+
 .comp.filter-freq .knob:first-of-type {
   border-radius: 50%;
   background: whitesmoke;
@@ -99,6 +105,8 @@
   display: grid;
   grid-template-areas: "freqknob qknob"
                        "freqlabel qlabel";
+  margin-left: 10px;
+  grid-column-gap: 5px;
 }
 
 .filter-freq .knobs .label {
@@ -118,10 +126,6 @@
   font-size: 11px;
   margin-top: 3px;
   text-align: center;
-}
-
-.filter-freq .label.res {
-  grid-area: qlabel;
 }
 
 .filter-freq .label.freq {
