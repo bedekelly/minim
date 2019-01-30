@@ -38,7 +38,8 @@ class Synth extends React.Component {
                 freq: this.audio.filter.freq,
                 res: this.audio.filter.res,
                 type: this.audio.filter.type
-            }
+            },
+            filterEnvelope: this.audio.filterEnvelope
         }
     }
     
@@ -152,6 +153,30 @@ class Synth extends React.Component {
         const filter = this.state.filter;
         this.audio.filterType = value;
         this.setState({ filter: { ...filter, type: value }});
+    }
+    
+    setFilterAttack(attack) {
+        const filterEnvelope = this.state.filterEnvelope;
+        this.audio.filterEnvelope.attack = attack;
+        this.setState({ filterEnvelope: { ...filterEnvelope, attack }})
+    }
+    
+    setFilterDecay(decay) {
+        const filterEnvelope = this.state.filterEnvelope;
+        this.audio.filterEnvelope.decay = decay;
+        this.setState({ filterEnvelope: { ...filterEnvelope, decay }})
+    }
+    
+    setFilterSustain(sustain) {
+        const filterEnvelope = this.state.filterEnvelope;
+        this.audio.filterEnvelope.sustain = sustain;
+        this.setState({ filterEnvelope: { ...filterEnvelope, sustain }})
+    }
+    
+    setFilterRelease(release) {
+        const filterEnvelope = this.state.filterEnvelope;
+        this.audio.filterEnvelope.release = release;
+        this.setState({ filterEnvelope: { ...filterEnvelope, release }})
     }
     
     render() {
@@ -287,16 +312,28 @@ class Synth extends React.Component {
               <div className="comp envelope filter-envelope">
                 <h2>Filter Env.</h2>
                 <div className="slidecontainer">
-                  <input type="range" min="1" max="100" className="slider" id="myRange"></input>
+                  <input type="range" min="0" max="3" className="slider" step="0.01"
+                      value={ this.state.filterEnvelope.attack } 
+                      onChange={ event => this.setFilterAttack(event.target.value) }
+                      ></input>
                 </div>
                 <div className="slidecontainer">
-                  <input type="range" min="1" max="100" className="slider" id="myRange"></input>
+                  <input type="range" min="0" max="3" className="slider" step="0.01"
+                      value={ this.state.filterEnvelope.decay } 
+                      onChange={ event => this.setFilterDecay(event.target.value) }
+                      ></input>
                 </div>
                 <div className="slidecontainer">
-                  <input type="range" min="1" max="100" className="slider" id="myRange"></input>
+                  <input type="range" min="0" max="1" className="slider" step="0.01"
+                      value={ this.state.filterEnvelope.sustain } 
+                      onChange={ event => this.setFilterSustain(event.target.value) }
+                      ></input>
                 </div>
                 <div className="slidecontainer">
-                  <input type="range" min="1" max="100" className="slider" id="myRange"></input>
+                  <input type="range" min="0" max="3" className="slider" step="0.01"
+                      value={ this.state.filterEnvelope.release } 
+                      onChange={ event => this.setFilterRelease(event.target.value) }
+                      ></input>
                 </div>
                 <div className="label">A</div>
                 <div className="label">D</div>

@@ -17,12 +17,7 @@ function midiToPitch(midi) {
 export default class SynthAudio {
 
     setupFilter() {
-        this.filterNode = this.context.createBiquadFilter();
-        this.filterNode.frequency.setValueAtTime(this.filter.freq, 0);
-        this.filterNode.Q.setValueAtTime(this.filter.res, 0);
-        this.filterNode.gain.setValueAtTime(1, 0);
-        this.filterNode.type = this.filter.type;
-        this.filterNode.connect(this.mainMix);
+        
     }
     
     setupLFOs() {
@@ -41,7 +36,7 @@ export default class SynthAudio {
         this.filter = {
             freq: 850,
             res: 0,
-            type: "LOWPASS"
+            type: "lowpass"
         }
 
         this.osc1 = {
@@ -65,6 +60,13 @@ export default class SynthAudio {
             release: 0
         };
         
+        this.filterEnvelope = {
+            attack: 0,
+            decay: 0,
+            sustain: 1,
+            release: 0
+        }
+        
         this.lfo = {
             rate: 3,
             destination: ""
@@ -72,7 +74,6 @@ export default class SynthAudio {
         
         this.context = parentAudio.appAudio.context;
         this.mainMix = this.context.createGain();
-        this.setupFilter();
         this.notes = {};
         this.setupLFOs();
     }
@@ -122,12 +123,18 @@ export default class SynthAudio {
     
     set filterFreq(value) {
         this.filter.freq = value;
-        this.filterNode.frequency.setValueAtTime(value, 0);
+        for (let { filter } of Object.values(this.notes)) {
+            filter.frequency.cancelScheduledValues(0);
+            filter.frequency.setValueAtTime(value, 0);
+        }
     }
     
     set filterRes(value) {
         this.filter.res = value;
-        this.filterNode.Q.setValueAtTime(value, 0);
+        for (let { filter } of Object.values(this.notes)) {
+            filter.frequency.cancelScheduledValues(0);
+            filter.Q.setValueAtTime(value, 0);
+        }
     }
 
     noteOnAtTime(note, time) {
@@ -154,6 +161,13 @@ export default class SynthAudio {
         const oscTwoGain = this.context.createGain();
         oscTwoGain.gain.setValueAtTime(0.5, time);
 
+        // Create the filter.
+        const filter = this.context.createBiquadFilter();
+        filter.frequency.setValueAtTime(this.filter.freq, time);
+        filter.Q.setValueAtTime(this.filter.res, time);
+        filter.gain.setValueAtTime(1, time);
+        filter.type = this.filter.type;
+
         // Create a gain to follow the amp envelope.
         const oscAmpGain = this.context.createGain();
         oscAmpGain.gain.setValueAtTime(0, time);
@@ -161,9 +175,10 @@ export default class SynthAudio {
         // Connect the graph.
         oscOne.connect(oscOneGain);
         if (this.osc2.waveform !== "") oscTwo.connect(oscTwoGain);
-        oscOneGain.connect(oscAmpGain);
-        oscTwoGain.connect(oscAmpGain);
-        oscAmpGain.connect(this.filterNode);
+        oscOneGain.connect(filter);
+        oscTwoGain.connect(filter);
+        filter.connect(oscAmpGain);
+        oscAmpGain.connect(this.mainMix);
 
         for (let [osc, pitch] of [[oscOne, pitchOne], [oscTwo, pitchTwo]]) {
             osc.frequency.setValueAtTime(pitch, time);
@@ -181,7 +196,7 @@ export default class SynthAudio {
             ampGain.setTargetAtTime(sustain, decayTime, this.ampEnvelope.decay / 3);
         }
         
-        this.notes[note] = { one: oscOne, two: oscTwo, oneGain: oscOneGain, twoGain: oscTwoGain, amp: oscAmpGain };
+        this.notes[note] = { one: oscOne, two: oscTwo, oneGain: oscOneGain, twoGain: oscTwoGain, amp: oscAmpGain, filter };
     }
 
     noteOn(note) {
