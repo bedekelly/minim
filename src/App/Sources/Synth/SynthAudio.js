@@ -16,10 +16,33 @@ function midiToPitch(midi) {
 
 export default class SynthAudio {
 
+    setupFilter() {
+        this.filterNode = this.context.createBiquadFilter();
+        this.filterNode.frequency.setValueAtTime(this.filter.freq, 0);
+        this.filterNode.Q.setValueAtTime(this.filter.res, 0);
+        this.filterNode.gain.setValueAtTime(1, 0);
+        this.filterNode.type = this.filter.type;
+        this.filterNode.connect(this.mainMix);
+    }
+    
+    setupLFOs() {
+        this.lfoNode = this.context.createOscillator();
+        this.lfoNode.frequency.setValueAtTime(this.lfo.rate, 0);
+        this.pitchLfo = this.context.createGain();
+        this.pitchLfo.gain.setValueAtTime(PITCH_LFO_AMP, 0);
+        this.ampLfo = this.context.createGain();
+        this.ampLfo.gain.setValueAtTime(AMP_LFO_AMP, 0);
+        this.lfoNode.connect(this.pitchLfo);
+        this.lfoNode.connect(this.ampLfo);
+        this.lfoNode.start();
+    }
+
     constructor(parentAudio) {
-        this.context = parentAudio.appAudio.context;
-        this.mainMix = this.context.createGain();
-        this.notes = {};
+        this.filter = {
+            freq: 850,
+            res: 0,
+            type: "LOWPASS"
+        }
 
         this.osc1 = {
             waveform: "sine",
@@ -47,15 +70,11 @@ export default class SynthAudio {
             destination: ""
         };
         
-        this.lfoNode = this.context.createOscillator();
-        this.lfoNode.frequency.setValueAtTime(this.lfo.rate, 0);
-        this.pitchLfo = this.context.createGain();
-        this.pitchLfo.gain.setValueAtTime(PITCH_LFO_AMP, 0);
-        this.ampLfo = this.context.createGain();
-        this.ampLfo.gain.setValueAtTime(AMP_LFO_AMP, 0);
-        this.lfoNode.connect(this.pitchLfo);
-        this.lfoNode.connect(this.ampLfo);
-        this.lfoNode.start();
+        this.context = parentAudio.appAudio.context;
+        this.mainMix = this.context.createGain();
+        this.setupFilter();
+        this.notes = {};
+        this.setupLFOs();
     }
 
     set ampAttack(value) {
@@ -100,6 +119,16 @@ export default class SynthAudio {
             }
         }
     }
+    
+    set filterFreq(value) {
+        this.filter.freq = value;
+        this.filterNode.frequency.setValueAtTime(value, 0);
+    }
+    
+    set filterRes(value) {
+        this.filter.res = value;
+        this.filterNode.Q.setValueAtTime(value, 0);
+    }
 
     noteOnAtTime(note, time) {
         const oscOneNote = note + this.osc1.octave * 12 + this.osc1.semi + this.osc1.tune/100;
@@ -134,7 +163,7 @@ export default class SynthAudio {
         if (this.osc2.waveform !== "") oscTwo.connect(oscTwoGain);
         oscOneGain.connect(oscAmpGain);
         oscTwoGain.connect(oscAmpGain);
-        oscAmpGain.connect(this.mainMix);
+        oscAmpGain.connect(this.filterNode);
 
         for (let [osc, pitch] of [[oscOne, pitchOne], [oscTwo, pitchTwo]]) {
             osc.frequency.setValueAtTime(pitch, time);
@@ -192,11 +221,8 @@ export default class SynthAudio {
 
     routeTo(output) {
         console.log("Todo: Routing synth audio to ", output);
-        for (let osc of Object.values(this.notes)) {
-            osc.disconnect();
-            osc.connect(output);
-        }
         this._output = output;
+        if (this.output) this.output.disconnect();
         this.output = this.context.createGain();
         this.mainMix.connect(this.output);
         this.output.connect(this._output);

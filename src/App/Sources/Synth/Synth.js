@@ -33,6 +33,11 @@ class Synth extends React.Component {
             lfo: {
                 rate: this.audio.lfo.rate,
                 destination: this.audio.lfo.destination
+            },
+            filter: {
+                freq: this.audio.filter.freq,
+                res: this.audio.filter.res,
+                type: this.audio.filter.type
             }
         }
     }
@@ -129,6 +134,24 @@ class Synth extends React.Component {
         this.audio.osc2.tune = value;
         const osc2 = this.state.osc2;
         this.setState({ osc2: { ...osc2, tune: value }})
+    }
+    
+    changeFilterFreq(value) {
+        const filter = this.state.filter;
+        this.audio.filterFreq = value;
+        this.setState({ filter: { ...filter, freq: value }});
+    }
+    
+    changeFilterRes(value) {
+        const filter = this.state.filter;
+        this.audio.filterRes = value;
+        this.setState({ filter: { ...filter, res: value }});
+    }
+    
+    changeFilterType(value) {
+        const filter = this.state.filter;
+        this.audio.filterType = value;
+        this.setState({ filter: { ...filter, type: value }});
     }
     
     render() {
@@ -253,9 +276,11 @@ class Synth extends React.Component {
               <div className="comp filter-freq">
                 <h2>Filter <span className="filter-type">HP</span></h2>
                 <div className="knobs">
-                  <div className="knob freq"></div>
+                  <Knob min={0} max={1000} value={this.state.filter.freq}
+                        onChange={value => this.changeFilterFreq(value)}></Knob>
                   <div className="label freq">Freq</div>
-                  <div className="knob res"></div>
+                  <Knob min={0} max={30} value={this.state.filter.res}
+                        onChange={value => this.changeFilterRes(value)}></Knob>
                   <div className="label res">Res</div>
                 </div>
               </div>

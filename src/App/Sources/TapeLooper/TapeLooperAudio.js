@@ -181,7 +181,7 @@ class TapeLooperAudio {
         
         // Calculate the time we should skip into the track next time we play it.
         // This is necessary if we want to use a new source node every time!
-        this.absoluteStartTime = this.context.currentTIme;
+        this.absoluteStartTime = this.context.currentTime;
         this.node = null;
     }
     

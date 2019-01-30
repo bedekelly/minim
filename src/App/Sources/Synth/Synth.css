@@ -64,11 +64,35 @@
   grid-area: filter-freq;
 }
 
-.comp.filter-freq .knob {
+.comp.filter-freq .knob:first-of-type {
   border-radius: 50%;
   background: whitesmoke;
   box-shadow: 0 0 3px;
+  width: 30px;
+  height: 30px;
+  grid-area: freqknob;
+  justify-self: center;
 }
+
+.comp.filter-freq .label + .knob {
+    box-shadow: 0 0 3px;
+    width: 20px;
+    height: 20px;
+    grid-area: qknob;
+    align-self: end;
+    justify-self: center;
+    border-radius: 50%;
+}
+
+.comp.filter-freq .label + .knob .notch {
+    height: 9px;
+}
+
+.comp.filter-freq .knob .notch {
+  width: 1px;
+  height: 14px;
+}
+
 
 .comp.filter-freq .knobs {
   margin-top: 7px;
@@ -80,21 +104,6 @@
 .filter-freq .knobs .label {
   font-family: monospace;
   user-select: none;
-}
-
-.filter-freq .knob.freq {
-  width: 30px;
-  height: 30px;
-  grid-area: freqknob;
-  justify-self: center;
-}
-
-.filter-freq .knob.res {
-  width: 20px;
-  height: 20px;
-  grid-area: qknob;
-  align-self: end;
-  justify-self: center;
 }
 
 .filter-freq h2 {
