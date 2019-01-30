@@ -5,6 +5,9 @@ const POLYPHONY = 6;
 const NUMBER_OSCILLATORS = 2;
 const FULL_VOLUME = 1/(POLYPHONY*NUMBER_OSCILLATORS);
 
+const PITCH_LFO_AMP = 50;
+const AMP_LFO_AMP = 0.5;
+
 
 function midiToPitch(midi) {
     return Math.pow(2, (midi - 69) / 12) * 440;
@@ -37,7 +40,24 @@ export default class SynthAudio {
             decay: 0,
             sustain: 1,
             release: 0
-        }
+        };
+        
+        this.lfo = {
+            rate: 3,
+            destination: "pitch"
+        };
+        
+        
+        
+        this.lfoNode = this.context.createOscillator();
+        this.lfoNode.frequency.setValueAtTime(this.lfo.rate, 0);
+        this.pitchLfo = this.context.createGain();
+        this.pitchLfo.gain.setValueAtTime(PITCH_LFO_AMP, 0);
+        this.ampLfo = this.context.createGain();
+        this.ampLfo.gain.setValueAtTime(AMP_LFO_AMP, 0);
+        this.lfoNode.connect(this.pitchLfo);
+        this.lfoNode.connect(this.ampLfo);
+        this.lfoNode.start();
     }
 
     set ampAttack(value) {
@@ -55,9 +75,24 @@ export default class SynthAudio {
     set ampRelease(value) {
         this.ampEnvelope.release = value;
     }
+    
+    set lfoRate(value) {
+        this.lfo.rate = value;
+        this.lfoNode.frequency.setValueAtTime(value, 0);
+    }
+    
+    set lfoDestination(value) {
+        this.lfo.destination = value;
+        
+        if (value === "amplitude") {
+            this.pitchLfo.disconnect();
+            this.ampLfo.connect(this.mainMix.gain);
+        } else {
+            this.ampLfo.disconnect();
+        }
+    }
 
     noteOnAtTime(note, time) {
-        
         const pitchOne = midiToPitch(note);
         const pitchTwo = midiToPitch(note + 12);
         
@@ -66,6 +101,12 @@ export default class SynthAudio {
         oscOne.type = this.osc1.waveform;
         const oscTwo = this.context.createOscillator();
         oscTwo.type = this.osc2.waveform;
+        
+        // If LFO is controlling pitch, link it up.
+        if (this.lfo.destination === "pitch") {
+            this.pitchLfo.connect(oscOne.detune);
+            this.pitchLfo.connect(oscTwo.detune);
+        }
         
         // Create a gain for each oscillator.
         const oscOneGain = this.context.createGain();

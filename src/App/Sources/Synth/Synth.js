@@ -2,6 +2,9 @@ import React from 'react';
 
 import './Synth.css';
 
+import Knob from '../../Knob';
+
+
 
 class Synth extends React.Component {
     
@@ -20,6 +23,10 @@ class Synth extends React.Component {
             },
             osc2: {
                 waveform: this.audio.osc2.waveform
+            },
+            lfo: {
+                rate: this.audio.lfo.rate,
+                destination: this.audio.lfo.destination
             }
         }
     }
@@ -60,6 +67,18 @@ class Synth extends React.Component {
     changeOsc2Waveform(waveform) {
         this.audio.osc2.waveform = waveform;
         this.setState({ osc2: { waveform }})
+    }
+    
+    changeLFODestination(destination) {
+        this.audio.lfoDestination = destination;
+        const lfo = this.state.lfo;
+        this.setState({ lfo: { ...lfo, destination }});
+    }
+    
+    setLFORate(rate) {
+        this.audio.lfoRate = rate;
+        const lfo = this.state.lfo;
+        this.setState({ lfo: { ...lfo, rate }});
     }
     
     render() {
@@ -206,26 +225,37 @@ class Synth extends React.Component {
               <div className="comp lfo">
                 <h2>LFO</h2>
                 <div className="lfo-layout">
-                  <div className="knob"></div>
+                  <Knob min={ 0 } max={ 25 } value={ this.state.lfo.rate }
+                        onChange={ value => this.setLFORate(value) }
+                        ></Knob>
                   <div className="label">Rate</div>
                   <div className="destinations">
                     <div className="destination">
                       <label htmlFor="pitch">
-                        <input type="radio" name="destination" value="pitch" id="pitch"></input>
+                        <input type="radio" name="destination" value="pitch" id="pitch" 
+                            checked={ this.state.lfo.destination === "pitch" }
+                            onChange={ e => this.changeLFODestination(e.target.value) }
+                            ></input>
                         <div className="light"></div>
                         <span className="label">Pitch</span>
                       </label>
                     </div>
                     <div className="destination">
                       <label htmlFor="amplitude">
-                        <input type="radio" name="destination" value="amplitude" id="amplitude"></input>
+                        <input type="radio" name="destination" value="amplitude" id="amplitude" 
+                            checked={ this.state.lfo.destination === "amplitude" }
+                            onChange={ e => this.changeLFODestination(e.target.value) }
+                            ></input>
                         <div className="light"></div>
                         <span className="label">Amp</span>
                       </label>
                     </div>
                     <div className="destination">
                       <label htmlFor="filter">
-                        <input type="radio" name="destination" value="filter" id="filter"></input>
+                        <input type="radio" name="destination" value="filter" id="filter" 
+                            checked={ this.state.lfo.destination === "filter" }
+                            onChange={ e => this.changeLFODestination(e.target.value) }
+                            ></input>
                         <div className="light"></div>
                         <span className="label">Filter</span>
                       </label>

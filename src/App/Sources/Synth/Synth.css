@@ -355,3 +355,12 @@
   align-items: center;
   cursor: pointer;
 }
+
+.comp.lfo .knob .notch {
+    height: 12px;
+    width: 1px;
+}
+
+.comp.lfo .knob-inner {
+    box-shadow: none;
+}
