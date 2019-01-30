@@ -106,16 +106,16 @@ class Synth extends React.Component {
               <div className="comp envelope filter-envelope">
                 <h2>Filter Env.</h2>
                 <div className="slidecontainer">
-                  <input type="range" min="1" max="100" value="50" className="slider" id="myRange"></input>
+                  <input type="range" min="1" max="100" className="slider" id="myRange"></input>
                 </div>
                 <div className="slidecontainer">
-                  <input type="range" min="1" max="100" value="50" className="slider" id="myRange"></input>
+                  <input type="range" min="1" max="100" className="slider" id="myRange"></input>
                 </div>
                 <div className="slidecontainer">
-                  <input type="range" min="1" max="100" value="50" className="slider" id="myRange"></input>
+                  <input type="range" min="1" max="100" className="slider" id="myRange"></input>
                 </div>
                 <div className="slidecontainer">
-                  <input type="range" min="1" max="100" value="50" className="slider" id="myRange"></input>
+                  <input type="range" min="1" max="100" className="slider" id="myRange"></input>
                 </div>
                 <div className="label">A</div>
                 <div className="label">D</div>
@@ -130,14 +130,14 @@ class Synth extends React.Component {
                   <div className="destinations">
                     <div className="destination">
                       <label htmlFor="pitch">
-                        <input type="radio" name="destination" value="destination" id="pitch"></input>
+                        <input type="radio" name="destination" value="pitch" id="pitch"></input>
                         <div className="light"></div>
                         <span className="label">Pitch</span>
                       </label>
                     </div>
                     <div className="destination">
                       <label htmlFor="amplitude">
-                        <input type="radio" name="destination" value="destination" id="amplitude"></input>
+                        <input type="radio" name="destination" value="amplitude" id="amplitude"></input>
                         <div className="light"></div>
                         <span className="label">Amp.</span>
                       </label>
@@ -148,16 +148,16 @@ class Synth extends React.Component {
               <div className="comp amp envelope">
                 <h2>Amp Env.</h2>
                 <div className="slidecontainer">
-                  <input type="range" min="1" max="100" value="50" className="slider" id="myRange"></input>
+                  <input type="range" min="1" max="100" className="slider" id="myRange"></input>
                 </div>
                 <div className="slidecontainer">
-                  <input type="range" min="1" max="100" value="50" className="slider" id="myRange"></input>
+                  <input type="range" min="1" max="100" className="slider" id="myRange"></input>
                 </div>
                 <div className="slidecontainer">
-                  <input type="range" min="1" max="100" value="50" className="slider" id="myRange"></input>
+                  <input type="range" min="1" max="100" className="slider" id="myRange"></input>
                 </div>
                 <div className="slidecontainer">
-                  <input type="range" min="1" max="100" value="50" className="slider" id="myRange"></input>
+                  <input type="range" min="1" max="100" className="slider" id="myRange"></input>
                 </div>
                 <div className="label">A</div>
                 <div className="label">D</div>
