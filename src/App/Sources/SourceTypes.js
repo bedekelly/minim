@@ -6,13 +6,16 @@ import MPC from './MPC';
 import MPCAudio from './MPC/MPCAudio';
 import Ambience from './Ambience';
 import AmbienceAudio from './Ambience/AmbienceAudio';
+import Synth from './Synth';
+import SynthAudio from './Synth/SynthAudio';
 
 
 const SourceType = Object.freeze({
     TapeLooper: Symbol("TapeLooper"),
     GranularSynth: Symbol("GranularSynth"),
     MPC: Symbol("MPC"),
-    Ambience: Symbol("Ambience")
+    Ambience: Symbol("Ambience"),
+    Synth: Symbol("Synth")
 });
 
 
@@ -44,6 +47,13 @@ const SourceTypes = [
         image: "https://lorempixel.com/300/240",
         component: Ambience,
         audio: AmbienceAudio
+    },
+    {
+        type: SourceType.Synth,
+        text: "2x OSC",
+        image: "https://lorempixel.com/300/240",
+        component: Synth,
+        audio: SynthAudio
     }
 ]
 

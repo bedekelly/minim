@@ -1,0 +1,350 @@
+.synth * {
+  box-sizing: border-box;
+  user-select: none;
+}
+
+.synth {
+  width: 300px;
+  box-shadow: 0 0 40px;
+  border: 5px solid darkgrey;
+  box-sizing: content-box;
+  height: 160px;
+  background: whitesmoke;
+  display: grid;
+  grid-template-areas: "osc-one filter-env filter-freq"
+                       "osc-two lfo amp-env";
+}
+
+.comp.osc {
+  background: lightgrey;
+  width: 100px;
+  height: 80px;
+}
+
+.comp.osc.one {
+  grid-area: osc-one;
+  border-bottom: 0;
+}
+
+.comp.osc.two {
+  grid-area: osc-two;
+  background: whitesmoke;
+}
+
+.comp.filter-freq {
+  grid-area: filter-freq;
+  width: 100px;
+  height: 80px;
+}
+
+.comp.filter-envelope {
+  grid-area: filter-env;
+  width: 100px;
+  height: 80px;
+}
+
+.comp.lfo {
+  grid-area: lfo;
+  background: lightgrey;
+}
+
+.comp.amp-envelope {
+  grid-area: amp-env;
+}
+
+
+.comp.filter-freq {
+  width: 100px;
+  height: 80px;
+  background: lightgrey;
+  box-sizing: border-box;
+  padding: 5px 7px;
+  grid-area: filter-freq;
+}
+
+.comp.filter-freq .knob {
+  border-radius: 50%;
+  background: whitesmoke;
+  box-shadow: 0 0 3px;
+}
+
+.comp.filter-freq .knobs {
+  margin-top: 7px;
+  display: grid;
+  grid-template-areas: "freqknob qknob"
+                       "freqlabel qlabel";
+}
+
+.filter-freq .knobs .label {
+  font-family: monospace;
+  user-select: none;
+}
+
+.filter-freq .knob.freq {
+  width: 30px;
+  height: 30px;
+  grid-area: freqknob;
+  justify-self: center;
+}
+
+.filter-freq .knob.res {
+  width: 20px;
+  height: 20px;
+  grid-area: qknob;
+  align-self: end;
+  justify-self: center;
+}
+
+.filter-freq h2 {
+  font-family: monospace;
+  font-size: 12px;
+  margin: 0;
+  user-select: none;
+  text-align: center;
+}
+
+.filter-freq .label {
+  font-size: 11px;
+  margin-top: 3px;
+  text-align: center;
+}
+
+.filter-freq .label.res {
+  grid-area: qlabel;
+}
+
+.filter-freq .label.freq {
+  grid-area: freqlabel;
+}
+
+.filter-freq .filter-type {
+  cursor: pointer;
+  background: darkgrey;
+  border-radius: 4px;
+  padding: 1px 4px;
+  margin-right: -2px;
+}
+
+
+.envelope {
+  display: grid;
+  width: 100px;
+  height: 80px;
+  background: whitesmoke;
+  grid-template-areas: "h h h h"
+                       "as ds ss rs"
+                       "al dl sl rl";
+  padding: 5px;
+  grid-template-rows: 1fr 5fr 1fr;
+  box-sizing: border-box;
+}
+
+.envelope .slidecontainer {
+  width: 20px;
+  position: relative;
+  height: 40px;
+}
+
+.envelope .label {
+  text-align: center;
+  font-family: monospace;
+  user-select: none;
+}
+
+.envelope h2 {
+  user-select: none;
+  font-size: 12px;
+  display: block;
+  grid-area: h;
+  margin: 0;
+  padding: 0;
+  font-family: monospace;
+  margin-bottom: 3px;
+  padding-left: 4px;
+  text-align: center;
+}
+
+.envelope input[type=range] {
+  -webkit-appearance: none;
+  transform: rotate(270deg);
+  width: 40px;
+  margin-top: 18px;
+  position: absolute;
+  left: -11px;
+}
+
+.envelope input[type=range] {
+  outline: 0;
+}
+
+.envelope input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 3px;
+  cursor: pointer;
+  background: #3071a9;
+}
+
+.envelope input[type=range]::-webkit-slider-thumb {
+  height: 15px;
+  width: 6px;
+  background: #777;
+  cursor: pointer;
+  margin-top: -6px;
+  -webkit-appearance: none;
+}
+
+.osc * {
+  user-select: none;
+  user-drag: none;
+  box-sizing: border-box;
+}
+
+.osc {
+  width: 100px;
+  height: 80px;
+  display: grid;
+  grid-template-areas: "knobs knobs knobs knobs"
+                       "sine sawtooth triangle square";
+  grid-template-rows: 1fr 1fr;
+  padding: 5px;
+  overflow-y: hidden;
+  box-sizing: border-box;
+}
+
+.osc .knob {
+  width: 20px;
+  height: 20px;
+  box-shadow: 0 0 3px;
+  border-radius: 50%;
+  background: whitesmoke;
+}
+
+.osc .knobs {
+  grid-area: knobs;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: 40px;
+  align-items: center;
+}
+
+.osc .knobs .label {
+  font-size: 8pt;
+  font-family: monospace;
+}
+
+.osc .waveform {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+}
+
+.osc .square {
+  grid-area: square;
+}
+
+.osc label img {
+  width: 12px;
+  height: 12px;
+}
+
+.osc .light {
+  margin: 0 auto;
+  width: 5px;
+  height: 5px;
+  margin-bottom: -5px;
+  background: radial-gradient(white, transparent);
+  border-radius: 50%;
+}
+
+.osc.two .light {
+  background: radial-gradient(darkgrey, transparent);
+}
+
+.osc input:checked ~ .light {
+  background: radial-gradient(red, transparent);
+}
+
+.osc input[type="radio"] {
+  display: none;
+}
+
+.osc label {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  cursor: pointer;
+}
+
+.comp.lfo h2 {
+  font-family: monospace;
+  font-size: 12px;
+  text-align: center;
+  margin: 5px 0;
+  user-select: none;
+}
+
+.comp.lfo .lfo-layout {
+  display: grid;
+  margin-top: 5px;
+  margin-left: 5px;
+  grid-template-areas: "knob dest"
+                       "rate dest";
+}
+
+.comp.lfo .label {
+  grid-area: rate;
+  font-family: monospace;
+  text-align: center;
+  margin-top: 3px;
+  font-size: 11px;
+}
+
+.comp.lfo .knob {
+  width: 25px;
+  height: 25px;
+  background: whitesmoke;
+  border-radius: 50%;
+  box-shadow: 0 0 3px;
+  justify-self: center;
+  align-self: center;
+}
+
+.comp.lfo .light {
+  margin: 0 auto;
+  width: 5px;
+  height: 5px;
+  margin-bottom: -5px;
+  margin-right: 5px;
+  margin-left: 15px;
+  background: radial-gradient(white, transparent);
+  border-radius: 50%;
+}
+
+.comp.lfo input:checked ~ .light {
+  background: radial-gradient(red, transparent);
+}
+
+.comp.lfo input[type="radio"] {
+  display: none;
+}
+
+.comp.lfo .destination .label {
+  font-size: 10px;
+  text-align: left;
+}
+
+.comp.lfo .destination {
+  margin-left: -10px;
+}
+
+.comp.lfo .destination label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
