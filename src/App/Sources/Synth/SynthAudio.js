@@ -16,10 +16,6 @@ function midiToPitch(midi) {
 
 export default class SynthAudio {
 
-    setupFilter() {
-        
-    }
-    
     setupLFOs() {
         this.lfoNode = this.context.createOscillator();
         this.lfoNode.frequency.setValueAtTime(this.lfo.rate, 0);
@@ -27,8 +23,11 @@ export default class SynthAudio {
         this.pitchLfo.gain.setValueAtTime(PITCH_LFO_AMP, 0);
         this.ampLfo = this.context.createGain();
         this.ampLfo.gain.setValueAtTime(AMP_LFO_AMP, 0);
+        this.filterLfo = this.context.createGain();
+        this.filterLfo.gain.setValueAtTime(this.filter.freq, 0)
         this.lfoNode.connect(this.pitchLfo);
         this.lfoNode.connect(this.ampLfo);
+        this.lfoNode.connect(this.filterLfo);
         this.lfoNode.start();
     }
 
@@ -57,14 +56,14 @@ export default class SynthAudio {
             attack: 0,
             decay: 0,
             sustain: 1,
-            release: 0
+            release: 0.01
         };
         
         this.filterEnvelope = {
             attack: 0,
             decay: 0,
             sustain: 1,
-            release: 0
+            release: 0.01
         }
         
         this.lfo = {
@@ -99,24 +98,42 @@ export default class SynthAudio {
         this.lfoNode.frequency.setValueAtTime(value, 0);
     }
     
+    connectFilterLFO() {
+        for (let { filter } of Object.values(this.notes)) {
+            this.filterLfo.connect(filter);
+        }
+    }
+    
+    connectPitchLFO() {
+        for (let { one, two } of Object.values(this.notes)) {
+            this.pitchLfo.connect(one.detune);
+            this.pitchLfo.connect(two.detune);
+        }
+    }
+    
     set lfoDestination(value) {
         this.lfo.destination = value;
         
         switch (value) {
             case "amplitude": {
                 this.pitchLfo.disconnect();
+                this.filterLfo.disconnect();
                 this.ampLfo.connect(this.mainMix.gain);
                 break;
             }
             
             case "pitch": {
                 this.ampLfo.disconnect();
+                this.filterLfo.disconnect();
+                this.connectPitchLFO();
                 break;
             }
             
+            case "filter":
             default: {
                 this.pitchLfo.disconnect();
                 this.ampLfo.disconnect();
+                this.connectFilterLFO();
             }
         }
     }
@@ -127,6 +144,7 @@ export default class SynthAudio {
             filter.frequency.cancelScheduledValues(0);
             filter.frequency.setValueAtTime(value, 0);
         }
+        this.filterLfo.gain.setValueAtTime(this.filter.freq, 0)
     }
     
     set filterRes(value) {
@@ -167,6 +185,10 @@ export default class SynthAudio {
         filter.Q.setValueAtTime(this.filter.res, time);
         filter.gain.setValueAtTime(1, time);
         filter.type = this.filter.type;
+        
+        if (this.lfo.destination === "filter") {
+            this.filterLfo.connect(filter.detune);
+        }
 
         // Create a gain to follow the amp envelope.
         const oscAmpGain = this.context.createGain();
@@ -184,16 +206,25 @@ export default class SynthAudio {
             osc.frequency.setValueAtTime(pitch, time);
             osc.start(time);
             
+            // Apply our filter envelope
+            const freq = filter.frequency;
+            freq.setValueAtTime(0, time);
+            freq.setTargetAtTime(this.filter.freq, time, this.filterEnvelope.attack / 3);
+            let filterSustain = this.filter.freq * this.filterEnvelope.sustain;
+            const startTime = time < this.context.currentTime ? this.context.currentTime : time;
+            const filterDecayTime = startTime + this.filterEnvelope.attack;
+            freq.setTargetAtTime(filterSustain, filterDecayTime, this.filterEnvelope.decay / 3);
+            
             // Apply our amp envelope:
             const ampGain = oscAmpGain.gain;
             ampGain.setValueAtTime(0, time);
             ampGain.setTargetAtTime(FULL_VOLUME, time, this.ampEnvelope.attack / 3);
             // Assumption: ampEnvelope.sustain is between 0 and 1.
-            let sustain = this.ampEnvelope.sustain * FULL_VOLUME;
-            const startTime = time < this.context.currentTime ? this.context.currentTime : time;
-            const decayTime = startTime + this.ampEnvelope.attack;
-
-            ampGain.setTargetAtTime(sustain, decayTime, this.ampEnvelope.decay / 3);
+            let ampSustain = this.ampEnvelope.sustain * FULL_VOLUME;
+            const ampDecayTime = startTime + this.ampEnvelope.attack;
+            ampGain.setTargetAtTime(ampSustain, ampDecayTime, this.ampEnvelope.decay / 3);
+            
+            
         }
         
         this.notes[note] = { one: oscOne, two: oscTwo, oneGain: oscOneGain, twoGain: oscTwoGain, amp: oscAmpGain, filter };
@@ -204,11 +235,14 @@ export default class SynthAudio {
     }
     
     noteOffAtTime(note, time) {
-        const { one, two, amp } = this.notes[note];
-        const release = this.ampEnvelope.release;
+        const { one, two, amp, filter } = this.notes[note];
+        const ampRelease = this.ampEnvelope.release;
+        const filterRelease = this.filterEnvelope.release;
         const startTime = time < this.context.currentTime ? this.context.currentTime : time;
         amp.gain.cancelScheduledValues(startTime);
-        amp.gain.setTargetAtTime(0, startTime, release / 5);
+        amp.gain.setTargetAtTime(0, startTime, ampRelease / 5);
+        filter.frequency.cancelScheduledValues(startTime);
+        filter.frequency.setTargetAtTime(0, startTime, filterRelease / 5)
         one.stop(startTime + this.ampEnvelope.release);
         two.stop(startTime + this.ampEnvelope.release);
     }

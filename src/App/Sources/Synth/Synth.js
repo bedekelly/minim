@@ -156,24 +156,28 @@ class Synth extends React.Component {
     }
     
     setFilterAttack(attack) {
+        attack = parseFloat(attack);
         const filterEnvelope = this.state.filterEnvelope;
         this.audio.filterEnvelope.attack = attack;
         this.setState({ filterEnvelope: { ...filterEnvelope, attack }})
     }
     
     setFilterDecay(decay) {
+        decay = parseFloat(decay);
         const filterEnvelope = this.state.filterEnvelope;
         this.audio.filterEnvelope.decay = decay;
         this.setState({ filterEnvelope: { ...filterEnvelope, decay }})
     }
     
     setFilterSustain(sustain) {
+        sustain = parseFloat(sustain);
         const filterEnvelope = this.state.filterEnvelope;
         this.audio.filterEnvelope.sustain = sustain;
         this.setState({ filterEnvelope: { ...filterEnvelope, sustain }})
     }
     
     setFilterRelease(release) {
+        release = parseFloat(release);
         const filterEnvelope = this.state.filterEnvelope;
         this.audio.filterEnvelope.release = release;
         this.setState({ filterEnvelope: { ...filterEnvelope, release }})
@@ -318,7 +322,7 @@ class Synth extends React.Component {
                       ></input>
                 </div>
                 <div className="slidecontainer">
-                  <input type="range" min="0" max="3" className="slider" step="0.01"
+                  <input type="range" min="0" max="1" className="slider" step="0.01"
                       value={ this.state.filterEnvelope.decay } 
                       onChange={ event => this.setFilterDecay(event.target.value) }
                       ></input>
@@ -330,7 +334,7 @@ class Synth extends React.Component {
                       ></input>
                 </div>
                 <div className="slidecontainer">
-                  <input type="range" min="0" max="3" className="slider" step="0.01"
+                  <input type="range" min="0.01" max="3" className="slider" step="0.01"
                       value={ this.state.filterEnvelope.release } 
                       onChange={ event => this.setFilterRelease(event.target.value) }
                       ></input>
@@ -402,7 +406,7 @@ class Synth extends React.Component {
                       className="slider" id="myRange"></input>
                 </div>
                 <div className="slidecontainer">
-                  <input type="range" min="0" max="3" step="0.001"
+                  <input type="range" min="0.001" max="3" step="0.001"
                       value={ this.state.ampEnvelope.release } 
                       onChange={ event => this.setAmpRelease(event.target.value) }
                       className="slider" id="myRange"></input>
