@@ -97,6 +97,7 @@ class RackAudio {
     addSource(sourceType) {
         const { audio, component } = SourceTypes.find(t => t.type === sourceType);
         this.source = new audio(this);
+        this.source.routeTo(this.startOfFxChain);
         const id = uuid();
         this.appAudio.sources[id] = this.source;
         this.sequencer.sendNotesTo(this.source);

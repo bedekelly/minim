@@ -6,6 +6,7 @@
 .synth {
   width: 300px;
   margin-top: 3vh;
+  margin-bottom: 3vh;
   box-shadow: 0 0 40px;
   border: 5px solid darkgrey;
   box-sizing: content-box;
