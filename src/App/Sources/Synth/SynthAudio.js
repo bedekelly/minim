@@ -23,31 +23,57 @@ export default class SynthAudio {
         this.oscOneGain.connect(this.mainMix);
         this.oscTwoGain.connect(this.mainMix);
         this.notes = {};
-        
+
+        this.osc1 = {
+            waveform: "sine"
+        };
+
+        this.osc2 = {
+            waveform: ""
+        };
+
         this.ampEnvelope = {
-            attack: 0.3,
+            attack: 0,
             decay: 0,
             sustain: 1,
-            release: 0.2
+            release: 0
         }
+    }
+
+    set ampAttack(value) {
+        this.ampEnvelope.attack = value;
+    }
+    
+    set ampDecay(value) {
+        this.ampEnvelope.decay = value;
+    }
+    
+    set ampSustain(value) {
+        this.ampEnvelope.sustain = value;
+    }
+    
+    set ampRelease(value) {
+        this.ampEnvelope.release = value;
     }
 
     noteOnAtTime(note, time) {
         
         const pitchOne = midiToPitch(note);
-        const pitchTwo = midiToPitch(note);
+        const pitchTwo = midiToPitch(note + 12);
+        console.log({ pitchOne, pitchTwo });
         
         // Create two oscillators.
         const oscOne = this.context.createOscillator();
-        oscOne.type = "square";
+        oscOne.type = this.osc1.waveform;
         const oscTwo = this.context.createOscillator();
-        oscTwo.type = "triangle";
+        oscTwo.type = this.osc2.waveform;
         
         // Create a gain for each oscillator.
         const oscOneGain = this.context.createGain();
         oscOneGain.gain.setValueAtTime(0.5, time);
         const oscTwoGain = this.context.createGain();
-        oscTwoGain.gain.setValueAtTime(0.5, time);
+        const o2gainValue = oscTwo.type !== "" ? 0.5 : 0;
+        oscTwoGain.gain.setValueAtTime(o2gainValue, time);
         
         // Create a gain to follow the amp envelope.
         const oscAmpGain = this.context.createGain();
@@ -70,9 +96,10 @@ export default class SynthAudio {
             ampGain.setValueAtTime(0, time);
             ampGain.setTargetAtTime(FULL_VOLUME, time, this.ampEnvelope.attack / 3);
             // Assumption: ampEnvelope.sustain is between 0 and 1.
-            const sustain = this.ampEnvelope.sustain * FULL_VOLUME;
+            let sustain = this.ampEnvelope.sustain * FULL_VOLUME;
             const startTime = time < this.context.currentTime ? this.context.currentTime : time;
             const decayTime = startTime + this.ampEnvelope.attack;
+
             ampGain.setTargetAtTime(sustain, decayTime, this.ampEnvelope.decay / 3);
         }
         
@@ -85,11 +112,12 @@ export default class SynthAudio {
     
     noteOffAtTime(note, time) {
         const { one, two, amp } = this.notes[note];
-        const decay = this.ampEnvelope.decay;
+        const release = this.ampEnvelope.release;
         const startTime = time < this.context.currentTime ? this.context.currentTime : time;
-        amp.gain.setTargetAtTime(0, startTime, decay / 3);
-        one.stop(startTime + this.ampEnvelope.decay);
-        two.stop(startTime + this.ampEnvelope.decay);
+        amp.gain.cancelScheduledValues(startTime);
+        amp.gain.setTargetAtTime(0, startTime, release / 5);
+        one.stop(startTime + this.ampEnvelope.release);
+        two.stop(startTime + this.ampEnvelope.release);
     }
     
     noteOff(note) {
