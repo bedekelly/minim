@@ -293,10 +293,14 @@
 
 .comp.lfo .lfo-layout {
   display: grid;
-  margin-top: 5px;
-  margin-left: 5px;
   grid-template-areas: "knob dest"
                        "rate dest";
+  grid-template-columns: 3fr 5fr;
+  margin-left: 5px;
+}
+
+.comp.lfo .destinations {
+    grid-area: dest;
 }
 
 .comp.lfo .label {
@@ -310,6 +314,7 @@
 .comp.lfo .knob {
   width: 25px;
   height: 25px;
+  grid-area: knob;
   background: whitesmoke;
   border-radius: 50%;
   box-shadow: 0 0 3px;

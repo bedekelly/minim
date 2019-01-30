@@ -220,7 +220,14 @@ class Synth extends React.Component {
                       <label htmlFor="amplitude">
                         <input type="radio" name="destination" value="amplitude" id="amplitude"></input>
                         <div className="light"></div>
-                        <span className="label">Amp.</span>
+                        <span className="label">Amp</span>
+                      </label>
+                    </div>
+                    <div className="destination">
+                      <label htmlFor="filter">
+                        <input type="radio" name="destination" value="filter" id="filter"></input>
+                        <div className="light"></div>
+                        <span className="label">Filter</span>
                       </label>
                     </div>
                   </div>
