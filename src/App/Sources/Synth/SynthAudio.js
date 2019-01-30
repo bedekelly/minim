@@ -35,7 +35,7 @@ export default class SynthAudio {
         this.filter = {
             freq: 850,
             res: 0,
-            type: "lowpass"
+            type: "LP"
         }
 
         this.osc1 = {
@@ -152,6 +152,13 @@ export default class SynthAudio {
         for (let { filter } of Object.values(this.notes)) {
             filter.frequency.cancelScheduledValues(0);
             filter.Q.setValueAtTime(value, 0);
+        }
+    }
+    
+    set filterType(value) {
+        this.filter.type = value;
+        for ( let { filter } of Object.values(this.notes)) {
+            filter.type = this.filter.type;
         }
     }
 

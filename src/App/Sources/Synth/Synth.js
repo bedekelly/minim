@@ -5,6 +5,14 @@ import './Synth.css';
 import Knob from '../../Knob';
 
 
+const filterTypes = {
+    "LP": { next: "HP", audio: "lowpass", qLabel: "Res" },
+    "HP": { next: "BP", audio: "highpass", qLabel: "Res" },
+    "BP": { next: "NT", audio: "bandpass", qLabel: "Width" },
+    "NT": { next: "AP", audio: "notch", qLabel: "Width" },
+    "AP": { next: "LP", audio: "allpass", qLabel: "Sharp" }
+}
+
 
 class Synth extends React.Component {
     
@@ -149,9 +157,15 @@ class Synth extends React.Component {
         this.setState({ filter: { ...filter, res: value }});
     }
     
+    nextFilterType() {
+        const currentType = this.state.filter.type;
+        const { next } = filterTypes[currentType];
+        this.changeFilterType(next);
+    }
+    
     changeFilterType(value) {
         const filter = this.state.filter;
-        this.audio.filterType = value;
+        this.audio.filterType = filterTypes[value].audio;
         this.setState({ filter: { ...filter, type: value }});
     }
     
@@ -303,14 +317,18 @@ class Synth extends React.Component {
 
               </div>
               <div className="comp filter-freq">
-                <h2>Filter <span className="filter-type">HP</span></h2>
+                <h2>Filter <span className="filter-type" 
+                                 onClick={ () => this.nextFilterType() }
+                                 >{ this.state.filter.type }</span></h2>
                 <div className="knobs">
                   <Knob min={0} max={1000} value={this.state.filter.freq}
                         onChange={value => this.changeFilterFreq(value)}></Knob>
                   <div className="label freq">Freq</div>
                   <Knob min={0} max={30} value={this.state.filter.res}
                         onChange={value => this.changeFilterRes(value)}></Knob>
-                  <div className="label res">Res</div>
+                    <div className="label res">
+                        { filterTypes[this.state.filter.type].qLabel}
+                    </div>
                 </div>
               </div>
               <div className="comp envelope filter-envelope">
