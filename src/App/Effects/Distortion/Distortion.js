@@ -8,15 +8,19 @@ const STEP = 4;
 
 
 export default class Distortion extends React.Component {
+
     constructor(props) {
         super(props);
-        this.state = { amount: 0 };
+        this.audio = props.appAudio.effects[props.id];
+        this.state = { amount: this.audio.amount };
         this.noiseCanvasRef = React.createRef();
         this.animateNoise = this.animateNoise.bind(this);
+        this.maxDistortion = this.audio.max;
     }
 
     setAmount(amount) {
         this.setState({ amount });
+        this.audio.amount = amount;
     }
 
     componentDidMount() {
@@ -43,10 +47,10 @@ export default class Distortion extends React.Component {
 
     render() {
         return <div className="distortion">
-                 <canvas id="tv" style={ { opacity: this.state.amount*0.4 } } 
+                 <canvas id="tv" style={ { opacity: 0.4 * this.state.amount/this.audio.max } } 
                   width={ 100 } height={ 100 } ref={ this.noiseCanvasRef }></canvas>
-                 <Knob min={0} max={1} value={this.state.amount}
-                       onChange={ amount => this.setAmount(amount) } />
+                 <Knob min={ 0 } max={ this.audio.max } value={this.state.amount}
+                  onChange={ amount => this.setAmount(amount) } precision={ 0 }/>
                </div>
     }
 }

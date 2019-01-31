@@ -31,7 +31,6 @@ class EffectAudio {
         if (destination.input) {
             destination = destination.input;
         }
-        
         if (this.inputNode && this.outputNode) {
             this.input.connect(this.inputNode);
             this.outputNode.connect(this.wetNode);
@@ -42,8 +41,8 @@ class EffectAudio {
         } else {
             console.warn("Not a single-node or double-node effect")
         }
-        
-        
+
+
         this.wetNode.disconnect();
         this.wetNode.connect(destination);
 
