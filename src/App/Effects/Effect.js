@@ -5,6 +5,7 @@ import Filter from './Filter';
 import Gain from './Gain';
 import Compressor from './Compressor';
 import Reverb from './Reverb';
+import Echo from './Echo';
 import { EffectType } from './EffectTypes';
 import Knob from '../Knob';
 
@@ -17,7 +18,8 @@ const effectComponents = {
     [EffectType.Filter]: Filter,
     [EffectType.Gain]: Gain,
     [EffectType.Compressor]: Compressor,
-    [EffectType.Reverb]: Reverb
+    [EffectType.Reverb]: Reverb,
+    [EffectType.Echo]: Echo
 }
 
 

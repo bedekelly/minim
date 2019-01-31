@@ -1,0 +1,84 @@
+@font-face {
+    font-family: "Echo";
+    src: url("https://s3.eu-west-2.amazonaws.com/static-electricity/fonts/Echo.woff") format('woff');
+}
+
+.echo {
+  width: 200px;
+  height: 100px;
+  background: black;
+  border-radius: 7px;
+  box-shadow: 0 0 40px;
+  border: 2px solid yellow;
+  box-sizing: border-box;
+  user-select: none;
+  position: relative;
+}
+
+.echo h1 {
+  background: yellow;
+  display: inline-block;
+  padding: 0px 2px;
+  font-family: 'Echo';
+  font-size: 11pt;
+  margin: 5px;
+  border-radius: 2px;
+}
+
+.echo .knob {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: black;
+  border: 1px solid yellow;
+  box-sizing: border-box;
+  justify-self: center;
+  align-self: center;
+}
+
+.echo .knob-inner {
+    background: inherit;
+}
+
+.echo .notch {
+    width: 1px;
+    background: yellow;
+    height: 15px;
+}
+
+.echo .label {
+  background: yellow;
+  display: inline-block;
+  font-size: 11px;
+  font-family: monospace;
+  border-radius: 2px;
+  justify-self: center;
+  height: 13px;
+  padding: 0 4px;
+}
+
+.echo .echo-layout {
+  display: grid;
+  grid-template-areas: "fknob tknob cknob"
+                       "flabel tlabel clabel";
+  grid-template-columns: 1fr 1fr 1fr;
+  margin-left: 5px;
+  margin-top: calc(23px + 3px);
+  height: 80px;
+}
+
+.echo + .flabel .knob {
+  grid-area: tknob;
+}
+
+.echo + .tlabel .cknob {
+  grid-area: cknob;
+}
+
+.flabel {
+    grid-area: flabel;
+}
+
+.tlabel {
+    grid-area: tlabel;
+}

@@ -13,7 +13,8 @@ class EffectAudio {
     disconnect() {
         this.wetNode.disconnect();
         this.dryNode.disconnect();
-        this.node.disconnect();
+        if (this.node) this.node.disconnect();
+        else this.outputNode.disconnect()
     }
 
     set wet(value) {
@@ -30,10 +31,21 @@ class EffectAudio {
         if (destination.input) {
             destination = destination.input;
         }
-        this.input.connect(this.node);
+        
+        if (this.inputNode && this.outputNode) {
+            this.input.connect(this.inputNode);
+            this.outputNode.connect(this.wetNode);
+        }
+        else if (this.node) {
+            this.input.connect(this.node);
+            this.node.connect(this.wetNode);
+        } else {
+            console.warn("Not a single-node or double-node effect")
+        }
+        
+        
         this.wetNode.disconnect();
-        this.node.connect(this.wetNode);
-        this.wetNode.connect(destination)
+        this.wetNode.connect(destination);
 
         this.dryNode.disconnect();
         this.dryNode.connect(destination);
