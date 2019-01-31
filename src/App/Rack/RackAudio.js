@@ -6,7 +6,8 @@ import GainAudio from '../Effects/Gain/GainAudio';
 import CompressorAudio from '../Effects/Compressor/CompressorAudio';
 import ReverbAudio from '../Effects/Reverb/ReverbAudio';
 import SequencerAudio from './SequencerAudio';
-import EchoAudio from '../Effects/Echo/EchoAudio'
+import EchoAudio from '../Effects/Echo/EchoAudio';
+import DistortionAudio from '../Effects/Distortion/DistortionAudio';
 
 import { EffectType } from '../Effects/EffectTypes'
 import { SourceTypes } from '../Sources/SourceTypes';
@@ -121,7 +122,8 @@ class RackAudio {
             [EffectType.Gain]: GainAudio,
             [EffectType.Compressor]: CompressorAudio,
             [EffectType.Reverb]: ReverbAudio,
-            [EffectType.Echo]: EchoAudio
+            [EffectType.Echo]: EchoAudio,
+            [EffectType.Distortion]: DistortionAudio
         };
         const defaultEffectAudio = FilterAudio;
         const EffectAudio = effectAudios[effectType] || defaultEffectAudio
