@@ -45,7 +45,7 @@ class Synth extends React.Component {
             filter: {
                 freq: this.audio.filter.freq,
                 res: this.audio.filter.res,
-                type: this.audio.filter.type
+                type: "LP"
             },
             filterEnvelope: this.audio.filterEnvelope
         }

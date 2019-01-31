@@ -35,7 +35,7 @@ export default class SynthAudio {
         this.filter = {
             freq: 850,
             res: 0,
-            type: "LP"
+            type: "lowpass"
         }
 
         this.osc1 = {
