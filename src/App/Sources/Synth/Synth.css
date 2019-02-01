@@ -5,16 +5,30 @@
 
 .synth {
   width: 300px;
-  margin-top: 3vh;
+  margin-top: calc(3vh + 15px);
   margin-bottom: 3vh;
-  box-shadow: 0 0 40px;
-  border: 5px solid darkgrey;
+  border: 2px solid #555;
+  box-sizing: border-box;
   box-sizing: content-box;
   height: 160px;
   background: whitesmoke;
   display: grid;
+  position: relative;
   grid-template-areas: "osc-one filter-env filter-freq"
                        "osc-two lfo amp-env";
+}
+
+.synth:before {
+    position: absolute;
+    content: '';
+    top: -15px;
+    left: -15px;
+    width: 330px;
+    height: 190px;
+    background: linear-gradient(315deg, #d9d9d9 0%, #f6f2f2 74%);
+    z-index: -1;
+    box-shadow: 0 0 40px;
+    border-radius: 7px;
 }
 
 .comp.osc {
