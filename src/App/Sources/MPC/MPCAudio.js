@@ -43,7 +43,6 @@ export default class MPCAudio {
     }
 
     midiMessage(message) {
-        console.log(message.data);
         const lightPad = this.lightPad || (() => {});
         const { data: [messageType, note] } = message;
         const padIndex = this.padIndexOf(note);
