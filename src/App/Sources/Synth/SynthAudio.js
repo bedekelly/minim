@@ -242,7 +242,7 @@ export default class SynthAudio {
     }
     
     noteOffAtTime(note, time) {
-        const { one, two, amp, filter } = this.notes[note];
+        const { one, two, amp, filter, oneGain, twoGain } = this.notes[note];
         const ampRelease = this.ampEnvelope.release;
         const filterRelease = this.filterEnvelope.release;
         const startTime = time < this.context.currentTime ? this.context.currentTime : time;
@@ -252,6 +252,17 @@ export default class SynthAudio {
         filter.frequency.setTargetAtTime(0, startTime, filterRelease / 5)
         one.stop(startTime + this.ampEnvelope.release);
         two.stop(startTime + this.ampEnvelope.release);
+        
+        // Cleanup notes.
+        setTimeout(() => {
+            amp.disconnect();
+            one.disconnect();
+            two.disconnect();
+            oneGain.disconnect();
+            twoGain.disconnect();
+            filter.disconnect();
+            // Don't delete this.notes[note] – it gets overwritten!
+        }, ampRelease * 1000);
     }
     
     noteOff(note) {
