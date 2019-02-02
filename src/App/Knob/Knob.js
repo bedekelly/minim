@@ -68,7 +68,8 @@ class Knob extends React.Component {
         // Alt-click means we should start listening for MIDI events.
         if (event.altKey) {
             event.preventDefault();
-            this.props.midiLearn();
+            if (this.props.midiLearn) this.props.midiLearn();
+            else console.log("MIDI learn hasn't been implemented for me yet :(");
             return;
         }
 
@@ -158,6 +159,10 @@ class Knob extends React.Component {
                  </div>
             </div>
         </React.Fragment>
+    }
+    
+    shouldComponentUpdate(nextProps, nextState) {
+        return (nextProps.value !== this.props.value) || (this.state.dragging !== nextState.dragging);
     }
 }
 

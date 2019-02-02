@@ -61,7 +61,7 @@ class Rack extends React.Component {
         const effectsToKeep = effect => effect.id !== id;
         this.setState({effects: this.state.effects.filter(effectsToKeep)});
     }
-
+    
     render() {
         const EffectsList = SortableEffectsList(this.appAudio);
         return <React.Fragment>
@@ -77,7 +77,7 @@ class Rack extends React.Component {
                     chooseItem={ this.addSource.bind(this) }
                     items={ SourceTypes }>
                 </SourceModal> }
-            <section className={"rack"}>
+            <section className={"rack"} onClick={ this.props.select }>
                 <div className="components-wrapper">
                     <section className={"components"}>
                         { this.sourceComponent() }

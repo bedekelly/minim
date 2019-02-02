@@ -46,6 +46,10 @@ class App extends Component {
         this.appAudio.pause();
         this.setState({playing: false});
     }
+    
+    selectRack(id) {
+        this.appAudio.selectRack(id);
+    }
 
     render() {
         return <section className="app">
@@ -53,7 +57,7 @@ class App extends Component {
             { this.state.racks.map(rack => 
                 <Rack 
                     key={rack.id} id={rack.id} appAudio={this.appAudio} 
-                    playing={this.state.playing}>
+                    playing={this.state.playing} select={() => this.selectRack(rack.id)}>
                 </Rack>
             ) }
         

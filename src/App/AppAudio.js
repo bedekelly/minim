@@ -3,6 +3,20 @@ import uuid from "uuid4";
 import RackAudio from './Rack/RackAudio';
 
 
+/**
+ * Linearly map a value from one range to another.
+ */
+function linMap(value, fromLower, fromUpper, toLower, toUpper) {
+    const lowerRange = fromUpper - fromLower;
+    const upperRange = toUpper - toLower;
+    const magnitudeThroughLowerRange = (value - fromLower);
+    const fractionThroughRange = magnitudeThroughLowerRange / lowerRange;
+    const magnitudeThroughUpperRange = fractionThroughRange * upperRange;
+    const valueInUpperRange = toLower + magnitudeThroughUpperRange;
+    return valueInUpperRange;
+}
+
+
 class AppAudio {
 
     constructor() {
@@ -35,14 +49,16 @@ class AppAudio {
             this.learningMidi = false;
             this.midiLearnTarget = null;
         } else if (isControlMessage && this.midiHandlers[input.id] && this.midiHandlers[input.id][control]) {
-            const { id, handler } = this.midiHandlers[input.id][control];
+            const { id, handler, min, max } = this.midiHandlers[input.id][control];
+            if (min !== undefined && max !== undefined) {
+                value = linMap(value, 0, 127, min, max);
+            }
             this.components[id][handler](value);
         } else {
             const rack = this.racks[this.selectedRack];
             rack && rack.midiMessage(message)
         }
     }
-
 
     registerComponent(id, handlers) {
         this.components[id] = handlers;
@@ -67,9 +83,9 @@ class AppAudio {
         }
     }
     
-    midiLearn(id, handler) {
+    midiLearn(id, handler, min, max) {
         this.learningMidi = true;
-        this.midiLearnTarget = { id, handler };
+        this.midiLearnTarget = { id, handler, min, max };
     }
 
     play() {
@@ -98,6 +114,10 @@ class AppAudio {
         }
 
         this.context = context;
+    }
+    
+    selectRack(id) {
+        this.selectedRack = id;
     }
     
     async makeRack() {

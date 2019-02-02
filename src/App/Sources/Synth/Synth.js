@@ -14,7 +14,7 @@ const filterTypes = {
 }
 
 
-class Synth extends React.Component {
+class Synth extends React.PureComponent {
     
     constructor(props) {
         super(props);
@@ -42,9 +42,9 @@ class Synth extends React.Component {
                 rate: this.audio.lfo.rate,
                 destination: this.audio.lfo.destination
             },
+            filterFreq: this.audio.filter.freq,
+            filterRes: this.audio.filter.res,
             filter: {
-                freq: this.audio.filter.freq,
-                res: this.audio.filter.res,
                 type: "LP"
             },
             filterEnvelope: this.audio.filterEnvelope
@@ -146,15 +146,13 @@ class Synth extends React.Component {
     }
     
     changeFilterFreq(value) {
-        const filter = this.state.filter;
         this.audio.filterFreq = value;
-        this.setState({ filter: { ...filter, freq: value }});
+        this.setState({ filterFreq: value });
     }
     
     changeFilterRes(value) {
-        const filter = this.state.filter;
         this.audio.filterRes = value;
-        this.setState({ filter: { ...filter, res: value }});
+        this.setState({ filterRes: value });
     }
     
     nextFilterType() {
@@ -195,6 +193,17 @@ class Synth extends React.Component {
         const filterEnvelope = this.state.filterEnvelope;
         this.audio.filterEnvelope.release = release;
         this.setState({ filterEnvelope: { ...filterEnvelope, release }})
+    }
+    
+    componentDidMount() {
+        this.props.appAudio.registerComponent(this.props.id, {
+            setFilterFrequency: value => this.changeFilterFreq(value),
+            setFilterResonance: value => this.changeFilterRes(value)
+        });
+    }
+
+    midiLearn(control, min, max) {
+        this.props.appAudio.midiLearn(this.props.id, control, min, max);
     }
     
     render() {
@@ -321,11 +330,13 @@ class Synth extends React.Component {
                                  onClick={ () => this.nextFilterType() }
                                  >{ this.state.filter.type }</span></h2>
                 <div className="knobs">
-                  <Knob min={0} max={1000} value={this.state.filter.freq}
-                        onChange={value => this.changeFilterFreq(value)}></Knob>
+                  <Knob min={0} max={1000} value={this.state.filterFreq}
+                        onChange={value => this.changeFilterFreq(value)}
+                        midiLearn={ () => this.midiLearn("setFilterFrequency", 0, 1000) }></Knob>
                   <div className="label freq">Freq</div>
-                  <Knob min={0} max={30} value={this.state.filter.res}
-                        onChange={value => this.changeFilterRes(value)}></Knob>
+                  <Knob min={0} max={30} value={this.state.filterRes}
+                        onChange={value => this.changeFilterRes(value)}
+                        midiLearn={ () => this.midiLearn("setFilterResonance", 0, 30) }></Knob>
                     <div className="label res">
                         { filterTypes[this.state.filter.type].qLabel}
                     </div>
