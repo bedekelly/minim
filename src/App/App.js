@@ -18,11 +18,10 @@ class App extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { racks: [], playing: false }
         this.appAudio = new AppAudio();
-        this.state = { loaded: false, racks: [] }
+        this.state = { loaded: false, racks: [], playing: false, selectedRack: this.appAudio.selectedRack }
     }
-
+    
     async initialise() {
         if (this.state.loaded) return;
         await this.appAudio.initialise();
@@ -32,6 +31,7 @@ class App extends Component {
     async addRack() {
         await this.initialise();
         const rack = await this.appAudio.makeRack();
+        this.selectRack(rack.id);
         return this.setState({ racks: [ ...this.state.racks, rack ] })
     }
 
@@ -48,7 +48,12 @@ class App extends Component {
     }
     
     selectRack(id) {
+        this.setState({ selectedRack: id });
         this.appAudio.selectRack(id);
+    }
+    
+    get selectedRack() {
+        return this.state.selectedRack;
     }
 
     render() {
@@ -57,6 +62,7 @@ class App extends Component {
             { this.state.racks.map(rack => 
                 <Rack 
                     key={rack.id} id={rack.id} appAudio={this.appAudio} 
+                    selected={ this.state.selectedRack === rack.id }
                     playing={this.state.playing} select={() => this.selectRack(rack.id)}>
                 </Rack>
             ) }

@@ -50,7 +50,11 @@
 }
 
 .rack {
-    border: 2px dashed #eee;
+    /* border-width: 3px;
+    border-style: solid;
+    border-image: radial-gradient(#6CD4FF, #FE938C 85%);
+    border-image-slice: 1; */
+    box-shadow: 0 0 20px inset black;
     margin: 3vh;
     max-width: 400px;
     min-width: 400px;
@@ -61,9 +65,13 @@
     padding: 20px;
 }
 
+.rack.selected {
+    box-shadow: 0 0 20px inset whitesmoke;
+}
+
 .rack .add-source {
     width: 80%;
-    margin: 0 auto 3vh auto;
+    margin: 3vh auto 3vh auto;
     height: 140px;
     border-radius: 7px;
     border: 3px solid whitesmoke;

@@ -77,7 +77,7 @@ class Rack extends React.Component {
                     chooseItem={ this.addSource.bind(this) }
                     items={ SourceTypes }>
                 </SourceModal> }
-            <section className={"rack"} onClick={ this.props.select }>
+            <section className={ "rack" + (this.props.selected ? " selected" : "") } onClick={ this.props.select }>
                 <div className="components-wrapper">
                     <section className={"components"}>
                         { this.sourceComponent() }
