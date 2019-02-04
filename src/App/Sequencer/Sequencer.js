@@ -50,8 +50,9 @@ export default class Sequencer extends React.PureComponent {
     
     renderFrame() {
         // Calculate angle travelled by the innermost, one-beat-per-cycle ring.
-        const time = this.audio.timeSinceLastEvent;
+        const time = this.audio.currentRelativeTime;
         const innermostAngleTravelled = time * -2 * Math.PI * this.frequency;
+        console.log("drawing with time", time);
         
         // If for some reason the canvas has reloaded, renew our 2d drawing context.
         if (!this.context.clearRect ) {

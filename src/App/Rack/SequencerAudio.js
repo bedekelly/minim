@@ -21,6 +21,9 @@ export default class SequencerAudio {
         this.interval = null;
         this.startTime = null;
         this.relativeStartTime = 0;
+        this.lastEventRelativeTime = 0;
+        this.lastEventAbsoluteTime = 0;
+        this.lastEventTime = 0;
         this.soundSource = null;
         this.notes = [];
         this.playing = false;
@@ -158,9 +161,17 @@ export default class SequencerAudio {
 
     get timeSinceLastEvent() {
         if (this.playing) {
-            return this.context.currentTime - this.lastEventTime;
+            return this.context.currentTime - this.startTime;
         } else {
-            return this.lastEventTime;
+            return this.lastEventTime - this.startTime;
+        }
+    }
+    
+    get currentRelativeTime() {
+        if (!this.playing) {
+            return this.lastEventRelativeTime;
+        } else {
+            return this.context.currentTime - this.lastEventAbsoluteTime + this.lastEventRelativeTime;
         }
     }
 
@@ -192,13 +203,14 @@ export default class SequencerAudio {
 
     play() {
         this.playing = true;
-        this.startTime = this.lastEventTime = this.context.currentTime;
+        this.lastEventAbsoluteTime = this.context.currentTime;
         this.startScheduling();
     }
 
     pause() {
         this.playing = false;
-        this.lastEventTime = this.context.currentTime;
+        this.lastEventRelativeTime = this.currentRelativeTime;
+        this.lastEventAbsoluteTime = this.context.currentTime;
         this.cancelAllNotes();
         this.cancelCurrentScheduler();
     }
