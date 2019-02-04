@@ -110,13 +110,9 @@ export default class SequencerAudio {
 
     bulkSchedule(notes) {
         this.soundSource && this.soundSource.scheduleNotes && this.soundSource.scheduleNotes(notes);
-        // for (let { data, time } of notes) {
-            // console.log("To implement: Scheduling note", data, "at", time - this.startTime);
-        // }
     }
 
     cancelAllNotes() {
-        // console.log("Implement on sound source: cancel all notes.")
         this.soundSource && this.soundSource.cancelAllNotes && this.soundSource.cancelAllNotes();
     }
 
@@ -160,6 +156,14 @@ export default class SequencerAudio {
         if (this.playing) this.startAgainFromNow();
     }
 
+    get timeSinceLastEvent() {
+        if (this.playing) {
+            return this.context.currentTime - this.lastEventTime;
+        } else {
+            return this.lastEventTime;
+        }
+    }
+
     addNote({ data, beat, offset}) {
         // Todo: this is inefficient and we should just schedule
         // the note we've added, rather than rescheduling everything!
@@ -188,12 +192,13 @@ export default class SequencerAudio {
 
     play() {
         this.playing = true;
-        this.startTime = this.context.currentTime;
+        this.startTime = this.lastEventTime = this.context.currentTime;
         this.startScheduling();
     }
 
     pause() {
         this.playing = false;
+        this.lastEventTime = this.context.currentTime;
         this.cancelAllNotes();
         this.cancelCurrentScheduler();
     }

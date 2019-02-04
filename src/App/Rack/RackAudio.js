@@ -24,16 +24,7 @@ class RackAudio {
 
         // Todo: global fx rack
         this.destination = this.appAudio.context.destination;
-
-        const notes = [
-            { data: [144, 36, 123], beat: 0, offset: 0 },
-            { data: [144, 36], beat: 1, offset: 0 },
-            { data: [144, 36], beat: 2, offset: 0},
-            { data: [144, 36], beat: 3, offset: 0},
-            { data: [144, 38], beat: 3, offset: 50}
-        ];
-        this.sequencer.bpm = 200;
-        this.sequencer.addNotes(notes);
+        this.sequencer.bpm = 80;
     }
 
     pause() {

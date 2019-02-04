@@ -80,7 +80,7 @@ class Rack extends React.Component {
                 </SourceModal> }
             <section className={ "rack" + (this.props.selected ? " selected" : "") } onClick={ this.props.select }>
                 <div className="components-wrapper">
-                    <Sequencer />
+                    <Sequencer audio={ this.rackAudio.sequencer } appAudio={ this.appAudio }/>
                     <section className={"components"}>
                         { this.sourceComponent() }
                         { <EffectsList 
