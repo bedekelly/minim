@@ -12,7 +12,7 @@
   display: grid;
   grid-template-rows: 1fr 1fr 1fr 1fr;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  background: green;
+  background: #C0BCB5;
   width: 40px;
   height: 40px;
   place-items: center;
@@ -36,15 +36,18 @@
   height: 6px;
   border-radius: 0.5px;
   background: whitesmoke;
+  cursor: pointer;
+  box-shadow: 0 0 0.2px 0.2px #444, 0 0 3px inset white;
 }
 
 .sequencer .button.selected {
-    background: red;
+    background: #ED474A;
 }
 
 .sequencer .text-value-control{
     position: absolute;
     top: 10px;
+    font-size: 16pt;
 }
 
 .sequencer .text-value-control:first-of-type {
