@@ -1,0 +1,7 @@
+.text-value-control {
+  user-select: none;
+  cursor: ns-resize;
+  font-family: monospace;
+  font-size: 24pt;
+  color: #222;
+}

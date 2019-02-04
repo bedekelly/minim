@@ -6,6 +6,7 @@ import { EffectTypes } from '../Effects/EffectTypes'
 import SortableEffectsList from './SortableEffectsList';
 
 import { SourceModal, EffectsModal } from './Modals';
+import Sequencer from '../Sequencer';
 
 import { arrayMove } from 'react-sortable-hoc';
 
@@ -79,6 +80,7 @@ class Rack extends React.Component {
                 </SourceModal> }
             <section className={ "rack" + (this.props.selected ? " selected" : "") } onClick={ this.props.select }>
                 <div className="components-wrapper">
+                    <Sequencer />
                     <section className={"components"}>
                         { this.sourceComponent() }
                         { <EffectsList 

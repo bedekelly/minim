@@ -22,7 +22,7 @@
   z-index: 1;
 }
 
-.inset-shadow {
+.ambience .inset-shadow {
   position: absolute;
   top: 10%;
   left: 7.5%;
@@ -33,7 +33,7 @@
   z-index: 2;
 }
 
-.button {
+.ambience .button {
   border-radius: 50%;
   background: whitesmoke;
   width: 30px;
@@ -49,11 +49,11 @@
   cursor: pointer;
 }
 
-.button.left {
+.ambience .button.left {
   left: 12.5%;
 }
 
-.button.right {
+.ambience .button.right {
   right: 12.5%;
 }
 

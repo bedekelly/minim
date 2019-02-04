@@ -1,0 +1,56 @@
+.sequencer {
+  background: whitesmoke;
+  border-radius: 7px;
+  border: 10px solid #444;
+  box-shadow: 0 0 40px, 0 0 40px inset;
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.sequencer .buttons {
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  background: green;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  transition: all ease 0.2s;
+  border-radius: 3px;
+}
+
+.sequencer .buttons:hover {
+  scale: 5;
+  bottom: 90px;
+  right: 90px;
+  transition: all ease 0.2s;
+  box-shadow: 0 0 40px;
+}
+
+.sequencer .button {
+  width: 6px;
+  height: 6px;
+  border-radius: 0.5px;
+  background: whitesmoke;
+}
+
+.sequencer .button.selected {
+    background: red;
+}
+
+.sequencer .text-value-control{
+    position: absolute;
+    top: 10px;
+}
+
+.sequencer .text-value-control:first-of-type {
+    left: 10px;
+}
+
+.sequencer .text-value-control:nth-of-type(2) {
+    right: 10px;
+}
