@@ -52,7 +52,6 @@ export default class Sequencer extends React.PureComponent {
         // Calculate angle travelled by the innermost, one-beat-per-cycle ring.
         const time = this.audio.currentRelativeTime;
         const innermostAngleTravelled = time * -2 * Math.PI * this.frequency;
-        console.log("drawing with time", time);
         
         // If for some reason the canvas has reloaded, renew our 2d drawing context.
         if (!this.context.clearRect ) {
@@ -99,9 +98,18 @@ export default class Sequencer extends React.PureComponent {
                 closestPoint.dist = dist;
                 closestPoint.ring = i;
                 this.setState({ placingItem: true, closestPoint });
-            } else {
-                this.setState({ placingItem: false });
             }
+        }
+        
+        // Draw all notes
+        ctx.fillStyle = "rgba(100, 255, 20, 1)"
+        for (let { ring, angle } of this.state.notes) {
+            const radius = this.radiusOfRing(ring);
+            const x = radius * Math.sin(angle);
+            const y = -radius * Math.cos(angle);
+            ctx.beginPath();
+            ctx.arc(SIZE/2+x, SIZE/2+y, 7, 0, 2 * Math.PI);
+            ctx.fill();
         }
         
         ctx.fillStyle = "rgba(20, 20, 20, 0.2)"
