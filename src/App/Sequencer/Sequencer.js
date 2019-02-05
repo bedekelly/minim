@@ -51,7 +51,7 @@ export default class Sequencer extends React.PureComponent {
     renderFrame() {
         // Calculate angle travelled by the innermost, one-beat-per-cycle ring.
         const time = this.audio.currentRelativeTime;
-        const innermostAngleTravelled = time * -2 * Math.PI * this.frequency;
+        const outermostAngleTravelled = time * -2 * Math.PI * this.frequency / this.state.beatsPerMeasure;
         
         // If for some reason the canvas has reloaded, renew our 2d drawing context.
         if (!this.context.clearRect ) {
@@ -79,7 +79,9 @@ export default class Sequencer extends React.PureComponent {
             ctx.stroke();
             
             // Draw "current position" indicators.
-            const angleTravelled = innermostAngleTravelled / i;
+            const beats = this.state.beatsPerMeasure;
+            const cyclesPerBar = (beats - i + 1);
+            const angleTravelled = outermostAngleTravelled * cyclesPerBar;
             const x = radius * Math.sin(Math.PI + angleTravelled);
             const y = radius * Math.cos(Math.PI + angleTravelled);
             ctx.beginPath();
@@ -140,11 +142,26 @@ export default class Sequencer extends React.PureComponent {
         // Given the index of a ring and an angle, calculate the beat
         // a note should fall and add it to our sequencer-audio.
 
-        // Todo: work out how to implement for things which take more than 1 bar to repeat!
-        if (ring === this.state.beatsPerMeasure) {
-            const fractionalBeat = linMap(angle, 0, Math.PI*2, 1, this.state.beatsPerMeasure+1);
-            const beat = Math.round(fractionalBeat);
-            const offset = 100 * (fractionalBeat - beat);
+        // If it's the outermost ring, just map it between a and the number of beats per measure.
+        // If it's the innermost ring, create beatsPerMeasure copies and spread them equally.
+        
+        // Generally, if it's the nth ring from the outside, there are n cycles in a bar.
+        // Furthest ring out has 1 cycle in a bar; 4th ring in has 4 cycles in a bar.
+        
+        const numCycles = (this.state.beatsPerMeasure - ring + 1);
+        
+        // Loop `numCycles` times, splitting total time into `numCycles` chunks.
+        // Add a note `angle/2pi` through each chunk.
+        // const angleThroughBar = linMap(angle, 0, Math.PI*2, 1, this.beatsPerMeasure+1);
+        const beatsPerCycle = this.state.beatsPerMeasure / numCycles;
+
+        for (let cycle=0; cycle<numCycles; cycle++) {
+            const fractionalBeatInCycle = linMap(angle, 0, Math.PI*2, 0, beatsPerCycle);
+            const fractionalBeat = 1 + cycle * beatsPerCycle + fractionalBeatInCycle;
+            let beat = Math.round(fractionalBeat);
+            const offset = fractionalBeat - beat;
+            if (beat > this.state.beatsPerMeasure) beat -= this.state.beatsPerMeasure;
+            console.log({ offset, beat });
             this.audio.addNote({ beat, offset, data: [144, 36]})
         }
     }

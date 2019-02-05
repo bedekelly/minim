@@ -78,7 +78,6 @@ export default class SequencerAudio {
     }
 
     scheduleNextNBars() {
-
         this.cleanupFulfilledNotes();
 
         const newNotesToSchedule = [];
@@ -166,7 +165,7 @@ export default class SequencerAudio {
         // Todo: this is inefficient and we should just schedule
         // the note we've added, rather than rescheduling everything!
         this.notes.push({ data, beat, offset, scheduledTimes: []});
-        this.scheduleNextNBars();
+        if (this.playing) this.scheduleNextNBars();
     }
     
     addNotes(notes) {
