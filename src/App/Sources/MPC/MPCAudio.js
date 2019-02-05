@@ -71,9 +71,11 @@ export default class MPCAudio {
     }
 
     removeNodeWithId(id) {
-        const { node } = this.futureSounds.find(n => n.id === id);
-        node.stop();
-        node.disconnect();
+        const sound = this.futureSounds.find(n => n.id === id);
+        if (sound) {
+            sound.node.stop();
+            sound.node.disconnect();
+        }
     }
     
     cancelAllNotes() {
