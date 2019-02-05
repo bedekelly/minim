@@ -28,11 +28,13 @@ class RackAudio {
     }
 
     pause() {
+        console.log("rack pausing");
         this.sequencer.pause();
         this.source && this.source.pause();
     }
 
     play() {
+        console.log("rack playing");
         this.sequencer.play();
         this.source && this.source.play();
     }

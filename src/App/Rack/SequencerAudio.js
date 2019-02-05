@@ -15,11 +15,10 @@ export default class SequencerAudio {
     constructor(context) {
         this.context = context;
         this._timeSignature = 4;
-        this._bpm = 60;
+        this._bpm = 80;
         this.barsLookahead = 1;
         this.scheduleTicksPerBar = 3;
         this.interval = null;
-        this.startTime = null;
         this.relativeStartTime = 0;
         this.lastEventRelativeTime = 0;
         this.lastEventAbsoluteTime = 0;
@@ -45,16 +44,20 @@ export default class SequencerAudio {
         return 1000 * this.totalBarTime / this.scheduleTicksPerBar;
     }
 
-    get currentProgressIntoBar() {
-        return (
-            this.context.currentTime +
-            this.relativeStartTime -
-            this.startTime
-        ) % this.totalBarTime
+    get currentRelativeTime() {
+        
+        if (!this.playing) {
+            return this.lastEventRelativeTime;
+        }
+        
+        // current progress into bar is the current progress at the last event, 
+        // plus the time elapsed since the last event, modulo the length of the bar.
+        const timeSinceLastEvent = this.context.currentTime - this.lastEventAbsoluteTime;
+        return (this.lastEventRelativeTime + timeSinceLastEvent) % this.totalBarTime;
     }
     
     get startOfCurrentBar() {
-        return this.context.currentTime - this.currentProgressIntoBar;
+        return this.context.currentTime - this.currentRelativeTime;
     }
 
     /**
@@ -93,7 +96,7 @@ export default class SequencerAudio {
                 const { data, beat, offset, scheduledTimes } = note;
                 const noteScheduledTime = (
                     barStart 
-                    + beat * this.timePerBeat 
+                    + (beat-1) * this.timePerBeat 
                     + offset/100 * this.timePerBeat
                 );
                 // Check if we've already scheduled this note.
@@ -121,12 +124,12 @@ export default class SequencerAudio {
 
     startScheduling() {
         this.scheduleNextNBars();
-        this.interval = setInterval(this.scheduleNextNBars, this.scheduleInterval)
+        this.interval = setInterval(this.scheduleNextNBars, this.scheduleInterval);
     }
 
     updateStartTimes() {
-        this.relativeStartTime = this.currentProgressIntoBar;
-        this.startTime = this.context.currentTime;
+        this.lastEventRelativeTime = this.currentRelativeTime;
+        this.lastEventAbsoluteTime = this.context.currentTime;
     }
 
     cancelCurrentScheduler() {
@@ -158,35 +161,18 @@ export default class SequencerAudio {
         this._timeSignature = value;
         if (this.playing) this.startAgainFromNow();
     }
-
-    get timeSinceLastEvent() {
-        if (this.playing) {
-            return this.context.currentTime - this.startTime;
-        } else {
-            return this.lastEventTime - this.startTime;
-        }
-    }
     
-    get currentRelativeTime() {
-        if (!this.playing) {
-            return this.lastEventRelativeTime;
-        } else {
-            return this.context.currentTime - this.lastEventAbsoluteTime + this.lastEventRelativeTime;
-        }
-    }
-
     addNote({ data, beat, offset}) {
         // Todo: this is inefficient and we should just schedule
         // the note we've added, rather than rescheduling everything!
         this.notes.push({ data, beat, offset, scheduledTimes: []});
-        this.startAgainFromNow();
+        this.scheduleNextNBars();
     }
     
     addNotes(notes) {
         for (let { data, beat, offset } of notes) {
             this.notes.push({ data, beat, offset, scheduledTimes: []});
         }
-        if (this.playing) this.startAgainFromNow();
     }
 
     removeNote({ data, beat, offset }) {
@@ -202,14 +188,16 @@ export default class SequencerAudio {
     }
 
     play() {
+        console.log("sequencer playing");
         this.playing = true;
         this.lastEventAbsoluteTime = this.context.currentTime;
         this.startScheduling();
     }
 
     pause() {
-        this.playing = false;
+        console.log("sequencer pausing");
         this.lastEventRelativeTime = this.currentRelativeTime;
+        this.playing = false;
         this.lastEventAbsoluteTime = this.context.currentTime;
         this.cancelAllNotes();
         this.cancelCurrentScheduler();
@@ -217,7 +205,7 @@ export default class SequencerAudio {
     
     stop() {
         this.pause();
-        this.relativeStartTime = 0;
+        this.lastEventRelativeTime = 0;
     }
     
     sendNotesTo(source) {

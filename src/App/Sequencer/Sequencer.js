@@ -139,12 +139,12 @@ export default class Sequencer extends React.PureComponent {
         
         // Given the index of a ring and an angle, calculate the beat
         // a note should fall and add it to our sequencer-audio.
-        
+
         // Todo: work out how to implement for things which take more than 1 bar to repeat!
         if (ring === this.state.beatsPerMeasure) {
             const fractionalBeat = linMap(angle, 0, Math.PI*2, 1, this.state.beatsPerMeasure+1);
-            const beat = Math.floor(fractionalBeat);
-            const offset = fractionalBeat - beat;
+            const beat = Math.round(fractionalBeat);
+            const offset = 100 * (fractionalBeat - beat);
             this.audio.addNote({ beat, offset, data: [144, 36]})
         }
     }

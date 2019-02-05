@@ -33,7 +33,6 @@ export default class MPCAudio {
     }
 
     scheduleNotes(midiMessages) {
-        // console.log("Scheduling...", midiMessages);
         for (let { data: [messageType, note], time } of midiMessages) {
             if (messageType === NOTE_ON) {
                 const padIndex = this.padIndexOf(note);
