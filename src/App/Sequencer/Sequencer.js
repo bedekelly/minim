@@ -157,11 +157,11 @@ export default class Sequencer extends React.PureComponent {
 
         for (let cycle=0; cycle<numCycles; cycle++) {
             const fractionalBeatInCycle = linMap(angle, 0, Math.PI*2, 0, beatsPerCycle);
-            const fractionalBeat = 1 + cycle * beatsPerCycle + fractionalBeatInCycle;
+            const fractionalBeat = cycle * beatsPerCycle + fractionalBeatInCycle;
             let beat = Math.round(fractionalBeat);
-            const offset = fractionalBeat - beat;
+            const offset = (fractionalBeat - beat) * 100;
             if (beat > this.state.beatsPerMeasure) beat -= this.state.beatsPerMeasure;
-            console.log({ offset, beat });
+            beat = 1 + beat % this.state.beatsPerMeasure;
             this.audio.addNote({ beat, offset, data: [144, 36]})
         }
     }
