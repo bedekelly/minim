@@ -36,6 +36,7 @@ export default class MPCAudio {
         for (let { data: [messageType, note], time } of midiMessages) {
             if (messageType === NOTE_ON) {
                 const padIndex = this.padIndexOf(note);
+                console.log({ note, padIndex });
                 this.playPadAtTime(padIndex, time);
             }
         }

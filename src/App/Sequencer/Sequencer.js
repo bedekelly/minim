@@ -1,5 +1,6 @@
 import React from 'react';
 import TextValue from '../TextValue';
+import MPCDrumSelector from './MPCDrumSelector';
 
 import './Sequencer.css';
 
@@ -34,7 +35,8 @@ export default class Sequencer extends React.PureComponent {
             placingItem: true,
             notes: [],
             closestPoint: null,
-            mousePos: {x:-10, y: -10} 
+            mousePos: {x:-10, y: -10},
+            selectedDrum: 0
         };
     }
     
@@ -46,6 +48,10 @@ export default class Sequencer extends React.PureComponent {
         const totalSpace = SIZE / 2 - 20;
         const circleRadius = totalSpace / this.state.beatsPerMeasure;
         return num * circleRadius;
+    }
+    
+    get selectedDrumMIDI() {
+        return [144, 36 + this.state.selectedDrum];
     }
     
     renderFrame() {
@@ -66,7 +72,7 @@ export default class Sequencer extends React.PureComponent {
         let closestPoint = { dist: 100000000 };
         
         // Draw each ring in turn.
-        for ( let i=1; i<=this.state.beatsPerMeasure; i++) {
+        for ( let ring=1; ring<=this.state.beatsPerMeasure; ring++) {
             
             // Set options for drawing rings.
             ctx.lineWidth = 2;
@@ -74,13 +80,13 @@ export default class Sequencer extends React.PureComponent {
             
             // Draw rings.
             ctx.beginPath();
-            const radius = this.radiusOfRing(i);
+            const radius = this.radiusOfRing(ring);
             ctx.arc(SIZE/2, SIZE/2, radius, 0, 2 * Math.PI);
             ctx.stroke();
             
             // Draw "current position" indicators.
             const beats = this.state.beatsPerMeasure;
-            const cyclesPerBar = (beats - i + 1);
+            const cyclesPerBar = beats - ring + 1;
             const angleTravelled = outermostAngleTravelled * cyclesPerBar;
             const x = radius * Math.sin(Math.PI + angleTravelled);
             const y = radius * Math.cos(Math.PI + angleTravelled);
@@ -98,7 +104,7 @@ export default class Sequencer extends React.PureComponent {
             if ( dist < closestPoint.dist ) {
                 closestPoint.coords = { x: circleX, y: circleY };
                 closestPoint.dist = dist;
-                closestPoint.ring = i;
+                closestPoint.ring = ring;
                 this.setState({ placingItem: true, closestPoint });
             }
         }
@@ -162,7 +168,7 @@ export default class Sequencer extends React.PureComponent {
             const offset = (fractionalBeat - beat) * 100;
             if (beat > this.state.beatsPerMeasure) beat -= this.state.beatsPerMeasure;
             beat = 1 + beat % this.state.beatsPerMeasure;
-            this.audio.addNote({ beat, offset, data: [144, 36]})
+            this.audio.addNote({ beat, offset, data: this.selectedDrumMIDI })
         }
     }
     
@@ -186,24 +192,7 @@ export default class Sequencer extends React.PureComponent {
             <TextValue value={this.state.beatsPerMeasure} onChange={ beatsPerMeasure => this.setState({ beatsPerMeasure })}/>
             <TextValue value={this.state.bpm} onChange={ bpm => this.setState({ bpm })}/>
             <canvas onMouseDown={ e => this.onMouseDown(e) } onMouseMove={ e => this.onMouseMove(e) } id="canvas" width={ `${SIZE}px` } height={ `${SIZE}px` } ref={ this.canvas }></canvas>
-            <div className="buttons">
-                <div className="button"></div>
-                <div className="button"></div>
-                <div className="button"></div>
-                <div className="button"></div>
-                <div className="button"></div>
-                <div className="button"></div>
-                <div className="button"></div>
-                <div className="button"></div>
-                <div className="button"></div>
-                <div className="button"></div>
-                <div className="button"></div>
-                <div className="button"></div>
-                <div className="button selected"></div>
-                <div className="button"></div>
-                <div className="button"></div>
-                <div className="button"></div>
-            </div>
+            <MPCDrumSelector value={ this.state.selectedDrum } onChange={ selectedDrum => this.setState({ selectedDrum })} />
         </div>;
     }
 }
