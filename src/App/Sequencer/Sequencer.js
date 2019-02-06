@@ -95,9 +95,11 @@ export default class Sequencer extends React.PureComponent {
         this.refreshContext();
 
         // Calculate clockwise progress through the bar, in radians.
-        const time = this.audio.currentRelativeTime;
-        const outermostAngleTravelled = (
-            time * -2 * Math.PI * this.frequency / this.state.beatsPerMeasure);
+        const outermostAngleTravelled = this.audio.currentProgress * -2 * Math.PI;
+        
+        // const time = this.audio.currentRelativeTime;
+        // const outermostAngleTravelled = (
+            // time * -2 * Math.PI * this.frequency / this.state.beatsPerMeasure);
         
         // Update the canvas with the current state.
         this.context.clearRect(0, 0, SIZE, SIZE);

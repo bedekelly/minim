@@ -45,7 +45,6 @@ export default class SequencerAudio {
     }
 
     get currentRelativeTime() {
-        
         if (!this.playing) {
             return this.lastEventRelativeTime;
         }
@@ -54,6 +53,10 @@ export default class SequencerAudio {
         // plus the time elapsed since the last event, modulo the length of the bar.
         const timeSinceLastEvent = this.context.currentTime - this.lastEventAbsoluteTime;
         return (this.lastEventRelativeTime + timeSinceLastEvent) % this.totalBarTime;
+    }
+    
+    get currentProgress() {
+        return this.currentRelativeTime / this.totalBarTime;
     }
     
     get startOfCurrentBar() {
