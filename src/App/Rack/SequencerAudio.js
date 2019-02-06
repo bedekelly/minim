@@ -172,6 +172,12 @@ export default class SequencerAudio {
         for (let { data, beat, offset } of notes) {
             this.notes.push({ data, beat, offset, scheduledTimes: []});
         }
+        if (this.playing) this.scheduleNextNBars();
+    }
+
+    clearAll() {
+        this.notes = [];
+        this.startAgainFromNow();
     }
 
     removeNote({ data, beat, offset }) {

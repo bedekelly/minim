@@ -22,7 +22,14 @@ export default class MPCDrumSelector extends React.Component {
                 DRUM_LAYOUT.map(
                     (i, _) => {
                         const className = "button" + (this.props.value === i ? " selected" : "");
-                        return <div className={ className } onMouseDown={ () => this.onChange(i) }></div>
+                        return <div 
+                            className={ className } 
+                            onMouseDown={ () => this.onChange(i) }
+                        >
+                            <div className="colour-indicator" style={{
+                                background: this.props.colours[i]
+                            }}></div>
+                        </div>
                     }
                 )
             }

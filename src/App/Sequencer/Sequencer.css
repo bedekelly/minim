@@ -21,14 +21,19 @@
   right: 10px;
   transition: all ease 0.2s;
   border-radius: 3px;
+  scale: 1;
 }
 
 .sequencer .buttons:hover {
-  scale: 5;
-  bottom: 90px;
-  right: 90px;
-  transition: all ease 0.2s;
+  scale: 4;
+  bottom: 65px;
+  right: 65px;
+  transition: all ease 0.3s;
   box-shadow: 0 0 40px;
+}
+
+.sequencer .buttons:hover .colour-indicator {
+    border: 1px solid black;
 }
 
 .sequencer .button {
@@ -38,6 +43,16 @@
   background: whitesmoke;
   cursor: pointer;
   box-shadow: 0 0 0.2px 0.2px #444, 0 0 3px inset white;
+  position: relative;
+}
+
+.sequencer .colour-indicator {
+    width: 4px;
+    height: 4px;
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    /* border-radius: 50%; */
 }
 
 .sequencer .button.selected {
@@ -46,14 +61,34 @@
 
 .sequencer .text-value-control{
     position: absolute;
-    top: 10px;
+    top: 20px;
     font-size: 16pt;
 }
 
+.sequencer .text-value-control:hover {
+    font-weight: bold;
+}
+
 .sequencer .text-value-control:first-of-type {
-    left: 10px;
+    left: 20px;
 }
 
 .sequencer .text-value-control:nth-of-type(2) {
-    right: 10px;
+    right: 20px;
+}
+
+.sequencer .clear-all {
+    left: 10px;
+    position: absolute;
+    font-size: 16pt;
+    bottom: 10px;
+    background: transparent;
+    border: 0;
+    font-family: monospace;
+    outline: 0;
+    cursor: pointer;
+}
+
+.sequencer .clear-all:hover {
+    font-weight: bold;
 }

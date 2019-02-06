@@ -6,7 +6,24 @@ import './Sequencer.css';
 
 
 const SIZE = 300;
-
+const COLOURS = [
+    "rgb(0, 0, 0)",
+    "rgb(255, 0, 0)",
+    "rgb(173, 35, 35)",
+    "rgb(42, 75, 215)",
+    "rgb(29, 105, 20)",
+    "rgb(129, 74, 25)",
+    "rgb(129, 38, 192)",
+    "rgb(160, 160, 160)",
+    "rgb(129, 197, 122)",
+    "rgb(157, 175, 255)",
+    "rgb(41, 208, 208)",
+    "rgb(255, 146, 51)",
+    "rgb(255, 238, 51)",
+    "rgb(233, 222, 187)",
+    "rgb(255, 205, 243)",
+    "rgb(255, 255, 255)"
+]
 
 /**
 * Linearly map a value from one range to another.
@@ -21,6 +38,17 @@ function linMap(value, fromLower, fromUpper, toLower, toUpper) {
     return valueInUpperRange;
 }
 
+const shallowCompare = (obj1, obj2) =>
+  Object.keys(obj1).length === Object.keys(obj2).length &&
+  Object.keys(obj1).every(key => 
+    obj2.hasOwnProperty(key) && obj1[key] === obj2[key]
+  );
+
+
+function removeFromArray(removeItem, array) {
+    return array.filter(i => !shallowCompare(i, removeItem));
+}
+
 
 export default class Sequencer extends React.PureComponent {
     constructor(props) {
@@ -32,8 +60,8 @@ export default class Sequencer extends React.PureComponent {
         this.state = { 
             beatsPerMeasure: this.audio.timeSignature, 
             bpm: this.audio.bpm, 
-            placingItem: true,
             notes: [],
+            draggingNote: null,
             closestPoint: null,
             mousePos: {x:-10, y: -10},
             selectedDrum: 0
@@ -54,85 +82,136 @@ export default class Sequencer extends React.PureComponent {
         return [144, 36 + this.state.selectedDrum];
     }
     
+    componentDidUpdate() {
+        this.context = this.canvas.current.getContext("2d");
+    }
+    
+    refreshContext() {
+        if (!this.context.clearRect ) this.context = this.canvas.current.getContext("2d");
+        return this.context;
+    }
+    
     renderFrame() {
-        // Calculate angle travelled by the innermost, one-beat-per-cycle ring.
-        const time = this.audio.currentRelativeTime;
-        const outermostAngleTravelled = time * -2 * Math.PI * this.frequency / this.state.beatsPerMeasure;
-        
-        // If for some reason the canvas has reloaded, renew our 2d drawing context.
-        if (!this.context.clearRect ) {
-            this.context = this.canvas.current.getContext("2d");
-        }
-        
-        // Clear the canvas.
-        const ctx = this.context;
-        ctx.clearRect(0, 0, SIZE, SIZE);
+        this.refreshContext();
 
-        // Set an "infinitely far away" closest point to iterate from.
-        let closestPoint = { dist: 100000000 };
+        // Calculate clockwise progress through the bar, in radians.
+        const time = this.audio.currentRelativeTime;
+        const outermostAngleTravelled = (
+            time * -2 * Math.PI * this.frequency / this.state.beatsPerMeasure);
         
-        // Draw each ring in turn.
-        for ( let ring=1; ring<=this.state.beatsPerMeasure; ring++) {
-            
-            // Set options for drawing rings.
-            ctx.lineWidth = 2;
-            ctx.fillStyle = "#222";
-            
-            // Draw rings.
-            ctx.beginPath();
+        // Update the canvas with the current state.
+        this.context.clearRect(0, 0, SIZE, SIZE);
+        this.drawRings(outermostAngleTravelled);
+        this.drawAllNotes();
+        this.drawNoteGhost();
+        if (this.state.draggingNote) this.drawDraggingNote();
+        requestAnimationFrame(timestamp => this.renderFrame(timestamp));
+    }
+    
+    drawDraggingNote() {
+        const point = this.getClosestPointToMouse();
+        if (!point) return;
+        const colour = COLOURS[this.state.draggingNote.drum];
+        console.log({ point, colour });
+        this.drawNote(point.coords.x - SIZE/2, point.coords.y - SIZE/2, colour);
+    }
+    
+    drawPositionIndicator(ring, outermostAngleTravelled) {
+        const ctx = this.refreshContext();
+        const radius = this.radiusOfRing(ring);
+        const beats = this.state.beatsPerMeasure;
+        const cyclesPerBar = beats - ring + 1;
+        const angleTravelled = outermostAngleTravelled * cyclesPerBar;
+        const x = radius * Math.sin(Math.PI + angleTravelled);
+        const y = radius * Math.cos(Math.PI + angleTravelled);
+        ctx.beginPath();
+        ctx.arc(SIZE/2+x, SIZE/2+y, 4, 0, 2 * Math.PI);
+        ctx.fill();
+    }
+    
+    drawRings(angleTravelled) {
+        for (let ring=1; ring<=this.state.beatsPerMeasure; ring++) {
+            this.drawRing(ring);
+            this.drawPositionIndicator(ring, angleTravelled);
+        }
+    }
+
+    drawRing(ring) {
+        const ctx = this.refreshContext();
+        ctx.lineWidth = 2;
+        ctx.fillStyle = "#555";
+        ctx.strokeStyle = "#555";
+
+        ctx.beginPath();
+        const radius = this.radiusOfRing(ring);
+        ctx.arc(SIZE/2, SIZE/2, radius, 0, 2 * Math.PI);
+        ctx.stroke();
+    }
+    
+    getClosestPointToMouse() {
+        let closestPoint = { dist: 123456 };
+        for (let ring = 1; ring <= this.state.beatsPerMeasure; ring++) {
             const radius = this.radiusOfRing(ring);
-            ctx.arc(SIZE/2, SIZE/2, radius, 0, 2 * Math.PI);
-            ctx.stroke();
-            
-            // Draw "current position" indicators.
-            const beats = this.state.beatsPerMeasure;
-            const cyclesPerBar = beats - ring + 1;
-            const angleTravelled = outermostAngleTravelled * cyclesPerBar;
-            const x = radius * Math.sin(Math.PI + angleTravelled);
-            const y = radius * Math.cos(Math.PI + angleTravelled);
-            ctx.beginPath();
-            ctx.arc(SIZE/2+x, SIZE/2+y, 4, 0, 2 * Math.PI);
-            ctx.fill();
-            
-            // Update the "closest point" in the state.
             let mouse = this.state.mousePos;
             const mag = Math.hypot(mouse.x, mouse.y);
             let circleX = SIZE/2 + mouse.x / mag * radius;
             let circleY = SIZE/2 + mouse.y / mag * radius;
-            
             let dist = Math.hypot((mouse.x + SIZE/2 - circleX), (mouse.y + SIZE/2 - circleY));
             if ( dist < closestPoint.dist ) {
                 closestPoint.coords = { x: circleX, y: circleY };
                 closestPoint.dist = dist;
                 closestPoint.ring = ring;
-                this.setState({ placingItem: true, closestPoint });
             }
         }
-        
-        // Draw all notes
-        ctx.fillStyle = "rgba(100, 255, 20, 1)"
-        for (let { ring, angle } of this.state.notes) {
+        if (closestPoint.coords) return closestPoint;
+        else return null;
+    }
+    
+    get hoveringOverNote() {
+        const point = this.getClosestPointToMouse();
+        if (!point) return false;
+        const { coords: { x, y } } = point;
+        for (let note of this.state.notes) {
+            const dist = Math.hypot(x - note.x, y - note.y);
+            if (dist < 13) return note;
+        }
+        return false;
+    }
+    
+    drawNoteGhost() {
+        const closestPoint = this.getClosestPointToMouse();
+        if (!closestPoint || closestPoint.dist > 17) return;
+        if (this.state.dragging) return;
+        if (this.hoveringOverNote) return;
+        this.drawNote(
+            closestPoint.coords.x - SIZE/2, 
+            closestPoint.coords.y - SIZE/2, 
+            "rgba(20, 20, 20, 0.2)", 10
+        );
+    }
+    
+    drawNote(x, y, colour, size) {
+        size |= 7;
+        const ctx = this.refreshContext();
+        ctx.fillStyle = colour;
+        ctx.beginPath();
+        ctx.arc(SIZE/2+x, SIZE/2+y, 7, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.strokeStyle = "#222";
+        ctx.stroke();
+    }
+    
+    drawAllNotes() {
+        for (let { ring, angle, drum } of this.state.notes) {
             const radius = this.radiusOfRing(ring);
             const x = radius * Math.sin(angle);
             const y = -radius * Math.cos(angle);
-            ctx.beginPath();
-            ctx.arc(SIZE/2+x, SIZE/2+y, 7, 0, 2 * Math.PI);
-            ctx.fill();
+            const fill = COLOURS[drum];
+            this.drawNote(x, y, fill);
         }
-        
-        ctx.fillStyle = "rgba(20, 20, 20, 0.2)"
-        if (closestPoint.dist <= 17) {
-            ctx.beginPath();
-            ctx.arc(closestPoint.coords.x, closestPoint.coords.y, 10, 0, 2 * Math.PI);
-            ctx.fill();
-        }
-        
-        
-        requestAnimationFrame(timestamp => this.renderFrame(timestamp));
     }
     
     componentDidMount() {
-        this.context = this.canvas.current.getContext("2d");
         this.renderFrame();
     }
     
@@ -141,26 +220,16 @@ export default class Sequencer extends React.PureComponent {
         this.setState({mousePos: {y: event.clientY-SIZE/2-canvasY, x: event.clientX-SIZE/2-canvasX}});
     }
     
-    addNoteAt(ring, angle) {
-        // Add the note to our state to draw.
-        this.setState({notes: [...this.state.notes, { ring, angle }]});
-        
-        // Given the index of a ring and an angle, calculate the beat
-        // a note should fall and add it to our sequencer-audio.
-
-        // If it's the outermost ring, just map it between a and the number of beats per measure.
-        // If it's the innermost ring, create beatsPerMeasure copies and spread them equally.
-        
-        // Generally, if it's the nth ring from the outside, there are n cycles in a bar.
-        // Furthest ring out has 1 cycle in a bar; 4th ring in has 4 cycles in a bar.
-        
+    async addNoteAt(ring, angle, x, y, note) {
+        const drum = note ? note.drum : this.state.selectedDrum;
+        await this.setState({notes: [...this.state.notes, { ring, angle, drum, x, y }]});
+        this.addAudioNote(angle, ring)
+    }
+    
+    addAudioNote(angle, ring) {
         const numCycles = (this.state.beatsPerMeasure - ring + 1);
-        
-        // Loop `numCycles` times, splitting total time into `numCycles` chunks.
-        // Add a note `angle/2pi` through each chunk.
-        // const angleThroughBar = linMap(angle, 0, Math.PI*2, 1, this.beatsPerMeasure+1);
         const beatsPerCycle = this.state.beatsPerMeasure / numCycles;
-
+        const notes = [];
         for (let cycle=0; cycle<numCycles; cycle++) {
             const fractionalBeatInCycle = linMap(angle, 0, Math.PI*2, 0, beatsPerCycle);
             const fractionalBeat = cycle * beatsPerCycle + fractionalBeatInCycle;
@@ -168,31 +237,85 @@ export default class Sequencer extends React.PureComponent {
             const offset = (fractionalBeat - beat) * 100;
             if (beat > this.state.beatsPerMeasure) beat -= this.state.beatsPerMeasure;
             beat = 1 + beat % this.state.beatsPerMeasure;
-            this.audio.addNote({ beat, offset, data: this.selectedDrumMIDI })
+            
+            console.log("Adding note: ");
+            console.log({ beat, offset })
+            notes.push({ beat, offset, data: this.selectedDrumMIDI });
+        }
+        this.audio.addNotes(notes);
+    }
+    
+    addAllAudioNotes() {
+        for (let { angle, ring } of this.state.notes) {
+            this.addAudioNote(angle, ring);
         }
     }
     
     onMouseDown(event) {
         event.preventDefault();
         event.stopPropagation();
-        if (!this.state.closestPoint || !this.state.placingItem) return;
+
+        const hoverNote = this.hoveringOverNote;
+        if (hoverNote) {
+            const notes = removeFromArray(hoverNote, this.state.notes)
+            this.setState({ draggingNote: hoverNote, notes })
+        } else {
+            this.addNoteHere()
+        }
         
-        // Given a point (X, Y) on circle C of centre (Cx, Cy) and radius R, 
-        // calculate the angle between the vertical and the line joining the 
-        // centre of C and the point (x, y).
-        // tan(theta) = opposite/adjacent
-        //            = (x-cx) / (y-cy)
-        const { coords: { x, y }, ring } = this.state.closestPoint;
+    }
+
+    clearAll() {
+        this.setState({notes: []});
+        this.audio.clearAll();
+    }
+
+    setBeatsPerMeasure(beatsPerMeasure) {
+        this.setState({ beatsPerMeasure });
+        this.audio.timeSignature = beatsPerMeasure;
+    }
+
+    setBpm(bpm) {
+        this.setState({ bpm });
+        this.audio.bpm = bpm;
+    }
+
+    async addNoteHere(note) {
+        const closestPoint = this.getClosestPointToMouse();
+        const { coords: { x, y }, ring } = closestPoint;
         const angle = Math.PI - Math.atan2(x - SIZE/2, y - SIZE/2);
-        this.addNoteAt(ring, angle);
+        await this.addNoteAt(ring, angle, x, y, note);
+    }
+
+    async onMouseUp(event) {
+        if (!this.state.draggingNote) return;
+        const note = this.state.draggingNote;
+        await this.addNoteHere(note);
+        await this.setState({ draggingNote: null });
+        this.refreshSequencerNotes();
     }
     
+    refreshSequencerNotes() {
+        this.audio.clearAll();
+        this.addAllAudioNotes();
+    }
+
     render() {
         return <div className="sequencer">
-            <TextValue value={this.state.beatsPerMeasure} onChange={ beatsPerMeasure => this.setState({ beatsPerMeasure })}/>
-            <TextValue value={this.state.bpm} onChange={ bpm => this.setState({ bpm })}/>
-            <canvas onMouseDown={ e => this.onMouseDown(e) } onMouseMove={ e => this.onMouseMove(e) } id="canvas" width={ `${SIZE}px` } height={ `${SIZE}px` } ref={ this.canvas }></canvas>
-            <MPCDrumSelector value={ this.state.selectedDrum } onChange={ selectedDrum => this.setState({ selectedDrum })} />
+            <TextValue value={this.state.beatsPerMeasure} onChange={ beatsPerMeasure => this.setBeatsPerMeasure(beatsPerMeasure) } />
+            <TextValue value={this.state.bpm} onChange={ bpm => this.setBpm(bpm) }/>
+            <canvas 
+                onMouseDown={ e => this.onMouseDown(e) } 
+                onMouseUp={ e => this.onMouseUp(e) }
+                onMouseMove={ e => this.onMouseMove(e) } 
+                id="canvas" width={ `${SIZE}px` } height={ `${SIZE}px` } 
+                ref={ this.canvas }></canvas>
+            <MPCDrumSelector 
+                value={ this.state.selectedDrum } 
+                onChange={ selectedDrum => this.setState({ selectedDrum })} 
+                colours={ COLOURS }
+                />
+            <button className="clear-all" onClick={ () => this.clearAll() }>X</button>
         </div>;
     }
 }
