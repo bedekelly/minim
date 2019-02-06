@@ -23,6 +23,7 @@ export default class MPCDrumSelector extends React.Component {
                     (i, _) => {
                         const className = "button" + (this.props.value === i ? " selected" : "");
                         return <div 
+                            key={ `drum-${i}` }
                             className={ className } 
                             onMouseDown={ () => this.onChange(i) }
                         >

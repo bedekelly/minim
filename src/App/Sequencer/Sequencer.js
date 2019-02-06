@@ -273,11 +273,13 @@ export default class Sequencer extends React.PureComponent {
     }
 
     setBeatsPerMeasure(beatsPerMeasure) {
+        beatsPerMeasure = Math.floor(beatsPerMeasure);
         this.setState({ beatsPerMeasure });
         this.audio.timeSignature = beatsPerMeasure;
     }
 
     setBpm(bpm) {
+        bpm = Math.floor(bpm);
         this.setState({ bpm });
         this.audio.bpm = bpm;
     }
@@ -304,8 +306,8 @@ export default class Sequencer extends React.PureComponent {
 
     render() {
         return <div className="sequencer">
-            <TextValue value={this.state.beatsPerMeasure} onChange={ beatsPerMeasure => this.setBeatsPerMeasure(beatsPerMeasure) } />
-            <TextValue value={this.state.bpm} onChange={ bpm => this.setBpm(bpm) }/>
+            <TextValue value={this.state.beatsPerMeasure} min={1} max={7} onChange={ beatsPerMeasure => this.setBeatsPerMeasure(beatsPerMeasure) } />
+            <TextValue value={this.state.bpm} min={10} max={200} onChange={ bpm => this.setBpm(bpm) }/>
             <canvas 
                 onMouseDown={ e => this.onMouseDown(e) } 
                 onMouseUp={ e => this.onMouseUp(e) }

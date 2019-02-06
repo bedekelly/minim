@@ -2,10 +2,37 @@ import React from 'react';
 
 import './TextValue.css';
 
+const PIXEL_TOLERANCE = 100;
+
+
+/**
+ * Linearly map a value from one range to another.
+ */
+function linMap(value, fromLower, fromUpper, toLower, toUpper) {
+    const lowerRange = fromUpper - fromLower;
+    const upperRange = toUpper - toLower;
+    const magnitudeThroughLowerRange = (value - fromLower);
+    const fractionThroughRange = magnitudeThroughLowerRange / lowerRange;
+    const magnitudeThroughUpperRange = fractionThroughRange * upperRange;
+    const valueInUpperRange = toLower + magnitudeThroughUpperRange;
+    return valueInUpperRange;
+}
+
+/**
+ * Clamp a value to the range lower <= value <= upper.
+ */
+function bounded(value, lower, upper) {
+  if (value > upper) return upper;
+  if (value < lower) return lower;
+  return value;
+}
+
 
 export default class TextValue extends React.PureComponent {
   constructor(props) {
     super(props);
+    this.min = props.min;
+    this.max = props.max;
     this.onChange = props.onChange;
     this.state = {};
   }
@@ -13,7 +40,8 @@ export default class TextValue extends React.PureComponent {
   startListening({ clientY }) {
     const initialY = clientY;
     const initialValue = this.props.value;
-    const onChange = this.onChange;
+    const { min, max, onChange } = this;
+    const that = this;
     
     function mouseUp(event) {
       document.removeEventListener("mouseup", mouseUp);
@@ -21,7 +49,12 @@ export default class TextValue extends React.PureComponent {
     }
     
     function mouseMove(event) {
-      const newValue = initialValue - event.clientY + initialY;
+      const mouseY = event.clientY;
+      const pixelDiff = initialY - mouseY;  // Flip the y axis – for us, up really means up.
+      that.pixelDiff = pixelDiff;
+      const valueBreadth = max - min;
+      const valueDiff = linMap(pixelDiff, -PIXEL_TOLERANCE, PIXEL_TOLERANCE, -valueBreadth, valueBreadth);
+      const newValue = bounded(initialValue + valueDiff, min, max);
       onChange(newValue);
     }
     
