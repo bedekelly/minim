@@ -180,7 +180,7 @@ export default class SequencerAudio {
 
     clearAll() {
         this.notes = [];
-        this.startAgainFromNow();
+        if (this.playing) this.startAgainFromNow();
     }
 
     removeNote({ data, beat, offset }) {

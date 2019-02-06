@@ -79,7 +79,11 @@ export default class Sequencer extends React.PureComponent {
     }
     
     get selectedDrumMIDI() {
-        return [144, 36 + this.state.selectedDrum];
+        return this.midiFor(this.state.selectedDrum);
+    }
+    
+    midiFor(drumIndex) {
+        return [144, 36 + drumIndex]
     }
     
     componentDidUpdate() {
@@ -114,7 +118,6 @@ export default class Sequencer extends React.PureComponent {
         const point = this.getClosestPointToMouse();
         if (!point) return;
         const colour = COLOURS[this.state.draggingNote.drum];
-        console.log({ point, colour });
         this.drawNote(point.coords.x - SIZE/2, point.coords.y - SIZE/2, colour);
     }
     
@@ -225,10 +228,11 @@ export default class Sequencer extends React.PureComponent {
     async addNoteAt(ring, angle, x, y, note) {
         const drum = note ? note.drum : this.state.selectedDrum;
         await this.setState({notes: [...this.state.notes, { ring, angle, drum, x, y }]});
-        this.addAudioNote(angle, ring)
+        this.addAudioNote(angle, ring, this.midiFor(drum))
     }
     
-    addAudioNote(angle, ring) {
+    addAudioNote(angle, ring, data) {
+        if (data === undefined) data = this.selectedDrumMIDI;
         const numCycles = (this.state.beatsPerMeasure - ring + 1);
         const beatsPerCycle = this.state.beatsPerMeasure / numCycles;
         const notes = [];
@@ -239,23 +243,28 @@ export default class Sequencer extends React.PureComponent {
             const offset = (fractionalBeat - beat) * 100;
             if (beat > this.state.beatsPerMeasure) beat -= this.state.beatsPerMeasure;
             beat = 1 + beat % this.state.beatsPerMeasure;
-            
-            console.log("Adding note: ");
-            console.log({ beat, offset })
-            notes.push({ beat, offset, data: this.selectedDrumMIDI });
+            notes.push({ beat, offset, data });
         }
         this.audio.addNotes(notes);
     }
     
     addAllAudioNotes() {
-        for (let { angle, ring } of this.state.notes) {
-            this.addAudioNote(angle, ring);
+        for (let { angle, ring, drum } of this.state.notes) {
+            this.addAudioNote(angle, ring, this.midiFor(drum));
         }
+    }
+
+    async removeNoteHere() {
+        const hoverNote = this.hoveringOverNote;
+        if (!hoverNote) return;
+        await this.setState({ notes: removeFromArray(hoverNote, this.state.notes) });
+        this.refreshSequencerNotes();
     }
     
     onMouseDown(event) {
         event.preventDefault();
         event.stopPropagation();
+        if (event.button !== 0) return;
 
         const hoverNote = this.hoveringOverNote;
         if (hoverNote) {
@@ -264,7 +273,6 @@ export default class Sequencer extends React.PureComponent {
         } else {
             this.addNoteHere()
         }
-        
     }
 
     clearAll() {
@@ -299,6 +307,12 @@ export default class Sequencer extends React.PureComponent {
         this.refreshSequencerNotes();
     }
     
+    onRightClick(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        this.removeNoteHere();
+    }
+    
     refreshSequencerNotes() {
         this.audio.clearAll();
         this.addAllAudioNotes();
@@ -317,6 +331,7 @@ export default class Sequencer extends React.PureComponent {
                 onMouseDown={ e => this.onMouseDown(e) } 
                 onMouseUp={ e => this.onMouseUp(e) }
                 onMouseMove={ e => this.onMouseMove(e) } 
+                onContextMenu={ e => this.onRightClick(e) }
                 id="canvas" width={ `${SIZE}px` } height={ `${SIZE}px` } 
                 ref={ this.canvas }></canvas>
             <MPCDrumSelector 
