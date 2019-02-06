@@ -304,9 +304,14 @@ export default class Sequencer extends React.PureComponent {
         this.addAllAudioNotes();
     }
 
+    get minBeatsPerMeasure() {
+        // Todo: loop through notes and find the lowest unpopulated ring.
+        return 1;
+    }
+
     render() {
         return <div className="sequencer">
-            <TextValue value={this.state.beatsPerMeasure} min={1} max={7} onChange={ beatsPerMeasure => this.setBeatsPerMeasure(beatsPerMeasure) } />
+            <TextValue value={this.state.beatsPerMeasure} min={this.minBeatsPerMeasure} max={7} onChange={ beatsPerMeasure => this.setBeatsPerMeasure(beatsPerMeasure) } />
             <TextValue value={this.state.bpm} min={10} max={200} onChange={ bpm => this.setBpm(bpm) }/>
             <canvas 
                 onMouseDown={ e => this.onMouseDown(e) } 
