@@ -46,13 +46,13 @@ function boundedLinMap(value, fromLower, fromUpper, toLower, toUpper) {
  */
 class Knob extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.precision = props.precision === undefined ? 1 : props.precision;
-    this.pixelDiff = 0;
-    this.knobRef = React.createRef();
-    this.state = { dragging: false };
-  }
+    constructor(props) {
+        super(props);
+        this.precision = props.precision === undefined ? 1 : props.precision;
+        this.pixelDiff = 0;
+        this.knobRef = React.createRef();
+        this.state = { dragging: false };
+    }
 
     onMouseDown(event) {
         const initialY = event.clientY;
