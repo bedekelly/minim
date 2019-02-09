@@ -332,13 +332,13 @@ class Synth extends React.PureComponent {
                                  onClick={ () => this.nextFilterType() }
                                  >{ this.state.filter.type }</span></h2>
                 <div className="knobs">
-                  <Knob min={0} max={1000} value={this.state.filterFreq}
+                  <Knob min={50} max={10000} value={this.state.filterFreq}
                         onChange={value => this.changeFilterFreq(value)}
                         appAudio={ this.props.appAudio }
                         id={ this.props.id + "-filter-freq" }
                         midiLearn={ () => this.midiLearn("setFilterFrequency", 0, 1000) }></Knob>
                   <div className="label freq">Freq</div>
-                  <Knob min={0} max={30} value={this.state.filterRes}
+                  <Knob min={0} max={100} value={this.state.filterRes}
                         appAudio={ this.props.appAudio }
                         id={ this.props.id + "-filter-res" }
                         onChange={value => this.changeFilterRes(value)}
