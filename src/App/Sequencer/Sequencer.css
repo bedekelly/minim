@@ -2,7 +2,7 @@
   background: whitesmoke;
   border-radius: 7px;
   border: 10px solid #444;
-  box-shadow: 0 0 40px, 0 0 40px inset;
+  box-shadow: 0 0 40px, 0 0 10px inset;
   position: relative;
   display: grid;
   place-items: center;
@@ -87,8 +87,15 @@
     font-family: monospace;
     outline: 0;
     cursor: pointer;
+    font-weight: bold;
 }
 
 .sequencer .clear-all:hover {
-    font-weight: bold;
+    scale: 1.1;
+}
+
+.sequencer .lock {
+    position: absolute;
+    bottom: 23px;
+    left: 50px;
 }

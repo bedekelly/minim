@@ -22,47 +22,55 @@ function linMap(value, fromLower, fromUpper, toLower, toUpper) {
  * Clamp a value to the range lower <= value <= upper.
  */
 function bounded(value, lower, upper) {
-  if (value > upper) return upper;
-  if (value < lower) return lower;
-  return value;
+    if (value > upper) return upper;
+    if (value < lower) return lower;
+    return value;
 }
 
 
 export default class TextValue extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.min = props.min;
-    this.max = props.max;
-    this.onChange = props.onChange;
-    this.state = {};
-  }
-  
-  startListening({ clientY }) {
-    const initialY = clientY;
-    const initialValue = this.props.value;
-    const { min, max, onChange } = this;
-    const that = this;
-    
-    function mouseUp(event) {
-      document.removeEventListener("mouseup", mouseUp);
-      document.removeEventListener("mousemove", mouseMove);
+
+    constructor(props) {
+        super(props);
+        this.min = props.min;
+        this.max = props.max;
+        this.onChange = props.onChange;
+        this.state = {};
     }
-    
-    function mouseMove(event) {
-      const mouseY = event.clientY;
-      const pixelDiff = initialY - mouseY;  // Flip the y axis – for us, up really means up.
-      that.pixelDiff = pixelDiff;
-      const valueBreadth = max - min;
-      const valueDiff = linMap(pixelDiff, -PIXEL_TOLERANCE, PIXEL_TOLERANCE, -valueBreadth, valueBreadth);
-      const newValue = bounded(initialValue + valueDiff, min, max);
-      onChange(newValue);
+
+    startListening({ clientY }) {
+        const initialY = clientY;
+        const initialValue = this.props.value;
+        const { min, max, onChange } = this;
+        const that = this;
+
+        function mouseUp(event) {
+            document.removeEventListener("mouseup", mouseUp);
+            document.removeEventListener("mousemove", mouseMove);
+        }
+
+        function mouseMove(event) {
+            const mouseY = event.clientY;
+            const pixelDiff = initialY - mouseY;  // Flip the y axis – for us, up really means up.
+            that.pixelDiff = pixelDiff;
+            const valueBreadth = max - min;
+            const valueDiff = linMap(pixelDiff, -PIXEL_TOLERANCE, PIXEL_TOLERANCE, -valueBreadth, valueBreadth);
+            const newValue = bounded(initialValue + valueDiff, min, max);
+            onChange(newValue);
+        }
+
+        document.addEventListener("mouseup", mouseUp);
+        document.addEventListener("mousemove", mouseMove);
     }
-    
-    document.addEventListener("mouseup", mouseUp);
-    document.addEventListener("mousemove", mouseMove);
-  }
-  
-  render() {
-    return <span className="text-value-control" onMouseDown={ event => this.startListening(event) }>{ this.props.value }</span>
-  }
+
+    render() {
+        return <span 
+            className="text-value-control" 
+            onMouseDown={ event => this.startListening(event) }
+            >{ this.props.value }
+            {this.props.label && 
+                <span className="label">{ this.props.label }</span>
+            }
+        </span>
+    }
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import TextValue from '../TextValue';
 import MPCDrumSelector from './MPCDrumSelector';
+import Toggle from './Toggle';
 
 import './Sequencer.css';
 
@@ -61,6 +62,7 @@ export default class Sequencer extends React.PureComponent {
             beatsPerMeasure: this.audio.timeSignature, 
             bpm: this.audio.bpm, 
             notes: [],
+            snap: true,
             draggingNote: null,
             closestPoint: null,
             mousePos: {x:-10, y: -10},
@@ -100,10 +102,6 @@ export default class Sequencer extends React.PureComponent {
 
         // Calculate clockwise progress through the bar, in radians.
         const outermostAngleTravelled = this.audio.currentProgress * -2 * Math.PI;
-        
-        // const time = this.audio.currentRelativeTime;
-        // const outermostAngleTravelled = (
-            // time * -2 * Math.PI * this.frequency / this.state.beatsPerMeasure);
         
         // Update the canvas with the current state.
         this.context.clearRect(0, 0, SIZE, SIZE);
@@ -153,6 +151,22 @@ export default class Sequencer extends React.PureComponent {
         ctx.stroke();
     }
     
+    snap(x, y, radius) {
+        debugger;
+        let circleX = x;
+        let circleY = y;
+        if (this.state.snap) {
+            const angle = Math.PI - Math.atan2(circleX - SIZE/2, circleY - SIZE/2);
+            const distanceRoundCircle = angle / 2 / Math.PI;
+            const steps = this.state.beatsPerMeasure * 4;
+            const roundedDistance = Math.round(distanceRoundCircle * steps) / steps;
+            const roundedAngle = Math.PI * 2 * roundedDistance;
+            circleX = SIZE/2 + radius * Math.sin(roundedAngle);
+            circleY = SIZE/2 + -radius * Math.cos(roundedAngle);
+        }
+        return [circleX, circleY];
+    }
+    
     getClosestPointToMouse() {
         let closestPoint = { dist: 123456 };
         for (let ring = 1; ring <= this.state.beatsPerMeasure; ring++) {
@@ -161,8 +175,11 @@ export default class Sequencer extends React.PureComponent {
             const mag = Math.hypot(mouse.x, mouse.y);
             let circleX = SIZE/2 + mouse.x / mag * radius;
             let circleY = SIZE/2 + mouse.y / mag * radius;
+
             let dist = Math.hypot((mouse.x + SIZE/2 - circleX), (mouse.y + SIZE/2 - circleY));
             if ( dist < closestPoint.dist ) {
+                if (circleX !== circleY)
+                    [circleX, circleY] = this.snap(circleX, circleY, radius);
                 closestPoint.coords = { x: circleX, y: circleY };
                 closestPoint.dist = dist;
                 closestPoint.ring = ring;
@@ -270,9 +287,7 @@ export default class Sequencer extends React.PureComponent {
         if (hoverNote) {
             const notes = removeFromArray(hoverNote, this.state.notes)
             this.setState({ draggingNote: hoverNote, notes })
-        } else {
-            this.addNoteHere()
-        }
+        } else this.addNoteHere()
     }
 
     clearAll() {
@@ -325,8 +340,17 @@ export default class Sequencer extends React.PureComponent {
 
     render() {
         return <div className="sequencer">
-            <TextValue value={this.state.beatsPerMeasure} min={this.minBeatsPerMeasure} max={7} onChange={ beatsPerMeasure => this.setBeatsPerMeasure(beatsPerMeasure) } />
-            <TextValue value={this.state.bpm} min={10} max={200} onChange={ bpm => this.setBpm(bpm) }/>
+            <TextValue 
+                value={this.state.beatsPerMeasure} 
+                min={this.minBeatsPerMeasure} 
+                max={7} 
+                label={ "beats" }
+                onChange={ beatsPerMeasure => this.setBeatsPerMeasure(beatsPerMeasure) } />
+            <TextValue 
+                value={this.state.bpm} 
+                min={10} max={200} 
+                label={ "bpm" }
+                onChange={ bpm => this.setBpm(bpm) }/>
             <canvas 
                 onMouseDown={ e => this.onMouseDown(e) } 
                 onMouseUp={ e => this.onMouseUp(e) }
@@ -334,6 +358,7 @@ export default class Sequencer extends React.PureComponent {
                 onContextMenu={ e => this.onRightClick(e) }
                 id="canvas" width={ `${SIZE}px` } height={ `${SIZE}px` } 
                 ref={ this.canvas }></canvas>
+            <Toggle className="lock" value={ this.state.snap } onChange={ () => this.setState({ snap: !this.state.snap })} />
             <MPCDrumSelector 
                 value={ this.state.selectedDrum } 
                 onChange={ selectedDrum => this.setState({ selectedDrum })} 

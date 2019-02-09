@@ -5,3 +5,8 @@
   font-size: 24pt;
   color: #222;
 }
+
+.text-value-control .label {
+    font-size: 12pt;
+    margin-left: 3px;
+}
