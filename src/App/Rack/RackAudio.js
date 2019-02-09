@@ -40,7 +40,9 @@ class RackAudio {
     }
 
     midiMessage(message) {
-        this.source && this.source.midiMessage(message);
+        this.source && this.source.midiMessage ? 
+            this.source.midiMessage(message)
+            : console.warn("Sent MIDI messages to a source who doesn't support it.");
     }
 
     removeEffect(id) {
@@ -58,7 +60,8 @@ class RackAudio {
         this.effects.splice(effectIndex, 1);
         
         // Unregister component for MIDI messages.
-        this.appAudio.unregisterComponent(id);
+        // Todo: reinstate this.
+        this.appAudio.unregisterAllHandlers(id);
     }
 
     outputOf(index) {

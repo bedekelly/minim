@@ -3,29 +3,15 @@ import uuid from "uuid4";
 import RackAudio from './Rack/RackAudio';
 
 
-/**
- * Linearly map a value from one range to another.
- */
-function linMap(value, fromLower, fromUpper, toLower, toUpper) {
-    const lowerRange = fromUpper - fromLower;
-    const upperRange = toUpper - toLower;
-    const magnitudeThroughLowerRange = (value - fromLower);
-    const fractionThroughRange = magnitudeThroughLowerRange / lowerRange;
-    const magnitudeThroughUpperRange = fractionThroughRange * upperRange;
-    const valueInUpperRange = toLower + magnitudeThroughUpperRange;
-    return valueInUpperRange;
-}
-
-
 class AppAudio {
 
     constructor() {
         this.racks = {};
         this.sources = {};
         this.effects = {};
-        this.components = {};
+        this.midiControlledComponents = {};
         this.context = null;
-        this.midiHandlers = {};
+        this.componentMidiHandlers = {};
         this.selectedRack = null;
         this.learningMidi = false;
         this.midiLearnTarget = null;
@@ -40,31 +26,42 @@ class AppAudio {
             value = message.data[2];
         }
 
+        // Currently learn MIDI, so swallow the next component input.
         if (isControlMessage && this.learningMidi) {
             // Assign the control to the current midi learn target.
-            if (this.midiHandlers[input.id] === undefined) this.midiHandlers[input.id] = {};
-            this.midiHandlers[input.id][control] = this.midiLearnTarget;
-            
+            if (this.midiControlledComponents[input.id] === undefined) 
+                this.midiControlledComponents[input.id] = {};
+            this.midiControlledComponents[input.id][control] = this.midiLearnTarget;
+
             // Reset our state so controllers work normally again.
             this.learningMidi = false;
             this.midiLearnTarget = null;
-        } else if (isControlMessage && this.midiHandlers[input.id] && this.midiHandlers[input.id][control]) {
-            const { id, handler, min, max } = this.midiHandlers[input.id][control];
-            if (min !== undefined && max !== undefined) {
-                value = linMap(value, 0, 127, min, max);
-            }
-            this.components[id][handler](value);
-        } else {
+        } 
+
+        // Control has been MIDI-learned, so delegate to the component's handler.
+        else if (isControlMessage && this.midiControlledComponents[input.id] && this.midiControlledComponents[input.id][control]) {
+            const componentId = this.midiControlledComponents[input.id][control];
+            const handler = this.componentMidiHandlers[componentId];
+            handler(value);
+        } 
+        
+        // Otherwise, just send the MIDI message to the current rack.
+        else {
             const rack = this.racks[this.selectedRack];
             rack && rack.midiMessage(message)
         }
     }
 
-    registerComponent(id, handlers) {
-        this.components[id] = handlers;
+    registerHandler(componentId, handler) {
+        this.componentMidiHandlers[componentId] = handler;
     }
 
-    unregisterComponent(componentId) {
+    unregisterAllHandlers(componentId) {
+        console.warn("Unregistering handlers not implemented");
+        // Todo: loop through all handlers with IDs starting with the
+        // given ID, and unregister them.
+        
+        /*
         for (let input of Object.keys(this.midiHandlers)) {
             for (let control of Object.keys(this.midiHandlers[input])) {
                 const handler = this.midiHandlers[input][control]
@@ -74,6 +71,7 @@ class AppAudio {
             }
         }
         delete this.components[componentId];
+        */
     }
 
     async setupMidi() {
@@ -83,9 +81,9 @@ class AppAudio {
         }
     }
     
-    midiLearn(id, handler, min, max) {
+    midiLearn(componentId) {
         this.learningMidi = true;
-        this.midiLearnTarget = { id, handler, min, max };
+        this.midiLearnTarget = componentId;
     }
 
     play() {

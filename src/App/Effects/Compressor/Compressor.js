@@ -29,24 +29,44 @@ class Compressor extends React.Component {
     render() {
         return <div className="compressor">
           <div className="control">
-            <Knob min={-100} max={0} value={this.state.threshold} onChange={value => this.change("threshold", value)} />
+            <Knob min={-100} max={0} 
+                value={this.state.threshold} 
+                appAudio={ this.props.appAudio }
+                id={ this.props.id + "-threshold" }
+                onChange={value => this.change("threshold", value)} />
             <div className="knob-title">Threshold</div>
           </div>
           <div className="control">
-            <Knob min={0} max={40} value={this.state.knee} onChange={value => this.change("knee", value)} />
+            <Knob min={0} max={40} 
+                value={this.state.knee} 
+                appAudio={ this.props.appAudio }
+                id={ this.props.id + "-knee" }
+                onChange={value => this.change("knee", value)} />
             <div className="knob-title">Knee</div>
           </div>
           <div className="control">
-            <Knob min={1} max={20} value={this.state.ratio} onChange={value => this.change("ratio", value)} />
+            <Knob min={1} max={20} 
+                value={this.state.ratio} 
+                appAudio={ this.props.appAudio }
+                id={ this.props.id + "-ratio" }
+                onChange={value => this.change("ratio", value)} />
             <div className="knob-title">Ratio</div>
           </div>
           <div className="control">
-            <Knob min={0} max={1} value={this.state.attack} onChange={value => this.change("attack", value)} />
+            <Knob min={0} max={1} 
+                value={this.state.attack} 
+                appAudio={ this.props.appAudio }
+                id={ this.props.id + "-attack" }
+                onChange={value => this.change("attack", value)} />
             <div className="knob-title">Attack</div>
           </div>
           
           <div className="control">
-            <Knob min={0} max={1} value={this.state.release} onChange={value => this.change("release", value)} />
+            <Knob min={0} max={1} 
+                value={this.state.release} 
+                appAudio={ this.props.appAudio }
+                id={ this.props.id + "-release" }
+                onChange={value => this.change("release", value)} />
             <div className="knob-title">Release</div>
           </div>
 

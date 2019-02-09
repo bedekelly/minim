@@ -50,7 +50,11 @@ class Effect extends React.Component {
         const Component = effectComponents[props.effectType] || defaultComponent;
         return <div className="effect">
             <div className="wetdry">
-                <Knob min={0} max={1} value={this.state.wet} onChange={this.changeWet}></Knob>
+                <Knob min={0} max={1} 
+                    value={this.state.wet} 
+                    appAudio={ this.props.appAudio }
+                    id={ this.props.id + "-wetdry" }
+                    onChange={this.changeWet}></Knob>
             </div>
             { props.handle }
             <button className="remove" onClick={props.removeSelf}>X</button>

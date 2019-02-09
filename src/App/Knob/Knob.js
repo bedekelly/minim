@@ -52,6 +52,7 @@ class Knob extends React.Component {
         this.pixelDiff = 0;
         this.knobRef = React.createRef();
         this.state = { dragging: false };
+        this.registerHandler();
     }
 
     onMouseDown(event) {
@@ -68,8 +69,7 @@ class Knob extends React.Component {
         // Alt-click means we should start listening for MIDI events.
         if (event.altKey) {
             event.preventDefault();
-            if (this.props.midiLearn) this.props.midiLearn();
-            else console.log("MIDI learn hasn't been implemented for me yet :(");
+            this.props.appAudio.midiLearn(this.props.id);
             return;
         }
 
@@ -164,6 +164,20 @@ class Knob extends React.Component {
     shouldComponentUpdate(nextProps, nextState) {
         return (nextProps.value !== this.props.value) || (this.state.dragging !== nextState.dragging);
     }
+    
+    gotMidi(value) {
+        this.props.onChange(
+            linMap(value, 0, 127, this.props.min, this.props.max)
+        );
+    }
+    
+    registerHandler() {
+        this.props.appAudio.registerHandler(this.props.id, value => this.gotMidi(value)); 
+    }
+    
+    componentDidUpdate() {
+        this.registerHandler();
+    }
 }
 
 
@@ -173,7 +187,8 @@ Knob.propTypes = {
     max: PropTypes.number.isRequired,
     onChange: PropTypes.func.isRequired,
     default: PropTypes.number.isRequired,
-    midiLearn: PropTypes.func.isRequired
+    appAudio: PropTypes.any.isRequired,
+    id: PropTypes.string.isRequired
 }
 
 

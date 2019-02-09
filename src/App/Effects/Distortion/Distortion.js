@@ -49,8 +49,11 @@ export default class Distortion extends React.Component {
         return <div className="distortion">
                  <canvas id="tv" style={ { opacity: 0.4 * this.state.amount/this.audio.max } } 
                   width={ 100 } height={ 100 } ref={ this.noiseCanvasRef }></canvas>
-                 <Knob min={ 0 } max={ this.audio.max } value={this.state.amount}
-                  onChange={ amount => this.setAmount(amount) } precision={ 0 }/>
+                 <Knob min={ 0 } max={ this.audio.max } 
+                     value={this.state.amount}
+                     appAudio={ this.props.appAudio }
+                     id={ this.props.id + "-distortion" }
+                     onChange={ amount => this.setAmount(amount) } precision={ 0 }/>
                </div>
     }
 }

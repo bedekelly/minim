@@ -195,29 +195,24 @@ class Synth extends React.PureComponent {
         this.setState({ filterEnvelope: { ...filterEnvelope, release }})
     }
     
-    componentDidMount() {
-        this.props.appAudio.registerComponent(this.props.id, {
-            setFilterFrequency: value => this.changeFilterFreq(value),
-            setFilterResonance: value => this.changeFilterRes(value)
-        });
-    }
-
-    midiLearn(control, min, max) {
-        this.props.appAudio.midiLearn(this.props.id, control, min, max);
-    }
-    
     render() {
         return (
             <div className="synth">
               <div className="comp osc one">
                 <div className="knobs">
                   <Knob min={-3} max={3} value={this.state.osc1.octave} precision={ 0 }
+                        appAudio={ this.props.appAudio }
+                        id={ this.props.id + "-osc1-octave" }
                         onChange={ value => this.changeOsc1Octave(value) }></Knob>
                   <div className="label">Oct</div>
                   <Knob min={-12} max={12} value={this.state.osc1.semi} precision={ 0 }
+                        appAudio={ this.props.appAudio }
+                        id={ this.props.id + "-osc1-semi" }
                         onChange={ value => this.changeOsc1Semi(value) }></Knob>
                   <div className="label">Semi</div>
                   <Knob min={-50} max={50} value={this.state.osc1.tune} precision={ 0 }
+                        appAudio={ this.props.appAudio }
+                        id={ this.props.id + "-osc1-tune" }
                         onChange={ value => this.changeOsc1Tune(value) }></Knob>
                   <div className="label">Tune</div>
                 </div>
@@ -270,12 +265,18 @@ class Synth extends React.PureComponent {
               <div className="comp osc two">
                 <div className="knobs">
                   <Knob min={-3} max={3} value={this.state.osc2.octave} precision={ 0 }
+                        appAudio={ this.props.appAudio }
+                        id={ this.props.id + "-osc2-octave" }
                         onChange={ value => this.changeOsc2Octave(value) }></Knob>
                   <div className="label">Oct</div>
                   <Knob min={-12} max={12} value={this.state.osc2.semi} precision={ 0 }
+                        appAudio={ this.props.appAudio }
+                        id={ this.props.id + "-osc2-semi" }
                         onChange={ value => this.changeOsc2Semi(value) }></Knob>
                   <div className="label">Semi</div>
                   <Knob min={-50} max={50} value={this.state.osc2.tune} precision={ 0 }
+                        appAudio={ this.props.appAudio }
+                        id={ this.props.id + "-osc2-tune" }
                         onChange={ value => this.changeOsc2Tune(value) }></Knob>
                   <div className="label">Tune</div>
                 </div>
@@ -332,9 +333,13 @@ class Synth extends React.PureComponent {
                 <div className="knobs">
                   <Knob min={0} max={1000} value={this.state.filterFreq}
                         onChange={value => this.changeFilterFreq(value)}
+                        appAudio={ this.props.appAudio }
+                        id={ this.props.id + "-filter-freq" }
                         midiLearn={ () => this.midiLearn("setFilterFrequency", 0, 1000) }></Knob>
                   <div className="label freq">Freq</div>
                   <Knob min={0} max={30} value={this.state.filterRes}
+                        appAudio={ this.props.appAudio }
+                        id={ this.props.id + "-filter-res" }
                         onChange={value => this.changeFilterRes(value)}
                         midiLearn={ () => this.midiLearn("setFilterResonance", 0, 30) }></Knob>
                     <div className="label res">
@@ -378,6 +383,8 @@ class Synth extends React.PureComponent {
                 <div className="lfo-layout">
                   <Knob min={ 0 } max={ 25 } value={ this.state.lfo.rate }
                         onChange={ value => this.setLFORate(value) }
+                        appAudio={ this.props.appAudio }
+                        id={ this.props.id + "-lfo-rate" }
                         ></Knob>
                   <div className="label">Rate</div>
                   <div className="destinations">

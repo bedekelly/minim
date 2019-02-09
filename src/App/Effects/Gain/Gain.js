@@ -37,12 +37,6 @@ class Gain extends React.Component {
         this.props.appAudio.midiLearn(this.props.id, "setGain");
     }
     
-    componentDidMount() {
-        this.props.appAudio.registerComponent(this.props.id, {
-            setGain: value => this.setGain(value, "midi")
-        });
-    }
-    
     setGain(value, midi) {
         if (midi) {
             value = linMap(value, 0, 127, this.MIN_GAIN, this.MAX_GAIN);
@@ -56,7 +50,8 @@ class Gain extends React.Component {
             <Knob min={ this.MIN_GAIN } max={ this.MAX_GAIN } 
                 value={this.state.value} 
                 onChange={value => this.setGain(value)} 
-                midiLearn={() => this.midiLearn()}
+                appAudio={ this.props.appAudio.midiLearn }
+                id={ `${this.props.id}-gain` }
                 />
         </div>
     }

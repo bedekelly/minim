@@ -100,16 +100,6 @@ class TapeLooper extends React.Component {
                ></Editor>
     }
     
-    componentDidMount() {
-        this.props.appAudio.registerComponent(this.props.id, {
-            setPlaybackRate: value => this.setPlaybackRate(value, "midi")
-        });
-    }
-
-    midiLearn(control) {
-        this.props.appAudio.midiLearn(this.props.id, control);
-    }
-
     render() {
         const classNames = [
             "tape-looper",
@@ -136,8 +126,9 @@ class TapeLooper extends React.Component {
                 precision={ 2 }
                 value={ this.state.playbackRate }
                 default={ 1 }
+                id={ this.props.id + "-playback-speed" }
                 onChange={ value => this.setPlaybackRate(value) }
-                midiLearn={ () => this.midiLearn("setPlaybackRate") }>
+                appAudio={ this.props.appAudio }>
             </Knob>
             <p className="speed-title">Speed</p>
             { this.state.hasTape ? <div className="button editor-button" onClick={() => this.openEditor()}>~</div> : null }

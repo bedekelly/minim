@@ -43,17 +43,6 @@ export default class GranularSynth extends React.Component {
         event.preventDefault();
     }
 
-    componentDidMount() {
-        this.props.appAudio.registerComponent(this.props.id, {
-            setLength: value => this.setLength(value, "midi"),
-            setSpace: value => this.setSpace(value, "midi")
-        });
-    }
-
-    midiLearn(control) {
-        this.props.appAudio.midiLearn(this.props.id, control);
-    }
-    
     setLength(length) {
         this.audio.setLength(length);
         this.setState({ length });
@@ -81,8 +70,9 @@ export default class GranularSynth extends React.Component {
              min={ this.MIN_LENGTH }
              max={ this.MAX_LENGTH }
              value={ this.state.length }
+             appAudio={ this.props.appAudio }
+             id={ this.props.id + "-length" }
              onChange={ length => this.setLength(length) }
-             midiLearn={ () => this.midiLearn("setLength") }
             />
             <span>Length</span>
           </div>
@@ -91,8 +81,9 @@ export default class GranularSynth extends React.Component {
              min={ this.MIN_SPACE }
              max={ this.MAX_SPACE }
              value={ this.state.space }
+             id={ this.props.id + "-spacing" }
+             appAudio={ this.props.appAudio }
              onChange={ space => this.setSpace(space) }
-             midiLearn={ () => this.midiLearn("setSpace") }
             />
             <span>Space</span>
           </div>

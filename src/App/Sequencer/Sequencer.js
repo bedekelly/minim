@@ -152,7 +152,6 @@ export default class Sequencer extends React.PureComponent {
     }
     
     snap(x, y, radius) {
-        debugger;
         let circleX = x;
         let circleY = y;
         if (this.state.snap) {
