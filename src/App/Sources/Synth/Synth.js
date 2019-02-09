@@ -3,6 +3,7 @@ import React from 'react';
 import './Synth.css';
 
 import Knob from '../../Knob';
+import Slider from './Slider';
 
 
 const filterTypes = {
@@ -350,28 +351,36 @@ class Synth extends React.PureComponent {
               <div className="comp envelope filter-envelope">
                 <h2>Filter Env.</h2>
                 <div className="slidecontainer">
-                  <input type="range" min="0" max="3" className="slider" step="0.01"
-                      value={ this.state.filterEnvelope.attack } 
-                      onChange={ event => this.setFilterAttack(event.target.value) }
-                      ></input>
+                    <Slider min={ 0 } max={ 3 } step={ 0.01 } 
+                        value={ this.state.filterEnvelope.attack }
+                        onChange={ value => this.setFilterAttack(value) }
+                        appAudio={ this.props.appAudio }
+                        id={ this.props.id + "-filter-attack" }
+                        ></Slider>
                 </div>
                 <div className="slidecontainer">
-                  <input type="range" min="0" max="1" className="slider" step="0.01"
-                      value={ this.state.filterEnvelope.decay } 
-                      onChange={ event => this.setFilterDecay(event.target.value) }
-                      ></input>
+                    <Slider min={ 0 } max={ 3 } step={ 0.01 } 
+                        value={ this.state.filterEnvelope.decay }
+                        onChange={ value => this.setFilterDecay(value) }
+                        appAudio={ this.props.appAudio }
+                        id={ this.props.id + "-filter-decay" }
+                        ></Slider>
                 </div>
                 <div className="slidecontainer">
-                  <input type="range" min="0" max="1" className="slider" step="0.01"
-                      value={ this.state.filterEnvelope.sustain } 
-                      onChange={ event => this.setFilterSustain(event.target.value) }
-                      ></input>
+                    <Slider min={ 0 } max={ 1 } step={ 0.01 } 
+                        value={ this.state.filterEnvelope.sustain }
+                        onChange={ value => this.setFilterSustain(value) }
+                        appAudio={ this.props.appAudio }
+                        id={ this.props.id + "-filter-sustain" }
+                        ></Slider>
                 </div>
                 <div className="slidecontainer">
-                  <input type="range" min="0.01" max="3" className="slider" step="0.01"
-                      value={ this.state.filterEnvelope.release } 
-                      onChange={ event => this.setFilterRelease(event.target.value) }
-                      ></input>
+                    <Slider min={ 0.01 } max={ 3 } step={ 0.01 } 
+                        value={ this.state.filterEnvelope.release }
+                        onChange={ value => this.setFilterRelease(value) }
+                        appAudio={ this.props.appAudio }
+                        id={ this.props.id + "-filter-release" }
+                        ></Slider>
                 </div>
                 <div className="label">A</div>
                 <div className="label">D</div>
@@ -424,28 +433,36 @@ class Synth extends React.PureComponent {
               <div className="comp amp envelope">
                 <h2>Amp Env.</h2>
                 <div className="slidecontainer">
-                  <input type="range" min="0" max="3" step="0.001"
-                      value={ this.state.ampEnvelope.attack } 
-                      onChange={ event => this.setAmpAttack(event.target.value) }
-                      className="slider" id="myRange"></input>
+                    <Slider min={ 0 } max={ 3 } step={ 0.001 } 
+                        value={ this.state.ampEnvelope.attack }
+                        onChange={ value => this.setAmpAttack(value) }
+                        appAudio={ this.props.appAudio }
+                        id={ this.props.id + "-amp-attack" }
+                        ></Slider>
                 </div>
                 <div className="slidecontainer">
-                  <input type="range" min="0" max="3" step="0.001"
-                      value={ this.state.ampEnvelope.decay } 
-                      onChange={ event => this.setAmpDecay(event.target.value) }
-                      className="slider" id="myRange"></input>
+                    <Slider min={ 0 } max={ 3 } step={ 0.001 } 
+                        value={ this.state.ampEnvelope.decay }
+                        onChange={ value => this.setAmpDecay(value) }
+                        appAudio={ this.props.appAudio }
+                        id={ this.props.id + "-amp-decay" }
+                        ></Slider>
                 </div>
                 <div className="slidecontainer">
-                  <input type="range" min="0" max="1" step="0.001"
-                      value={ this.state.ampEnvelope.sustain } 
-                      onChange={ event => this.setAmpSustain(event.target.value) }
-                      className="slider" id="myRange"></input>
+                    <Slider min={ 0 } max={ 1 } step={ 0.001 } 
+                        value={ this.state.ampEnvelope.sustain }
+                        onChange={ value => this.setAmpSustain(value) }
+                        appAudio={ this.props.appAudio }
+                        id={ this.props.id + "-amp-sustain" }
+                        ></Slider>
                 </div>
                 <div className="slidecontainer">
-                  <input type="range" min="0.001" max="3" step="0.001"
-                      value={ this.state.ampEnvelope.release } 
-                      onChange={ event => this.setAmpRelease(event.target.value) }
-                      className="slider" id="myRange"></input>
+                    <Slider min={ 0.001 } max={ 3 } step={ 0.001 } 
+                        value={ this.state.ampEnvelope.release }
+                        onChange={ value => this.setAmpRelease(value) }
+                        appAudio={ this.props.appAudio }
+                        id={ this.props.id + "-amp-release" }
+                        ></Slider>
                 </div>
                 <div className="label">A</div>
                 <div className="label">D</div>
