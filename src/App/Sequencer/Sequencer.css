@@ -6,6 +6,8 @@
   position: relative;
   display: grid;
   place-items: center;
+  padding-top: 30px;
+  padding-bottom: 25px;
 }
 
 .sequencer .buttons {
