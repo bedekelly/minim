@@ -72,6 +72,12 @@ class Knob extends React.Component {
             this.props.appAudio.midiLearn(this.props.id);
             return;
         }
+        
+        if (event.metaKey) {
+            event.preventDefault();
+            this.props.onChange(this.props.default);
+            return;
+        }
 
         /**
          * Calculate the new value for the knob given how far the

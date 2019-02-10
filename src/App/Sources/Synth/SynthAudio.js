@@ -33,7 +33,7 @@ export default class SynthAudio {
 
     constructor(parentAudio) {
         this.filter = {
-            freq: 850,
+            freq: 12000,
             res: 0,
             type: "lowpass"
         }
@@ -67,7 +67,7 @@ export default class SynthAudio {
         }
         
         this.lfo = {
-            rate: 3,
+            rate: 0,
             destination: ""
         };
         

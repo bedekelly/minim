@@ -23,6 +23,7 @@ class Gain extends React.Component {
     
     MIN_GAIN = 0;
     MAX_GAIN = 5;
+    DEFAULT_GAIN = 1;
     
     constructor(props) {
         super(props);
@@ -50,8 +51,9 @@ class Gain extends React.Component {
             <Knob min={ this.MIN_GAIN } max={ this.MAX_GAIN } 
                 value={this.state.value} 
                 onChange={value => this.setGain(value)} 
-                appAudio={ this.props.appAudio.midiLearn }
+                appAudio={ this.props.appAudio }
                 id={ `${this.props.id}-gain` }
+                default={ this.DEFAULT_GAIN }
                 />
         </div>
     }

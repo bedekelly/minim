@@ -5,6 +5,9 @@ class CompressorAudio extends EffectAudio {
     constructor(...args) {
         super(...args);
         this.node = this.context.createDynamicsCompressor();
+        
+        // Default ratio of 12 is pretty hardcore.
+        this.node.ratio.setValueAtTime(1.5, 0);
     }
 
     setValue(name, value) {

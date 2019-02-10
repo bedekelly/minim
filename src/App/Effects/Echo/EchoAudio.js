@@ -18,34 +18,40 @@ export default class EchoAudio extends EffectAudio {
         // Set ingress and egress points.
         this.inputNode = this.delayNode;
         this.outputNode = this.cutoffNode;
-
+        
+        // Prevent race condition.
+        this.lastValuesSet = {};
+        
         // Set some defaults.
-        this.feedback = 0;
+        this.feedback = 0.2;
         this.cutoff = 10000;
         this.time = 0.3;
     }
 
     set feedback(value) {
+        this.lastValuesSet.feedback = value;
         this.feedbackNode.gain.setValueAtTime(value, 0);
     }
 
     get feedback() {
-        return this.feedbackNode.gain.value;
+        return this.lastValuesSet.feedback || this.feedbackNode.gain.value;
     }
 
     set cutoff(value) {
+        this.lastValuesSet.cutoff = value;
         this.cutoffNode.frequency.setValueAtTime(value, 0);
     }
 
     get cutoff() {
-        return this.cutoffNode.frequency.value;
+        return this.lastValuesSet.frequency || this.cutoffNode.frequency.value;
     }
 
     set time(value) {
+        this.lastValuesSet.time = value;
         this.delayNode.delayTime.setValueAtTime(value, 0);
     }
 
     get time() {
-        return this.delayNode.delayTime.value;
+        return this.lastValuesSet.time || this.delayNode.delayTime.value;
     }
 }

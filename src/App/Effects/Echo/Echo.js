@@ -33,26 +33,29 @@ export default class Echo extends React.Component {
     }
     
     render() {
-        return <div class="echo">
-                  <div class="echo-layout">
-                    <Knob min={ 0 } max={ 1 }
+        return <div className="echo">
+                  <div className="echo-layout">
+                    <Knob min={ 0 } max={ 0.8 }
                           value={ this.state.feedback } 
+                          default={ 0.2 }
                           appAudio={ this.props.appAudio }
                           id={ this.props.id + "-feedback" }
                           onChange={ value => this.setFeedback(value) }></Knob>
-                    <div class="label flabel">Feedback</div>
+                    <div className="label flabel">Feedback</div>
                     <Knob min={ 0 } max={ 1 }
                           value={ this.state.time } 
+                          default={ 0.3 }
                           appAudio={ this.props.appAudio }
                           id={ this.props.id + "-time" }
                           onChange={ value => this.setTime(value) }></Knob>
-                    <div class="label tlabel">Time</div>
+                    <div className="label tlabel">Time</div>
                     <Knob min={ 1000 } max={ 10000 }
                           value={ this.state.cutoff } 
+                          default={ 10000 }
                           appAudio={ this.props.appAudio }
                           id={ this.props.id + "-cutoff" }
                           onChange={ value => this.setCutoff(value) }></Knob>
-                    <div class="label clabel">Cutoff</div>
+                    <div className="label clabel">Cutoff</div>
                   </div>
                 </div>
     }

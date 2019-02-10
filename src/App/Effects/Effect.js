@@ -54,6 +54,7 @@ class Effect extends React.Component {
                     value={this.state.wet} 
                     appAudio={ this.props.appAudio }
                     id={ this.props.id + "-wetdry" }
+                    default={ 1 }
                     onChange={this.changeWet}></Knob>
             </div>
             { props.handle }

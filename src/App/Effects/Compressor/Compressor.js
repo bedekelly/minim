@@ -31,6 +31,7 @@ class Compressor extends React.Component {
           <div className="control">
             <Knob min={-100} max={0} 
                 value={this.state.threshold} 
+                default={ -24 }
                 appAudio={ this.props.appAudio }
                 id={ this.props.id + "-threshold" }
                 onChange={value => this.change("threshold", value)} />
@@ -39,6 +40,7 @@ class Compressor extends React.Component {
           <div className="control">
             <Knob min={0} max={40} 
                 value={this.state.knee} 
+                default={ 30 }
                 appAudio={ this.props.appAudio }
                 id={ this.props.id + "-knee" }
                 onChange={value => this.change("knee", value)} />
@@ -47,6 +49,7 @@ class Compressor extends React.Component {
           <div className="control">
             <Knob min={1} max={20} 
                 value={this.state.ratio} 
+                default={ 1.5 }
                 appAudio={ this.props.appAudio }
                 id={ this.props.id + "-ratio" }
                 onChange={value => this.change("ratio", value)} />
@@ -55,6 +58,7 @@ class Compressor extends React.Component {
           <div className="control">
             <Knob min={0} max={1} 
                 value={this.state.attack} 
+                default={ 0.003 }
                 appAudio={ this.props.appAudio }
                 id={ this.props.id + "-attack" }
                 onChange={value => this.change("attack", value)} />
@@ -64,6 +68,7 @@ class Compressor extends React.Component {
           <div className="control">
             <Knob min={0} max={1} 
                 value={this.state.release} 
+                default={ 0.25 }
                 appAudio={ this.props.appAudio }
                 id={ this.props.id + "-release" }
                 onChange={value => this.change("release", value)} />
