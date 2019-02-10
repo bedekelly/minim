@@ -5,7 +5,8 @@ const EffectType = Object.freeze({
     Compressor: Symbol("Compressor"),
     Reverb: Symbol("Reverb"),
     Echo: Symbol("Echo"),
-    Distortion: Symbol("Distortion")
+    Distortion: Symbol("Distortion"),
+    BitCrusher: Symbol("BitCrusher")
 });
 
 
@@ -16,7 +17,8 @@ const EffectTypes = [
     {type: EffectType.Compressor, text: "Add Compressor", image: "https://lorempixel.com/200/120"},
     {type: EffectType.Reverb, text: "Add Reverb", image: "https://lorempixel.com/200/120"},
     {type: EffectType.Echo, text: "Add Echo", image: "https://lorempixel.com/200/120"},
-    {type: EffectType.Distortion, text: "Add Distortion", image: "https://lorempixel.com/200/120"}
+    {type: EffectType.Distortion, text: "Add Distortion", image: "https://lorempixel.com/200/120"},
+    {type: EffectType.BitCrusher, text: "Add BitCrusher", image: "https://lorempixel.com/200/120"}
 ];
 
 

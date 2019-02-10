@@ -1,0 +1,17 @@
+.bit-crusher {
+    height: 123px;
+    background: whitesmoke;
+    width: 200px;
+    padding-top: 23px;
+    border-radius: 7px;
+}
+
+.bit-crusher .knob-inner {
+    width: 25px;
+    height: 25px;
+}
+
+.bit-crusher .notch {
+    width: 1px;
+    height: 12px;
+}

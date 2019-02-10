@@ -16,6 +16,8 @@ viewportFix.init();
  */
 class App extends Component {
 
+    processors = [ "bit-crusher" ];
+
     constructor(props) {
         super(props);
         this.appAudio = new AppAudio();
@@ -25,7 +27,16 @@ class App extends Component {
     async initialise() {
         if (this.state.loaded) return;
         await this.appAudio.initialise();
+        await this.loadProcessors();
         await this.setState({loaded: true});
+    }
+
+    async loadProcessors() {
+        for (let worklet of this.processors) {
+            // Todo: use Promise.all() here to allow asynchronous loading.
+            await this.appAudio.context.audioWorklet.addModule(`worklets/${worklet}.js`);
+        }
+        console.log(`Loaded BitCrusher`);
     }
 
     async addRack() {

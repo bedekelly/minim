@@ -7,6 +7,7 @@ import CompressorAudio from '../Effects/Compressor/CompressorAudio';
 import ReverbAudio from '../Effects/Reverb/ReverbAudio';
 import EchoAudio from '../Effects/Echo/EchoAudio';
 import DistortionAudio from '../Effects/Distortion/DistortionAudio';
+import BitCrusherAudio from '../Effects/BitCrusher/BitCrusherAudio';
 
 import SequencerAudio from './SequencerAudio';
 import RecorderAudio from './RecorderAudio';
@@ -130,7 +131,8 @@ class RackAudio {
             [EffectType.Compressor]: CompressorAudio,
             [EffectType.Reverb]: ReverbAudio,
             [EffectType.Echo]: EchoAudio,
-            [EffectType.Distortion]: DistortionAudio
+            [EffectType.Distortion]: DistortionAudio,
+            [EffectType.BitCrusher]: BitCrusherAudio
         };
         const defaultEffectAudio = FilterAudio;
         const EffectAudio = effectAudios[effectType] || defaultEffectAudio

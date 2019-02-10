@@ -7,6 +7,7 @@ import Compressor from './Compressor';
 import Reverb from './Reverb';
 import Echo from './Echo';
 import Distortion from './Distortion';
+import BitCrusher from './BitCrusher';
 
 import { EffectType } from './EffectTypes';
 import Knob from '../Knob';
@@ -22,7 +23,8 @@ const effectComponents = {
     [EffectType.Compressor]: Compressor,
     [EffectType.Reverb]: Reverb,
     [EffectType.Echo]: Echo,
-    [EffectType.Distortion]: Distortion
+    [EffectType.Distortion]: Distortion,
+    [EffectType.BitCrusher]: BitCrusher
 }
 
 
