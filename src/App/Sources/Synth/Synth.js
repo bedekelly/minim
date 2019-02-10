@@ -361,7 +361,7 @@ class Synth extends React.PureComponent {
               <div className="comp envelope filter-envelope">
                 <h2>Filter Env.</h2>
                 <div className="slidecontainer">
-                    <Slider min={ 0 } max={ 3 } step={ 0.01 } 
+                    <Slider min={ 0 } max={ 3 } step={ 0.01 }
                         value={ this.state.filterEnvelope.attack }
                         default={ 0 }
                         onChange={ value => this.setFilterAttack(value) }
@@ -450,6 +450,7 @@ class Synth extends React.PureComponent {
                 <div className="slidecontainer">
                     <Slider min={ 0 } max={ 3 } step={ 0.001 } 
                         value={ this.state.ampEnvelope.attack }
+                        default={ 0 }
                         onChange={ value => this.setAmpAttack(value) }
                         appAudio={ this.props.appAudio }
                         id={ this.props.id + "-amp-attack" }
@@ -458,6 +459,7 @@ class Synth extends React.PureComponent {
                 <div className="slidecontainer">
                     <Slider min={ 0 } max={ 3 } step={ 0.001 } 
                         value={ this.state.ampEnvelope.decay }
+                        default={ 0 }
                         onChange={ value => this.setAmpDecay(value) }
                         appAudio={ this.props.appAudio }
                         id={ this.props.id + "-amp-decay" }
@@ -466,14 +468,16 @@ class Synth extends React.PureComponent {
                 <div className="slidecontainer">
                     <Slider min={ 0 } max={ 1 } step={ 0.001 } 
                         value={ this.state.ampEnvelope.sustain }
+                        default={ 1 }
                         onChange={ value => this.setAmpSustain(value) }
                         appAudio={ this.props.appAudio }
                         id={ this.props.id + "-amp-sustain" }
                         ></Slider>
                 </div>
                 <div className="slidecontainer">
-                    <Slider min={ 0.001 } max={ 3 } step={ 0.001 } 
+                    <Slider min={ 0.01 } max={ 3 } step={ 0.01 } 
                         value={ this.state.ampEnvelope.release }
+                        default={ 0.01 }
                         onChange={ value => this.setAmpRelease(value) }
                         appAudio={ this.props.appAudio }
                         id={ this.props.id + "-amp-release" }

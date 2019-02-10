@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 
 /**
@@ -35,6 +36,12 @@ export default class Slider extends React.Component {
             console.log(this.props.id);
             this.props.appAudio.midiLearn(this.props.id);
         }
+        
+        else if (event.metaKey) {
+            event.preventDefault();
+            this.props.onChange(this.props.default);
+            return;
+        }
     }
     
     render() {
@@ -61,5 +68,15 @@ export default class Slider extends React.Component {
     componentDidMount() {
         this.registerHandler();
     }
-    
+}
+
+
+Slider.propTypes = {
+    value: PropTypes.number.isRequired,
+    min: PropTypes.number.isRequired,
+    max: PropTypes.number.isRequired,
+    onChange: PropTypes.func.isRequired,
+    default: PropTypes.number.isRequired,
+    appAudio: PropTypes.any.isRequired,
+    id: PropTypes.string.isRequired
 }
