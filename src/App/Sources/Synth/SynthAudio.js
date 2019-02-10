@@ -163,6 +163,7 @@ export default class SynthAudio {
     }
 
     noteOnAtTime(note, time) {
+        console.log("noteOnAtTime", time, this.context.currentTime);
         const oscOneNote = note + this.osc1.octave * 12 + this.osc1.semi + this.osc1.tune/100;
         const oscTwoNote = note + this.osc2.octave * 12 + this.osc2.semi + this.osc2.tune/100;
         const pitchOne = midiToPitch(oscOneNote);
@@ -233,19 +234,39 @@ export default class SynthAudio {
             
             
         }
-        
-        this.notes[note] = { one: oscOne, two: oscTwo, oneGain: oscOneGain, twoGain: oscTwoGain, amp: oscAmpGain, filter };
+        if (!this.notes[note]) this.notes[note] = [];
+        this.notes[note].push({ one: oscOne, two: oscTwo, oneGain: oscOneGain, twoGain: oscTwoGain, amp: oscAmpGain, filter, noteOffTriggered: false });
     }
 
     noteOn(note) {
         return this.noteOnAtTime(note, 0);
     }
     
-    noteOffAtTime(note, time) {
-        const { one, two, amp, filter, oneGain, twoGain } = this.notes[note];
+    noteOffAtTime(pitch, time) {
+        console.log("noteOffAtTime", time, this.context.currentTime);
+
+
+        // Select the next occurrence of the note that hasn't been
+        // given scheduling information for when to trigger note-end
+        // events like following the amp envelope's release.
+        let note;
+        for (let i=0; i<this.notes[pitch].length; i++) {
+            const thisNote = this.notes[pitch][i];
+            if (!thisNote.noteOffTriggered) {
+                note = thisNote;
+                note.noteOffTriggered = true;
+                break;
+            }
+        }
+        
+        // This might happen if we've resumed the sequencer between the noteOn
+        // and noteOff midi messages.
+        if (!note) return;
+        
+        const { one, two, amp, filter, oneGain, twoGain } = note;
         const ampRelease = this.ampEnvelope.release;
         const filterRelease = this.filterEnvelope.release;
-        const startTime = time < this.context.currentTime ? this.context.currentTime : time;
+        let startTime = time < this.context.currentTime ? this.context.currentTime : time;
         amp.gain.cancelScheduledValues(startTime);
         amp.gain.setTargetAtTime(0, startTime, ampRelease / 5);
         filter.frequency.cancelScheduledValues(startTime);
@@ -253,29 +274,45 @@ export default class SynthAudio {
         one.stop(startTime + this.ampEnvelope.release);
         two.stop(startTime + this.ampEnvelope.release);
         
-        // Cleanup notes.
-        setTimeout(() => {
-            amp.disconnect();
-            one.disconnect();
-            two.disconnect();
-            oneGain.disconnect();
-            twoGain.disconnect();
-            filter.disconnect();
-            // Don't delete this.notes[note] – it gets overwritten!
-        }, ampRelease * 1000);
+        // Cleanup notes. Todo: try to do this for sequenced notes too?
+        if (time <= this.context.currentTime) {
+            setTimeout(() => {
+                amp.disconnect();
+                one.disconnect();
+                two.disconnect();
+                oneGain.disconnect();
+                twoGain.disconnect();
+                filter.disconnect();
+                // Don't delete this.notes[note] – it gets overwritten!
+            }, ampRelease * 1000);
+        }
     }
     
     noteOff(note) {
         this.noteOffAtTime(note, 0);
     }
 
-    midiMessage(message) {
+    midiMessage(message, time) {
+        time |= 0;
         const { data: [messageType, note] } = message;
         if (messageType === NOTE_OFF) {
-            this.noteOff(note);
+            // debugger;
+            this.noteOffAtTime(note, time);
         } else if (messageType === NOTE_ON) {
-            this.noteOn(note);
+            this.noteOnAtTime(note, time);
         }
+    }
+    
+    scheduleNotes(notes) {
+        for (let { data, time } of notes) {
+            console.log("Scheduling note", data, "for", time);
+            console.log("current time is ", this.context.currentTime);
+            this.midiMessage({data}, time);
+        }
+    }
+    
+    cancelAllNotes() {
+        
     }
 
     play() {

@@ -21,36 +21,54 @@ export default class Recorder extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            bpm: 120,
+            bpm: 80,
             beatsPerMeasure: 4,
             playing: false,
+            recording: false,
             metronome: false
         };
     }
     
     setBeatsPerMeasure(beatsPerMeasure) {
         this.setState({ beatsPerMeasure: Math.round(beatsPerMeasure) });
+        this.props.audio.beatsPerMeasure = beatsPerMeasure;
     }
     
     setBpm(bpm) {
         this.setState({ bpm: Math.round(bpm) });
+        this.props.audio.bpm = bpm;
     }
     
     togglePlaying() {
         this.setState({ playing: !this.state.playing });
+        this.props.audio.togglePlaying();
     }
     
     metronomeButtonStyle() {
         if (this.state.metronome) {
             return {
                 background: "lightgrey",
-                color: "black"
+                color: "#222"
             }
         } else return {};
     }
     
+    recordingButtonStyle() {
+        if (this.state.recording) {
+            return {
+                background: "#ee2222",
+                color: "whitesmoke"
+            }
+        }
+    }
+    
     toggleMetronome() {
         this.setState({ metronome: !this.state.metronome });
+    }
+    
+    toggleRecording() {
+        this.setState({ recording: !this.state.recording });
+        this.props.audio.toggleRecording();
     }
     
     render() {
@@ -82,7 +100,8 @@ export default class Recorder extends React.Component {
                         : <FontAwesomeIcon size={ "lg" } icon={ [ "fas", "play"]} />
                     }
                 </button>
-                <button className="record">
+                <button className="record" style={ this.recordingButtonStyle() }
+                        onClick={ () => this.toggleRecording() }>
                     <FontAwesomeIcon size={ "lg" } icon={ [ "fas", "circle" ]} />
                 </button>
                 <button className="metronome" style={ this.metronomeButtonStyle() } 

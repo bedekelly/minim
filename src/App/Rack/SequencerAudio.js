@@ -27,6 +27,7 @@ export default class SequencerAudio {
         this.notes = [];
         this.playing = false;
         this.closenessDelta = this.timePerBeat / 100;
+        // this.closenessDelta = 0.3;
 
         // Bind methods for cleaner passing.
         this.scheduleNextNBars = this.scheduleNextNBars.bind(this);
@@ -177,6 +178,15 @@ export default class SequencerAudio {
         }
         if (this.playing) this.scheduleNextNBars();
     }
+    
+    addRepeatingNoteNow(data) {
+        const fractionalBeat = this.timeSignature * this.currentRelativeTime / this.totalBarTime;
+        let beat = Math.round(fractionalBeat);
+        const offset = (fractionalBeat - beat) * 100;
+        if (beat > this.timeSignature) beat -= this.timeSignature;
+        beat = 1 + beat % this.timeSignature;
+        this.addNote({ data, beat, offset });
+    }
 
     clearAll() {
         this.notes = [];
@@ -217,6 +227,7 @@ export default class SequencerAudio {
     }
     
     sendNotesTo(source) {
+        console.log("sending notes to ", source);
         this.soundSource = source;
     }
 }

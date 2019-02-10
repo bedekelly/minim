@@ -73,7 +73,7 @@ export default class Sequencer extends React.PureComponent {
             snap: true,
             draggingNote: null,
             closestPoint: null,
-            mousePos: {x:-10, y: -10},
+            mousePos: { x: -10, y: -10 },
             selectedDrum: 0
         };
     }

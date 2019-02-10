@@ -20,29 +20,36 @@ class RackAudio {
 
     constructor(appAudio) {
         this.source = null;
-        this.sequencer = new SequencerAudio(appAudio.context);
+        // this.sequencer = new SequencerAudio(appAudio.context);
         this.recorder = new RecorderAudio(appAudio.context);
         this.appAudio = appAudio;
         this.effects = [];
 
         // Todo: global fx rack
         this.destination = this.appAudio.context.destination;
-        this.sequencer.bpm = 80;
+        // this.sequencer.bpm = 80;
     }
 
     pause() {
         console.log("rack pausing");
-        this.sequencer.pause();
+        this.sequencer && this.sequencer.pause();
+        this.recorder && this.recorder.pause();
         this.source && this.source.pause();
     }
 
     play() {
         console.log("rack playing");
-        this.sequencer.play();
+        this.recorder && this.recorder.play();
+        this.sequencer && this.sequencer.play();
         this.source && this.source.play();
     }
 
     midiMessage(message) {
+        if (this.recorder) {
+            this.recorder.midiMessage(message);
+            return;
+        }
+        
         this.source && this.source.midiMessage ? 
             this.source.midiMessage(message)
             : console.warn("Sent MIDI messages to a source who doesn't support it.");
@@ -101,7 +108,8 @@ class RackAudio {
         this.source.routeTo(this.startOfFxChain);
         const id = uuid();
         this.appAudio.sources[id] = this.source;
-        this.sequencer.sendNotesTo(this.source);
+        if (this.sequencer) this.sequencer.sendNotesTo(this.source);
+        if (this.recorder) this.recorder.sendNotesTo(this.source);
         return { id, component };
     }
 
