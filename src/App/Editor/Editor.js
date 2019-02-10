@@ -196,6 +196,13 @@ class Editor extends React.Component {
         this.loopEnd = value;
     }
 
+    canvasClicked(event) {
+        const mouseX = event.clientX;
+        const { x: canvasX } = this.canvasRef.current.getBoundingClientRect();
+        const fractionThroughWaveform = (mouseX - canvasX) / this.canvasWidth;
+        this.audio.scrubToFraction(fractionThroughWaveform);
+    }
+
     render() {
         
         const playPause = this.props.playing ? this.props.pause : this.props.play;
@@ -232,7 +239,8 @@ class Editor extends React.Component {
                     <canvas style={
                         { visible: this.state.ready }
                     } ref={this.canvasRef} width="610px" height="300px" className="waveform"></canvas>
-                    <canvas width="610px" height="300px" ref={this.playHeadCanvasRef} className="play-head"></canvas>
+                    <canvas width="610px" height="300px" ref={this.playHeadCanvasRef} className="play-head"
+                        onClick={ event => this.canvasClicked(event) }></canvas>
                 </div>
                 { this.state.ready && <LoopEndBar
                     audio={ this.audio }

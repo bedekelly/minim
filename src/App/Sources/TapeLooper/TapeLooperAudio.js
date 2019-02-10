@@ -122,11 +122,25 @@ class TapeLooperAudio {
         this.node.connect(this.parentRack.startOfFxChain);
     }
 
-    stop() {
+    scrubToFraction(fraction) {
+        const newTime = fraction * this.buffer.duration;
+        this.relativeStartTime = newTime;
+        this.absoluteStartTime = this.context.currentTime;
+        if (!this.paused) {
+            this.disconnect();
+            this.play();
+        }
+    }
+
+    disconnect() {
         if (this.node) {
             this.node.disconnect();
             this.node = null;
         }
+    }
+
+    stop() {
+        this.disconnect();
         this.relativeStartTime = 0;
     }
     
