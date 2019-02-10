@@ -49,8 +49,9 @@ export default class Slider extends React.Component {
         return <input type="range" min={ min } max={ max } 
             className="slider" step={ step }
             value={ this.props.value } 
+            style={ { cursor: "pointer" } }
             onClick={ event => this.onClick(event) }
-            onChange={ event => this.props.onChange(event.target.value) }
+            onChange={ event => this.props.onChange(event.target.valueAsNumber) }
         ></input>
     }
     

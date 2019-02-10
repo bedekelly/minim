@@ -1,6 +1,8 @@
 import React from "react";
 import './Pan.css';
 
+import Slider from '../../Slider';
+
 
 class Pan extends React.Component {
     
@@ -12,15 +14,20 @@ class Pan extends React.Component {
         }
     }
     
-    onChange(event) {
-        const newPan = event.target.valueAsNumber;
-        this.panAudio.value = newPan;
-        this.setState({value: newPan});
+    onChange(value) {
+        this.panAudio.value = value;
+        this.setState({value: value});
     }
 
     render() {
         return <div className="pan">
-            <input type="range" min={-1} max={1} step={0.01} value={this.state.value} onChange={event=>this.onChange(event)}/>
+            <Slider min={ -1 } max={ 1 } step={ 0.01 }
+                value={ this.state.value }
+                default={ 0 }
+                onChange={ value => this.onChange(value) }
+                appAudio={ this.props.appAudio }
+                id={ this.props.id + "-pan" }
+                ></Slider>
         </div>
     }
 }

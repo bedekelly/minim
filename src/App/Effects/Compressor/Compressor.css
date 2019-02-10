@@ -1,22 +1,23 @@
 .compressor {
-  background: whitesmoke;
-  width: 300px;
-  margin-top: 23px;
-  height: 180px;
-  display: grid;
-  grid-template-rows: 1fr 1fr;
-  grid-template-columns: 1fr 1fr 1fr;
-  place-items: center;
-  padding: 10px;
+    background: whitesmoke;
+    width: 300px;
+    margin-top: 23px;
+    height: 200px;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+    place-items: center;
+    padding: 10px;
+    grid-row-gap: 5px;
 }
-
+    
 .toggle-compressor-active {
   width: 40px;
   height: 40px;
 }
 
 .knob-title {
-  margin-top: 7px;
+  margin-top: 10px;
   text-align: center;
   font-family: "Helvetica Neue";
   font-weight: 200;
