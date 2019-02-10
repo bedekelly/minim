@@ -3,7 +3,15 @@ import TextValue from '../TextValue';
 import MPCDrumSelector from './MPCDrumSelector';
 import Toggle from './Toggle';
 
+
 import './Sequencer.css';
+
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/pro-solid-svg-icons';
+library.add(faTimes);
+
+
 
 
 const SIZE = 300;
@@ -363,7 +371,9 @@ export default class Sequencer extends React.PureComponent {
                 onChange={ selectedDrum => this.setState({ selectedDrum })} 
                 colours={ COLOURS }
                 />
-            <button className="clear-all" onClick={ () => this.clearAll() }>X</button>
+            <button className="clear-all" onClick={ () => this.clearAll() }>
+                <FontAwesomeIcon icon={ [ "fas", "times" ]} />
+            </button>
         </div>;
     }
 }
