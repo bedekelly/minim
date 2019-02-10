@@ -1,0 +1,95 @@
+import React from 'react';
+
+import './Recorder.css';
+
+import TextValue from '../TextValue';
+
+
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircle } from '@fortawesome/free-solid-svg-icons'
+import { faPlay, faPause, faStop, faTimes } from '@fortawesome/pro-solid-svg-icons';
+
+library.add(faPlay, faPause, faStop, faCircle, faTimes);
+
+
+
+export default class Recorder extends React.Component {
+    
+    minBeatsPerMeasure = 1;
+    
+    constructor(props) {
+        super(props);
+        this.state = {
+            bpm: 120,
+            beatsPerMeasure: 4,
+            playing: false,
+            metronome: false
+        };
+    }
+    
+    setBeatsPerMeasure(beatsPerMeasure) {
+        this.setState({ beatsPerMeasure: Math.round(beatsPerMeasure) });
+    }
+    
+    setBpm(bpm) {
+        this.setState({ bpm: Math.round(bpm) });
+    }
+    
+    togglePlaying() {
+        this.setState({ playing: !this.state.playing });
+    }
+    
+    metronomeButtonStyle() {
+        if (this.state.metronome) {
+            return {
+                background: "lightgrey",
+                color: "black"
+            }
+        } else return {};
+    }
+    
+    toggleMetronome() {
+        this.setState({ metronome: !this.state.metronome });
+    }
+    
+    render() {
+        return <section className="recorder">
+            <section className="timing">
+                <TextValue 
+                    value={this.state.beatsPerMeasure} 
+                    min={this.minBeatsPerMeasure} 
+                    max={ 32 } 
+                    label={ "beats" }
+                    onChange={ beatsPerMeasure => this.setBeatsPerMeasure(beatsPerMeasure) } />
+                <TextValue 
+                    value={this.state.bpm} 
+                    min={10} max={200} 
+                    label={ "bpm" }
+                    onChange={ bpm => this.setBpm(bpm) }/>
+            </section>
+            <section className="controls">
+                <button className="clear-all">
+                    <FontAwesomeIcon size={ "lg" } icon={ [ "fas", "times" ]} />
+                </button>
+                <button className="stop">
+                    <FontAwesomeIcon size={ "lg" } icon={ [ "fas", "stop" ]} />
+                </button>
+                <button className="play-pause" onClick={ () => this.togglePlaying() }>
+                    {
+                        this.state.playing ?
+                        <FontAwesomeIcon size={ "lg" } icon={ [ "fas", "pause" ]} />
+                        : <FontAwesomeIcon size={ "lg" } icon={ [ "fas", "play"]} />
+                    }
+                </button>
+                <button className="record">
+                    <FontAwesomeIcon size={ "lg" } icon={ [ "fas", "circle" ]} />
+                </button>
+                <button className="metronome" style={ this.metronomeButtonStyle() } 
+                        onClick={ () => this.toggleMetronome() }>
+                    <img src="https://s3.eu-west-2.amazonaws.com/static-electricity/icons/MetronomeIcon.svg" alt=""/>
+                </button>
+            </section>
+        </section>
+    }
+}

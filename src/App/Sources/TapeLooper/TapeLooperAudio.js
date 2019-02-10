@@ -224,7 +224,6 @@ class TapeLooperAudio {
     }
     
     routeTo(destination) {
-        console.log("Tape looper routing to ", destination);
         if (destination.input) {
             destination = destination.input;
         }

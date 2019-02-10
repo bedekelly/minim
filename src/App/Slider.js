@@ -62,7 +62,6 @@ export default class Slider extends React.Component {
     }
     
     registerHandler() {
-        console.log("registering", this.gotMidi);
         this.props.appAudio.registerHandler(this.props.id, value => this.gotMidi(value)); 
     }
     

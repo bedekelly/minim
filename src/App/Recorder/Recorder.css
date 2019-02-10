@@ -1,0 +1,54 @@
+.recorder {
+    width: 300px;
+    height: 60px;
+    background: whitesmoke;
+    margin: 3vh auto;
+    border-radius: 7px;
+    font-family: monospace;
+    font-size: 13pt;
+    color: #222;
+    display: flex;
+}
+
+.recorder .text-value-control {
+    font-size: 13pt;
+}
+
+.recorder .text-value-control:first-of-type {
+    margin-bottom: 5px;
+}
+
+.recorder .text-value-control .label {
+    font-size: 8pt;
+}
+
+.recorder .timing {
+    display: flex;
+    width: 80px;
+    height: 60px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.recorder .controls {
+    display: flex;
+    justify-content: space-around;
+    width: 220px;
+}
+
+.recorder .controls button {
+    width: calc(220px / 5);
+    border-right: 0;
+    outline: 0;
+    border: 0;
+    border-left: 1px solid lightgrey;
+}
+
+.recorder .controls button:active {
+    background: lightgrey;
+}
+
+.recorder .controls button:last-of-type {
+    border-radius: 0 7px 7px 0;
+}

@@ -6,20 +6,6 @@ import TapeComponents from './TapeComponents';
 import Knob from '../../Knob';
 
 
-/**
- * Linearly map a value from one range to another.
- */
-function linMap(value, fromLower, fromUpper, toLower, toUpper) {
-    const lowerRange = fromUpper - fromLower;
-    const upperRange = toUpper - toLower;
-    const magnitudeThroughLowerRange = (value - fromLower);
-    const fractionThroughRange = magnitudeThroughLowerRange / lowerRange;
-    const magnitudeThroughUpperRange = fractionThroughRange * upperRange;
-    const valueInUpperRange = toLower + magnitudeThroughUpperRange;
-    return valueInUpperRange;
-}
-
-
 class TapeLooper extends React.Component {
 
     PLAYBACK_MIN = 0;
@@ -71,10 +57,7 @@ class TapeLooper extends React.Component {
         return this.state.playbackRate;
     }
     
-    setPlaybackRate(rate, midi) {
-        if (midi) {
-            rate = linMap(rate, 0, 127, this.PLAYBACK_MIN, this.PLAYBACK_MAX);
-        }
+    setPlaybackRate(rate) {
         this.audio.setPlaybackRate(rate);
         this.setState({ playbackRate: rate });
     }

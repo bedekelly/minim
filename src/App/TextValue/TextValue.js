@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import './TextValue.css';
 
@@ -73,4 +74,12 @@ export default class TextValue extends React.PureComponent {
             }
         </span>
     }
+}
+
+
+TextValue.propTypes = {
+    min: PropTypes.number.isRequired,
+    max: PropTypes.number.isRequired,
+    value: PropTypes.number.isRequired,
+    label: PropTypes.string
 }

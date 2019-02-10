@@ -5,9 +5,11 @@ import FilterAudio from '../Effects/Filter/FilterAudio';
 import GainAudio from '../Effects/Gain/GainAudio';
 import CompressorAudio from '../Effects/Compressor/CompressorAudio';
 import ReverbAudio from '../Effects/Reverb/ReverbAudio';
-import SequencerAudio from './SequencerAudio';
 import EchoAudio from '../Effects/Echo/EchoAudio';
 import DistortionAudio from '../Effects/Distortion/DistortionAudio';
+
+import SequencerAudio from './SequencerAudio';
+import RecorderAudio from './RecorderAudio';
 
 import { EffectType } from '../Effects/EffectTypes'
 import { SourceTypes } from '../Sources/SourceTypes';
@@ -19,6 +21,7 @@ class RackAudio {
     constructor(appAudio) {
         this.source = null;
         this.sequencer = new SequencerAudio(appAudio.context);
+        this.recorder = new RecorderAudio(appAudio.context);
         this.appAudio = appAudio;
         this.effects = [];
 

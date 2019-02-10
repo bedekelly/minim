@@ -4,21 +4,6 @@ import './Gain.css';
 import Knob from '../../Knob/Knob';
 
 
-/**
- * Linearly map a value from one range to another.
- */
-function linMap(value, fromLower, fromUpper, toLower, toUpper) {
-    const lowerRange = fromUpper - fromLower;
-    const upperRange = toUpper - toLower;
-    const magnitudeThroughLowerRange = (value - fromLower);
-    const fractionThroughRange = magnitudeThroughLowerRange / lowerRange;
-    const magnitudeThroughUpperRange = fractionThroughRange * upperRange;
-    const valueInUpperRange = toLower + magnitudeThroughUpperRange;
-    return valueInUpperRange;
-}
-
-
-
 class Gain extends React.Component {
     
     MIN_GAIN = 0;
@@ -33,15 +18,7 @@ class Gain extends React.Component {
         }
     }
     
-    midiLearn() {
-        console.log("MIDI learning...")
-        this.props.appAudio.midiLearn(this.props.id, "setGain");
-    }
-    
-    setGain(value, midi) {
-        if (midi) {
-            value = linMap(value, 0, 127, this.MIN_GAIN, this.MAX_GAIN);
-        }
+    setGain(value) {
         this.setState({ value });
         this.gainAudio.value = value;
     }

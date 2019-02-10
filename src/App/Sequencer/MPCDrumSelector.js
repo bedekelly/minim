@@ -16,7 +16,6 @@ export default class MPCDrumSelector extends React.Component {
     }
     
     render() {
-        console.log("rendered with ", this.props.value);
         return <div className="buttons">
             {
                 DRUM_LAYOUT.map(
