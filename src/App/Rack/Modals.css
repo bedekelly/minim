@@ -20,18 +20,17 @@
     overflow-y: scroll;
     box-sizing: border-box;
     border: 5px solid lightgrey;
+    font-family: monospace;
 }
 
 .item {
     background: white;
     padding: 15px 20px;
     cursor: pointer;
-    transition: background ease 0.2s;
 }
 
 .item:hover {
     background: lightgrey;
-    transition: background ease 0.2s;
 }
 
 h2 {
