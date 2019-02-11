@@ -4,14 +4,69 @@
     width: 200px;
     padding-top: 23px;
     border-radius: 7px;
+    display: grid;
+    grid-template-areas: "bit-depth-knob freq-knob"
+                         "bit-depth-label freq-label";
+    grid-template-rows: 6fr 4fr;
+    grid-template-columns: 1fr 1fr;
+    place-items: center;
 }
 
 .bit-crusher .knob-inner {
-    width: 25px;
-    height: 25px;
+    width: 40px;
+    height: 40px;
 }
 
 .bit-crusher .notch {
     width: 1px;
     height: 12px;
+}
+
+.bit-crusher canvas {
+    position: absolute;
+    top: 23px;
+    left: 0;
+    border-radius: 0 0 7px 7px;
+}
+
+.bit-crusher .knob:first-of-type {
+    grid-area: bit-depth-knob;
+}
+
+.bit-crusher .knob:last-of-type {
+    grid-area: freq-knob;
+}
+
+.bit-crusher .label {
+    background: whitesmoke;
+    border-radius: 3px;
+    padding: 4px;
+    border: 1px solid black;
+    font-family: monospace;
+    font-size: 9pt;
+    user-select: none;
+    box-sizing: border-box;
+}
+
+.bit-crusher .bit-depth-label {
+    grid-area: bit-depth-label;
+    z-index: 2;
+    box-sizing: border-box;
+    display: inline;
+    margin-bottom: 7px;
+}
+
+.bit-crusher .freq-label {
+    grid-area: freq-label;
+    z-index: 2;
+    display: inline;
+    text-align: center;
+    margin-bottom: 7px;
+}
+
+
+.bit-crusher .knob {
+    display: grid;
+    align-items: end;
+    justify-items: center;
 }
