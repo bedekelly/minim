@@ -1,8 +1,3 @@
-@import url("https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,800");
-@import url("https://fonts.googleapis.com/css?family=Lato:400,400i,700");
-@import url("https://fonts.googleapis.com/css?family=Lora:400,400i,700");
-
-
 .background {
     position: fixed;
     width: 100vw;
@@ -16,95 +11,32 @@
 .picker {
     user-select: none;
     position: absolute;
-    left: 25vw;
-    top: 5vh;
-    width: 50vw;
-    min-width: 50vw;
-    background: #222;
-    border-radius: 7px;
-    box-shadow: 0 0 40px;
-    box-sizing: border-box;
-    padding: 20px;
-    overflow-y: scroll;
-    height: 90vh;
-}
-
-.picker h1 {
-    margin: 0;
-    color: #444;
-    padding: 0;
-    font-family: "Montserrat";
-    font-size: 48pt;
-    position: absolute;
-    top: 4vmax;
-    left: 4vmax;
-    text-transform: uppercase;
-    font-weight: bold;
+    left: 100px;
+    top: 100px;
     background: whitesmoke;
+    border-radius: 7px;
+    width: 200px;
+    max-height: 400px;
+    overflow-y: scroll;
+    box-sizing: border-box;
+    border: 5px solid lightgrey;
 }
 
-.picker .items {
-  display: flex;
-  background: whitesmoke;
-  border-radius: 6px;
-  box-shadow: 0 0 4vmax inset;
-  min-width: 100%;
-  min-height: 100%;
-  padding-top: 120px;
-  padding-bottom: 20px;
-  overflow-y: scroll;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  align-items: center;
+.item {
+    background: white;
+    padding: 15px 20px;
+    cursor: pointer;
+    transition: background ease 0.2s;
 }
 
-.picker .item {
-  display: grid;
-  place-items: center;
-  width: 300px;
-  height: 240px;
-  margin: 10px;
-  position: relative;
-  border-radius: 7px;
-  overflow: hidden;
-  box-shadow: 0 0 30px;
-  cursor: pointer;
+.item:hover {
+    background: lightgrey;
+    transition: background ease 0.2s;
 }
 
-.effects .item {
-    width: 240px;
-    height: 180px;
-}
-
-.picker .item-title {
-  position: absolute;
-  top: 50%;
-  transform: translateX(-50%) translateY(-50%);
-  margin: 0;
-  left: 50%;
-  user-select: none;
-  color: white;
-  font-family: "Helvetica Neue";
-  text-align: center;
-  font-weight: 200;
-  font-size: 28pt;
-  text-rendering: geometricPrecision;
-  opacity: 0;
-  transition: ease all 0.3s;
-}
-
-.item > img {
-    object-fit: cover;
-}
-
-.item:hover > img {
-  transition: ease all 0.3s;
-  filter: blur(3px) brightness(75%);
-  scale: 1.3;
-}
-
-.item:hover > .item-title {
-  transition: ease all 0.3s;
-  display: initial;
-  opacity: 1;
+h2 {
+    font-size: 12pt;
+    margin: 0;
+    padding: 0;
+    display: block;
 }

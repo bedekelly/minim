@@ -11,14 +11,14 @@ const EffectType = Object.freeze({
 
 
 const EffectTypes = [
-    {type: EffectType.Pan, text: "Add Pan", image: "https://lorempixel.com/200/120"},
-    {type: EffectType.Filter, text: "Add Filter", image: "https://lorempixel.com/200/120"},
-    {type: EffectType.Gain, text: "Add Gain", image: "https://lorempixel.com/200/120"},
-    {type: EffectType.Compressor, text: "Add Compressor", image: "https://lorempixel.com/200/120"},
-    {type: EffectType.Reverb, text: "Add Reverb", image: "https://lorempixel.com/200/120"},
-    {type: EffectType.Echo, text: "Add Echo", image: "https://lorempixel.com/200/120"},
-    {type: EffectType.Distortion, text: "Add Distortion", image: "https://lorempixel.com/200/120"},
-    {type: EffectType.BitCrusher, text: "Add BitCrusher", image: "https://lorempixel.com/200/120"}
+    {type: EffectType.Pan, text: "Pan", image: "https://lorempixel.com/200/120"},
+    {type: EffectType.Filter, text: "Filter", image: "https://lorempixel.com/200/120"},
+    {type: EffectType.Gain, text: "Volume", image: "https://lorempixel.com/200/120"},
+    {type: EffectType.Compressor, text: "Compressor", image: "https://lorempixel.com/200/120"},
+    {type: EffectType.Reverb, text: "Reverb", image: "https://lorempixel.com/200/120"},
+    {type: EffectType.Echo, text: "Echo", image: "https://lorempixel.com/200/120"},
+    {type: EffectType.Distortion, text: "Distortion", image: "https://lorempixel.com/200/120"},
+    {type: EffectType.BitCrusher, text: "Bit Crusher", image: "https://lorempixel.com/200/120"}
 ];
 
 
