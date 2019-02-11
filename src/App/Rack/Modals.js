@@ -5,7 +5,6 @@ import './Modals.css';
 
 function Modal(props) {
     const outerClass = `${props.type} picker`;
-    const [ width, height ] = props.type === "source" ? [ 300, 240] : [ 240, 180 ];
     return <div className="background" onClick={props.close}>
               <div className={ outerClass } onClick={e => e.stopPropagation() }>
                   <div className="items">

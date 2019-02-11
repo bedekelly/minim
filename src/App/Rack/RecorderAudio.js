@@ -64,4 +64,9 @@ export default class RecorderAudio {
         this.sequencer.pause();
         this.playing = false;
     }
+    
+    stop() {
+        this.sequencer.stop();
+        this.playing = false;
+    }
 }

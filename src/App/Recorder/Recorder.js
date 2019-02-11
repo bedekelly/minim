@@ -71,6 +71,11 @@ export default class Recorder extends React.Component {
         this.props.audio.toggleRecording();
     }
     
+    stop() {
+        this.setState({ playing: false });
+        this.props.audio.stop();
+    }
+    
     render() {
         return <section className="recorder">
             <section className="timing">
@@ -90,10 +95,10 @@ export default class Recorder extends React.Component {
                 <button className="clear-all">
                     <FontAwesomeIcon size={ "lg" } icon={ [ "fas", "times" ]} />
                 </button>
-                <button className="stop">
+                <button className="stop" onMouseDown={ () => this.stop() }>
                     <FontAwesomeIcon size={ "lg" } icon={ [ "fas", "stop" ]} />
                 </button>
-                <button className="play-pause" onClick={ () => this.togglePlaying() }>
+                <button className="play-pause" onMouseDown={ () => this.togglePlaying() }>
                     {
                         this.state.playing ?
                         <FontAwesomeIcon size={ "lg" } icon={ [ "fas", "pause" ]} />

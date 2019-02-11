@@ -18,8 +18,7 @@ function linMap(value, fromLower, fromUpper, toLower, toUpper) {
 }
 
 
-const maxVStep = 25;
-const maxHStep = 25;
+const maxStep = 25;
 
 
 export default class BitCrusher extends React.Component {
@@ -51,7 +50,7 @@ export default class BitCrusher extends React.Component {
         const imageData = context.createImageData(canvas.width, canvas.height);
         const pixels = imageData.data;
         
-        const vStep = maxVStep - Math.round(linMap(this.state.frequencyReduction, 0, 1, 0, maxVStep-1));
+        const vStep = maxStep - Math.round(linMap(this.state.frequencyReduction, 0, 1, 0, maxStep-1));
         const hStep = vStep;
       
         for (let row=0; row<height; row++) {
@@ -62,7 +61,6 @@ export default class BitCrusher extends React.Component {
             
             const r = 50 + 50 * (1 + Math.tan(-t/500 + (x+y)));
             const g = 90 + (row) % 128;
-            // const b = 128 * (1 + Math.sin(-(t)/1000));
             const b = 128 * (1 + Math.sin(x/width));
             
             pixels[p] = r;

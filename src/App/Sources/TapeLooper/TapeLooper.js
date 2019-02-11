@@ -36,9 +36,9 @@ class TapeLooper extends React.Component {
         event.preventDefault();
     }
 
-    fileLoaded(encodedBuffer) {
+    async fileLoaded(encodedBuffer) {
+        await this.audio.gotEncodedBuffer(encodedBuffer);
         this.setState({ hasTape: true });
-        return this.audio.gotEncodedBuffer(encodedBuffer);
     }
 
     newFile(file) {
@@ -114,7 +114,7 @@ class TapeLooper extends React.Component {
                 appAudio={ this.props.appAudio }>
             </Knob>
             <p className="speed-title">Speed</p>
-            { this.state.hasTape ? <div className="button editor-button" onClick={() => this.openEditor()}>~</div> : null }
+            { this.audio.buffer ? <div className="button editor-button" onClick={() => this.openEditor()}>~</div> : null }
 
             <TapeComponents></TapeComponents>
             
