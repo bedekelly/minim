@@ -21,6 +21,7 @@ class Rack extends React.Component {
         this.state = { source: null, effects: [], sourceModalOpen: false, effectsModalOpen: false };
         this.appAudio = this.props.appAudio;
         this.rackAudio = this.appAudio.racks[this.props.id];
+        this.wrapperRef = React.createRef();
     }
     
     openSourceModal() {
@@ -68,19 +69,21 @@ class Rack extends React.Component {
         const EffectsList = SortableEffectsList(this.appAudio);
         return <React.Fragment>
             { this.state.effectsModalOpen && 
-                <EffectsModal 
+                <EffectsModal
+                    x={100 + this.wrapperRef.current.getBoundingClientRect().x}
                     close={ () => this.setState({ effectsModalOpen: false })}
                     chooseItem={ this.addEffect.bind(this) }
                     items={ EffectTypes }>
                 </EffectsModal> }
             { this.state.sourceModalOpen && 
                 <SourceModal 
+                    x={100 + this.wrapperRef.current.getBoundingClientRect().x}
                     close={ () => this.setState({ sourceModalOpen: false })}
                     chooseItem={ this.addSource.bind(this) }
                     items={ SourceTypes }>
                 </SourceModal> }
-            <section className={ "rack" + (this.props.selected ? " selected" : "") } onClick={ this.props.select }>
-                <div className="components-wrapper">
+            <section className={ "rack" + (this.props.selected ? " selected" : "") } onClick={ this.props.select } ref={ this.wrapperRef }>
+                <div className="components-wrapper" >
                     { /* <Sequencer audio={ this.rackAudio.sequencer } appAudio={ this.appAudio }/> */ }
                     <Recorder audio={ this.rackAudio.recorder } appAudio={ this.appAudio }></Recorder>
                     <section className={"components"}>

@@ -4,9 +4,10 @@ import './Modals.css';
 
 
 function Modal(props) {
+    const { x } = props;
     const outerClass = `${props.type} picker`;
     return <div className="background" onClick={props.close}>
-              <div className={ outerClass } onClick={e => e.stopPropagation() }>
+              <div className={ outerClass } style={{ left: x }}onClick={e => e.stopPropagation() }>
                   <div className="items">
                   { props.items.map(item =>
                     <div className="item" key={ item.type.toString() } onClick={ () => props.chooseItem(item.type) }>

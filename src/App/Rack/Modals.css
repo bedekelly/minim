@@ -11,7 +11,6 @@
 .picker {
     user-select: none;
     position: absolute;
-    left: 100px;
     top: 100px;
     background: whitesmoke;
     border-radius: 7px;
