@@ -59,7 +59,7 @@ export default class BitCrusher extends React.Component {
             let x = hStep * (Math.round(col / hStep)) / width;
             let p = 4 * (row * width + col);
             
-            const r = 50 + 50 * (1 + Math.tan(-t/500 + (x+y)));
+            const r = 50 + 50 * (1 + Math.tan(-t/2000 + x + y - 100));
             const g = 90 + (row) % 128;
             const b = 128 * (1 + Math.sin(x/width));
             
@@ -70,7 +70,7 @@ export default class BitCrusher extends React.Component {
           }
         }
         context.putImageData(imageData, 0, 0);
-        requestAnimationFrame(timestamp => this.renderFrame(timestamp));
+        this.frameRequest = requestAnimationFrame(timestamp => this.renderFrame(timestamp));
     }
     
     updateContext() {
@@ -80,12 +80,15 @@ export default class BitCrusher extends React.Component {
     
     componentDidMount() {
         this.updateContext();
-        requestAnimationFrame(timestamp => this.renderFrame(timestamp));
+        this.frameRequest = requestAnimationFrame(timestamp => this.renderFrame(timestamp));
+    }
+    
+    componentWillUnmount() {
+        window.cancelAnimationFrame(this.frameRequest);
     }
     
     canvasStyle() {
         const grey = linMap(this.state.bitDepth, 1, 16, 1, 0);
-        console.log(grey);
         return {
             filter: `grayscale(${grey})`
         }
