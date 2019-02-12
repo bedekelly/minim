@@ -196,9 +196,37 @@ class Synth extends React.PureComponent {
         this.setState({ filterEnvelope: { ...filterEnvelope, release }})
     }
     
+    playTestSeries = () => {
+        const now = this.audio.context.currentTime;
+        console.log(now);
+        
+        const monophonic = [
+            { data: [144, 60], time: now + 0 },
+            { data: [128, 60], time: now + 1 },
+            { data: [144, 65], time: now + 2 },
+            { data: [128, 65], time: now + 3 },
+            { data: [144, 60], time: now + 4 },
+            { data: [128, 60], time: now + 5 }
+        ]
+        
+        const polyphonicSingleNote = [
+            { data: [144, 60], time: now + 0},
+            { data: [144, 60], time: now + 1},
+            { data: [128, 60], time: now + 2},
+            { data: [128, 60], time: now + 3}
+        ]
+        
+        for (let barStart of [0, 6, 12, 18, 24]) {
+            this.audio.scheduleNotes(monophonic.map(({data, time}) => ({
+                data, time: time + barStart
+            })));
+        }
+    }
+    
     render() {
         return (
             <div className="synth">
+                <button onMouseDown={ this.playTestSeries }>Test series</button>
               <div className="comp osc one">
                 <div className="knobs">
                   <Knob min={-3} max={3} value={this.state.osc1.octave} precision={ 0 }
@@ -361,7 +389,7 @@ class Synth extends React.PureComponent {
               <div className="comp envelope filter-envelope">
                 <h2>Filter Env.</h2>
                 <div className="slidecontainer">
-                    <Slider min={ 0 } max={ 3 } step={ 0.01 }
+                    <Slider min={ 0 } max={ 1 } step={ 0.01 }
                         value={ this.state.filterEnvelope.attack }
                         default={ 0 }
                         onChange={ value => this.setFilterAttack(value) }
@@ -370,7 +398,7 @@ class Synth extends React.PureComponent {
                         ></Slider>
                 </div>
                 <div className="slidecontainer">
-                    <Slider min={ 0 } max={ 3 } step={ 0.01 } 
+                    <Slider min={ 0 } max={ 1 } step={ 0.01 } 
                         value={ this.state.filterEnvelope.decay }
                         default={ 0 }
                         onChange={ value => this.setFilterDecay(value) }
@@ -388,7 +416,7 @@ class Synth extends React.PureComponent {
                         ></Slider>
                 </div>
                 <div className="slidecontainer">
-                    <Slider min={ 0.01 } max={ 3 } step={ 0.01 } 
+                    <Slider min={ 0.01 } max={ 1 } step={ 0.01 } 
                         value={ this.state.filterEnvelope.release }
                         default={ 0.01 }
                         onChange={ value => this.setFilterRelease(value) }
@@ -448,7 +476,7 @@ class Synth extends React.PureComponent {
               <div className="comp amp envelope">
                 <h2>Amp Env.</h2>
                 <div className="slidecontainer">
-                    <Slider min={ 0 } max={ 3 } step={ 0.001 } 
+                    <Slider min={ 0 } max={ 1 } step={ 0.001 } 
                         value={ this.state.ampEnvelope.attack }
                         default={ 0 }
                         onChange={ value => this.setAmpAttack(value) }
@@ -457,7 +485,7 @@ class Synth extends React.PureComponent {
                         ></Slider>
                 </div>
                 <div className="slidecontainer">
-                    <Slider min={ 0 } max={ 3 } step={ 0.001 } 
+                    <Slider min={ 0 } max={ 1 } step={ 0.001 } 
                         value={ this.state.ampEnvelope.decay }
                         default={ 0 }
                         onChange={ value => this.setAmpDecay(value) }
@@ -475,7 +503,7 @@ class Synth extends React.PureComponent {
                         ></Slider>
                 </div>
                 <div className="slidecontainer">
-                    <Slider min={ 0.01 } max={ 3 } step={ 0.01 } 
+                    <Slider min={ 0.01 } max={ 1 } step={ 0.01 } 
                         value={ this.state.ampEnvelope.release }
                         default={ 0.01 }
                         onChange={ value => this.setAmpRelease(value) }

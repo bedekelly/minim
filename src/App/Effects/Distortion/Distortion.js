@@ -27,10 +27,15 @@ export default class Distortion extends React.Component {
         this.canvas = this.noiseCanvasRef.current;
         const context = this.canvas.getContext("2d");
         this.time = 0;
-        this.animateNoise(context);
+        this.frameRequest = this.animateNoise(context);
+    }
+
+    componentWillUnmount() {
+        window.cancelAnimationFrame(this.frameRequest);
     }
 
     animateNoise(context) {
+        this.frameRequest = requestAnimationFrame(() => this.animateNoise(context));
         let imageData = context.createImageData(100, 100);
         let pixels = imageData.data;
 
@@ -42,7 +47,6 @@ export default class Distortion extends React.Component {
 
         this.time += 1;
         context.putImageData(imageData, 0, 0);
-        requestAnimationFrame(() => this.animateNoise(context));
     }
 
     render() {

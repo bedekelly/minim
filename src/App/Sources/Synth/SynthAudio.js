@@ -99,13 +99,13 @@ export default class SynthAudio {
     }
     
     connectFilterLFO() {
-        for (let { filter } of Object.values(this.notes)) {
+        for (let { filter } of Object.values(this.notes).flat()) {
             this.filterLfo.connect(filter);
         }
     }
     
     connectPitchLFO() {
-        for (let { one, two } of Object.values(this.notes)) {
+        for (let { one, two } of Object.values(this.notes).flat()) {
             this.pitchLfo.connect(one.detune);
             this.pitchLfo.connect(two.detune);
         }
@@ -140,7 +140,7 @@ export default class SynthAudio {
     
     set filterFreq(value) {
         this.filter.freq = value;
-        for (let { filter } of Object.values(this.notes)) {
+        for (let { filter } of Object.values(this.notes).flat()) {
             filter.frequency.cancelScheduledValues(0);
             filter.frequency.setValueAtTime(value, 0);
         }
@@ -149,7 +149,7 @@ export default class SynthAudio {
     
     set filterRes(value) {
         this.filter.res = value;
-        for (let { filter } of Object.values(this.notes)) {
+        for (let { filter } of Object.values(this.notes).flat()) {
             filter.frequency.cancelScheduledValues(0);
             filter.Q.setValueAtTime(value, 0);
         }
@@ -245,7 +245,6 @@ export default class SynthAudio {
     noteOffAtTime(pitch, time) {
         console.log("noteOffAtTime", time, this.context.currentTime);
 
-
         // Select the next occurrence of the note that hasn't been
         // given scheduling information for when to trigger note-end
         // events like following the amp envelope's release.
@@ -263,7 +262,7 @@ export default class SynthAudio {
         // and noteOff midi messages.
         if (!note) return;
         
-        const { one, two, amp, filter, oneGain, twoGain } = note;
+        const { one, two, amp, filter } = note;
         const ampRelease = this.ampEnvelope.release;
         const filterRelease = this.filterEnvelope.release;
         let startTime = time < this.context.currentTime ? this.context.currentTime : time;
@@ -274,18 +273,18 @@ export default class SynthAudio {
         one.stop(startTime + this.ampEnvelope.release);
         two.stop(startTime + this.ampEnvelope.release);
         
-        // Cleanup notes. Todo: try to do this for sequenced notes too?
-        if (time <= this.context.currentTime) {
-            setTimeout(() => {
-                amp.disconnect();
-                one.disconnect();
-                two.disconnect();
-                oneGain.disconnect();
-                twoGain.disconnect();
-                filter.disconnect();
-                // Don't delete this.notes[note] – it gets overwritten!
-            }, ampRelease * 1000);
-        }
+        // // Cleanup notes. Todo: try to do this for sequenced notes too?
+        // if (time <= this.context.currentTime) {
+        //     setTimeout(() => {
+        //         amp.disconnect();
+        //         one.disconnect();
+        //         two.disconnect();
+        //         oneGain.disconnect();
+        //         twoGain.disconnect();
+        //         filter.disconnect();
+        //         // Don't delete this.notes[note] – it gets overwritten!
+        //     }, ampRelease * 1000);
+        // }
     }
     
     noteOff(note) {
@@ -296,7 +295,6 @@ export default class SynthAudio {
         time |= 0;
         const { data: [messageType, note] } = message;
         if (messageType === NOTE_OFF) {
-            // debugger;
             this.noteOffAtTime(note, time);
         } else if (messageType === NOTE_ON) {
             this.noteOnAtTime(note, time);
@@ -312,7 +310,7 @@ export default class SynthAudio {
     }
     
     cancelAllNotes() {
-        
+        console.warn("Cancel all notes not yet implemented!")
     }
 
     play() {
