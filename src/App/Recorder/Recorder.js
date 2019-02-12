@@ -20,11 +20,12 @@ export default class Recorder extends React.Component {
     
     constructor(props) {
         super(props);
+        this.audio = this.props.audio;
         this.state = {
-            bpm: 80,
-            beatsPerMeasure: 4,
-            playing: false,
-            recording: false,
+            bpm: this.audio.bpm,
+            beatsPerMeasure: this.audio.beatsPerMeasure,
+            playing: this.audio.playing,
+            recording: this.audio.recording,
             metronome: false
         };
     }

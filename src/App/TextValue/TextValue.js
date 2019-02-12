@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import './TextValue.css';
 
-const PIXEL_TOLERANCE = 100;
+const PIXEL_TOLERANCE = 200;
 
 
 /**

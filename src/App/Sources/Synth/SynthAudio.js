@@ -162,10 +162,10 @@ export default class SynthAudio {
         }
     }
 
-    noteOnAtTime(note, time) {
-        console.log("noteOnAtTime", time, this.context.currentTime);
-        const oscOneNote = note + this.osc1.octave * 12 + this.osc1.semi + this.osc1.tune/100;
-        const oscTwoNote = note + this.osc2.octave * 12 + this.osc2.semi + this.osc2.tune/100;
+    noteOnAtTime(pitch, time, id) {
+        console.log(`noteOnAtTime(${pitch}, ${time ? time : this.context.currentTime})`);
+        const oscOneNote = pitch + this.osc1.octave * 12 + this.osc1.semi + this.osc1.tune/100;
+        const oscTwoNote = pitch + this.osc2.octave * 12 + this.osc2.semi + this.osc2.tune/100;
         const pitchOne = midiToPitch(oscOneNote);
         const pitchTwo = midiToPitch(oscTwoNote);
         
@@ -231,37 +231,16 @@ export default class SynthAudio {
             let ampSustain = this.ampEnvelope.sustain * FULL_VOLUME;
             const ampDecayTime = startTime + this.ampEnvelope.attack;
             ampGain.setTargetAtTime(ampSustain, ampDecayTime, this.ampEnvelope.decay / 3);
-            
-            
         }
-        if (!this.notes[note]) this.notes[note] = [];
-        this.notes[note].push({ one: oscOne, two: oscTwo, oneGain: oscOneGain, twoGain: oscTwoGain, amp: oscAmpGain, filter, noteOffTriggered: false });
+        if (!this.notes[pitch]) this.notes[pitch] = [];
+        this.notes[pitch].push({ id, one: oscOne, two: oscTwo, oneGain: oscOneGain, twoGain: oscTwoGain, amp: oscAmpGain, filter, noteOffTriggered: false });
     }
 
     noteOn(note) {
         return this.noteOnAtTime(note, 0);
     }
     
-    noteOffAtTime(pitch, time) {
-        console.log("noteOffAtTime", time, this.context.currentTime);
-
-        // Select the next occurrence of the note that hasn't been
-        // given scheduling information for when to trigger note-end
-        // events like following the amp envelope's release.
-        let note;
-        for (let i=0; i<this.notes[pitch].length; i++) {
-            const thisNote = this.notes[pitch][i];
-            if (!thisNote.noteOffTriggered) {
-                note = thisNote;
-                note.noteOffTriggered = true;
-                break;
-            }
-        }
-        
-        // This might happen if we've resumed the sequencer between the noteOn
-        // and noteOff midi messages.
-        if (!note) return;
-        
+    applyNoteOffEnvelope(note, time) {
         const { one, two, amp, filter } = note;
         const ampRelease = this.ampEnvelope.release;
         const filterRelease = this.filterEnvelope.release;
@@ -272,40 +251,57 @@ export default class SynthAudio {
         filter.frequency.setTargetAtTime(0, startTime, filterRelease / 5)
         one.stop(startTime + this.ampEnvelope.release);
         two.stop(startTime + this.ampEnvelope.release);
+    }
+    
+    cleanupNoteIfAlreadyPlayed(note, time) {
+        const { one, two, amp, filter, oneGain, twoGain } = note;
+        const ampRelease = this.ampEnvelope.release;
+        if (time <= this.context.currentTime) {
+            setTimeout(() => {
+                amp.disconnect();
+                one.disconnect();
+                two.disconnect();
+                oneGain.disconnect();
+                twoGain.disconnect();
+                filter.disconnect();
+                // Don't delete this.notes[note] – it gets overwritten!
+            }, ampRelease * 1000);
+        }
+    }
+    
+    noteOffAtTime(pitch, time, noteId) {
+        console.log(`noteOffAtTime(${pitch}, ${time ? time : this.context.currentTime})`);
         
-        // // Cleanup notes. Todo: try to do this for sequenced notes too?
-        // if (time <= this.context.currentTime) {
-        //     setTimeout(() => {
-        //         amp.disconnect();
-        //         one.disconnect();
-        //         two.disconnect();
-        //         oneGain.disconnect();
-        //         twoGain.disconnect();
-        //         filter.disconnect();
-        //         // Don't delete this.notes[note] – it gets overwritten!
-        //     }, ampRelease * 1000);
-        // }
+        // Apply noteOff messages to every note of the given pitch.
+        let notes = this.notes[pitch];
+        if (noteId) {
+            notes = notes.filter(({id}) => id === noteId);
+        }
+        
+        for (let note of notes) {
+            this.applyNoteOffEnvelope(note, time);
+            this.cleanupNoteIfAlreadyPlayed(note, time);
+        }
+
     }
     
     noteOff(note) {
         this.noteOffAtTime(note, 0);
     }
 
-    midiMessage(message, time) {
-        time |= 0;
+    midiMessage(message, time, id) {
+        time = time ? time : 0;
         const { data: [messageType, note] } = message;
         if (messageType === NOTE_OFF) {
-            this.noteOffAtTime(note, time);
+            this.noteOffAtTime(note, time, id);
         } else if (messageType === NOTE_ON) {
-            this.noteOnAtTime(note, time);
+            this.noteOnAtTime(note, time, id);
         }
     }
     
     scheduleNotes(notes) {
-        for (let { data, time } of notes) {
-            console.log("Scheduling note", data, "for", time);
-            console.log("current time is ", this.context.currentTime);
-            this.midiMessage({data}, time);
+        for (let { data, time, id } of notes) {
+            this.midiMessage({data}, time, id);
         }
     }
     

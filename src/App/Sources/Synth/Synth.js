@@ -209,14 +209,14 @@ class Synth extends React.PureComponent {
             { data: [128, 60], time: now + 5 }
         ]
         
-        const polyphonicSingleNote = [
+        const stackedSingleNote = [
             { data: [144, 60], time: now + 0},
             { data: [144, 60], time: now + 1},
             { data: [128, 60], time: now + 2},
             { data: [128, 60], time: now + 3}
         ]
         
-        for (let barStart of [0, 6, 12, 18, 24]) {
+        for (let barStart of [0, 6]) {
             this.audio.scheduleNotes(monophonic.map(({data, time}) => ({
                 data, time: time + barStart
             })));

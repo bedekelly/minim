@@ -1,4 +1,8 @@
 import SequencerAudio from './SequencerAudio';
+import uuid from 'uuid4';
+
+const NOTE_OFF = 128;
+const NOTE_ON = 144;
 
 
 export default class RecorderAudio {
@@ -7,6 +11,7 @@ export default class RecorderAudio {
         this.sequencer = new SequencerAudio(context)
         this.recording = false;
         this.playing = false;
+        this.noteIDs = {};
     }
     
     toggleRecording() {
@@ -29,11 +34,21 @@ export default class RecorderAudio {
         return this.sequencer.bpm;
     }
     
+    noteId(data) {
+        if (data[0] === NOTE_ON) {
+            const id = this.noteIDs[data[1]] = uuid();
+            return id;
+        } else if (data[0] === NOTE_OFF) {
+            return this.noteIDs[data[1]];
+        }
+    }
+    
     midiMessage({ data }) {
         if (this.recording && this.playing) {
-            this.sequencer.addRepeatingNoteNow(data);
+            const id = this.noteId(data);
+            this.sequencer.addRepeatingNoteNow(data, id);
         }
-        else if (this.source) {
+        if (this.source) {
             this.source.midiMessage({data});
         }
     }

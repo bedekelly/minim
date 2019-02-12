@@ -354,7 +354,7 @@ export default class Sequencer extends React.PureComponent {
                 label={ "beats" }
                 onChange={ beatsPerMeasure => this.setBeatsPerMeasure(beatsPerMeasure) } />
             <TextValue 
-                value={this.state.bpm} 
+                value={ this.state.bpm } 
                 min={10} max={200} 
                 label={ "bpm" }
                 onChange={ bpm => this.setBpm(bpm) }/>
