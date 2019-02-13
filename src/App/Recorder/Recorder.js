@@ -77,6 +77,10 @@ export default class Recorder extends React.Component {
         this.props.audio.stop();
     }
     
+    clearAll() {
+        this.props.audio.clearAll();
+    }
+    
     render() {
         return <section className="recorder">
             <section className="timing">
@@ -93,7 +97,7 @@ export default class Recorder extends React.Component {
                     onChange={ bpm => this.setBpm(bpm) }/>
             </section>
             <section className="controls">
-                <button className="clear-all">
+                <button className="clear-all" onClick={ () => this.clearAll() }>
                     <FontAwesomeIcon size={ "lg" } icon={ [ "fas", "times" ]} />
                 </button>
                 <button className="stop" onMouseDown={ () => this.stop() }>

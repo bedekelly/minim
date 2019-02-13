@@ -163,6 +163,7 @@ export default class SynthAudio {
     }
 
     noteOnAtTime(pitch, time, id) {
+        console.log("Current time: ", this.context.currentTime);
         console.log(`noteOnAtTime(${pitch}, ${time ? time : this.context.currentTime})`);
         const oscOneNote = pitch + this.osc1.octave * 12 + this.osc1.semi + this.osc1.tune/100;
         const oscTwoNote = pitch + this.osc2.octave * 12 + this.osc2.semi + this.osc2.tune/100;
@@ -232,7 +233,9 @@ export default class SynthAudio {
             const ampDecayTime = startTime + this.ampEnvelope.attack;
             ampGain.setTargetAtTime(ampSustain, ampDecayTime, this.ampEnvelope.decay / 3);
         }
-        if (!this.notes[pitch]) this.notes[pitch] = [];
+        if (this.notes[pitch] === undefined) {
+            this.notes[pitch] = [];
+        }
         this.notes[pitch].push({ id, one: oscOne, two: oscTwo, oneGain: oscOneGain, twoGain: oscTwoGain, amp: oscAmpGain, filter, noteOffTriggered: false });
     }
 
@@ -253,34 +256,32 @@ export default class SynthAudio {
         two.stop(startTime + this.ampEnvelope.release);
     }
     
+    cleanupNote({ one, two, amp, filter, oneGain, twoGain }) {
+        amp.disconnect();
+        one.disconnect();
+        two.disconnect();
+        oneGain.disconnect();
+        twoGain.disconnect();
+        filter.disconnect();
+    }
+    
     cleanupNoteIfAlreadyPlayed(note, time) {
-        const { one, two, amp, filter, oneGain, twoGain } = note;
-        const ampRelease = this.ampEnvelope.release;
         if (time <= this.context.currentTime) {
-            setTimeout(() => {
-                amp.disconnect();
-                one.disconnect();
-                two.disconnect();
-                oneGain.disconnect();
-                twoGain.disconnect();
-                filter.disconnect();
-                // Don't delete this.notes[note] – it gets overwritten!
-            }, ampRelease * 1000);
+            setTimeout(() => this.cleanupNote(note), this.ampEnvelope.release * 1000);
         }
     }
     
-    noteOffAtTime(pitch, time, noteId) {
+    noteOffAtTime(pitch, time) {
         console.log(`noteOffAtTime(${pitch}, ${time ? time : this.context.currentTime})`);
         
-        // Apply noteOff messages to every note of the given pitch.
+        // Apply noteOff messages to every non-cleaned-up note of the given pitch.
         let notes = this.notes[pitch];
-        if (noteId) {
-            notes = notes.filter(({id}) => id === noteId);
-        }
         
         for (let note of notes) {
+            if (note.noteOffEnvelopeAppliedTime <= time ) continue;
             this.applyNoteOffEnvelope(note, time);
             this.cleanupNoteIfAlreadyPlayed(note, time);
+            note.noteOffEnvelopeAppliedTime = time;
         }
 
     }
@@ -306,7 +307,13 @@ export default class SynthAudio {
     }
     
     cancelAllNotes() {
-        console.warn("Cancel all notes not yet implemented!")
+        console.log("Cancelling all notes");
+        for (let pitch of Object.keys(this.notes)) {
+            for (let note of this.notes[pitch]) {
+                this.cleanupNote(note);
+            }
+        }
+        this.notes = {};
     }
 
     play() {

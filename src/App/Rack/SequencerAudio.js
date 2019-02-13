@@ -1,3 +1,7 @@
+const NOTE_ON = 144;
+const NOTE_OFF = 128;
+
+
 function close(a, b, delta) {
     return Math.abs(a - b) < delta;
 }
@@ -33,8 +37,8 @@ export default class SequencerAudio {
         this.context = context;
         this._timeSignature = 4;
         this._bpm = 60;
-        this.barsLookahead = 2;
-        this.scheduleTicksPerBar = 3;
+        this.barsLookahead = 1;
+        this.scheduleTicksPerBar = 4;
         this.interval = null;
         this.relativeStartTime = 0;
         this.lastEventRelativeTime = 0;
@@ -91,11 +95,17 @@ export default class SequencerAudio {
         const currentTime = this.context.currentTime;
         for (let note of this.notes) {
             let sliceIndex = 0;
-            for (let scheduledTime of note.scheduledTimes) {
+            for (let scheduledTime of note.scheduledTimes[NOTE_ON]) {
                 if (scheduledTime >= currentTime) break;
                 sliceIndex++;
             }
-            note.scheduledTimes = note.scheduledTimes.slice(sliceIndex);
+            note.scheduledTimes[NOTE_ON] = note.scheduledTimes[NOTE_ON].slice(sliceIndex);
+            sliceIndex = 0;
+            for (let scheduledTime of note.scheduledTimes[NOTE_OFF]) {
+                if (scheduledTime >= currentTime) break;
+                sliceIndex++;
+            }
+            note.scheduledTimes[NOTE_OFF] = note.scheduledTimes[NOTE_OFF].slice(sliceIndex);
         }
     }
 
@@ -114,22 +124,26 @@ export default class SequencerAudio {
             // Calculate the absolute start-time of each bar.
             for (let note of this.notes) {
                 // Calculate when this note in this bar should fall (in absolute time).
-                const { data, beat, offset, scheduledTimes, id } = note;
-                const barStart = (beat === 1 && offset < 0) ? thisBarStart : nextBarStart;
+                const { data, beat, offset, scheduledTimes } = note;
+                const barStart = (beat === 1 && offset < 0) ? nextBarStart : thisBarStart;
                 
                 const noteScheduledTime = (
                     barStart 
                     + (beat-1) * this.timePerBeat 
                     + offset/100 * this.timePerBeat
                 );
-                // Check if we've already scheduled this note.
+                // Check if we've already scheduled this note, or if it's gone straight to the source.
                 const noteAlreadyScheduled = includesClose(
-                    scheduledTimes, noteScheduledTime, this.closenessDelta);
+                    scheduledTimes[data[0]], noteScheduledTime, this.closenessDelta);
 
-                // If the note hasn't already been scheduled, do so now.
-                if (!noteAlreadyScheduled && noteScheduledTime >= currentTime) {
-                    newNotesToSchedule.push({ data, id, time: noteScheduledTime });
-                    note.scheduledTimes.push(noteScheduledTime);
+                
+                const notePlayingNow = noteScheduledTime <= currentTime + this.closenessDelta;
+                
+                if (!noteAlreadyScheduled && !notePlayingNow) {
+                    newNotesToSchedule.push({ data, time: noteScheduledTime });
+                    note.scheduledTimes[data[0]].push(noteScheduledTime);
+                } else {
+                    // console.log("Not scheduling note because: ", { data, noteScheduledTime, currentTime, delta: this.closenessDelta, noteAlreadyScheduled, notePlayingNow, scheduledTimes: note.scheduledTimes[data[0]] });
                 }
             }
         }
@@ -185,21 +199,21 @@ export default class SequencerAudio {
         if (this.playing) this.startAgainFromNow();
     }
     
-    addNote({ data, beat, offset}, id) {
+    addNote({ data, beat, offset}) {
         // Todo: this is inefficient and we should just schedule
         // the note we've added, rather than rescheduling everything!
-        this.notes.push({ id, data, beat, offset, scheduledTimes: []});
+        this.notes.push({ data, beat, offset, scheduledTimes: { [NOTE_ON]: [], [NOTE_OFF]: []}});
         if (this.playing) this.scheduleNextNBars();
     }
     
     addNotes(notes) {
         for (let { data, beat, offset } of notes) {
-            this.notes.push({ data, beat, offset, scheduledTimes: []});
+            this.notes.push({ data, beat, offset, scheduledTimes: { [NOTE_ON]: [], [NOTE_OFF]: [] }});
         }
         if (this.playing) this.scheduleNextNBars();
     }
     
-    addRepeatingNoteNow(data, id) {
+    addRepeatingNoteNow(data) {
         const fractionalBeat = this.timeSignature * this.currentRelativeTime / this.totalBarTime;
         let beat = Math.round(fractionalBeat);
         let offset = (fractionalBeat - beat) * 100;
@@ -212,7 +226,7 @@ export default class SequencerAudio {
         if (this.snap) {
             offset = snapTo(offset, snapValues);
         }
-        this.addNote({ data, beat, offset }, id);
+        this.addNote({ data, beat, offset });
     }
 
     clearAll() {
@@ -233,14 +247,12 @@ export default class SequencerAudio {
     }
 
     play() {
-        // console.log("sequencer playing");
         this.playing = true;
         this.lastEventAbsoluteTime = this.context.currentTime;
         this.startScheduling();
     }
 
     pause() {
-        // console.log("sequencer pausing");
         this.lastEventRelativeTime = this.currentRelativeTime;
         this.playing = false;
         this.lastEventAbsoluteTime = this.context.currentTime;

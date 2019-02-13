@@ -44,18 +44,21 @@ export default class RecorderAudio {
     }
     
     midiMessage({ data }) {
-        if (this.recording && this.playing) {
-            const id = this.noteId(data);
-            this.sequencer.addRepeatingNoteNow(data, id);
-        }
         if (this.source) {
             this.source.midiMessage({data});
+        }
+        if (this.recording && this.playing) {
+            this.sequencer.addRepeatingNoteNow(data);
         }
     }
     
     sendNotesTo(source) {
         this.source = source;
         this.sequencer.sendNotesTo(source);
+    }
+    
+    clearAll() {
+        this.sequencer.clearAll();
     }
     
     togglePlaying() {
