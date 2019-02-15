@@ -226,7 +226,7 @@ class Synth extends React.PureComponent {
     render() {
         return (
             <div className="synth">
-                <button onMouseDown={ this.playTestSeries }>Test series</button>
+              { /* <button onMouseDown={ this.playTestSeries }>Test series</button> */ }
               <div className="comp osc one">
                 <div className="knobs">
                   <Knob min={-3} max={3} value={this.state.osc1.octave} precision={ 0 }

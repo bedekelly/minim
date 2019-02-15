@@ -63,6 +63,7 @@
     flex-direction: column;
     height: 85vh;
     padding: 20px;
+    padding-top: 7vh;
 }
 
 .rack.selected {
@@ -161,8 +162,7 @@
     border: none;
     border-bottom: 2px solid;
     border-left: 2px solid;
-    border-radius: 0 0 0 7px;
-    padding: 6px;
+    border-radius: 0 5px 0 7px;
     cursor: pointer;
     border-color: #666;
     color: #aaa;
@@ -177,3 +177,28 @@
     transition: all ease 0.1s;
 }
 
+.rack-title {
+    font-family: monospace;
+    color: #666;
+    position: absolute;
+    left: 50%;
+    top: 10px;
+    height: 13pt;
+    font-size: 12pt;
+    transform: translateX(-50%);
+    transition: all ease 0.1s;
+}
+
+.rack-title:hover,.rack-title:active {
+    color: whitesmoke;
+    transition: all ease 0.1s;
+}
+
+input.rack-title {
+    text-align: center;
+    width: auto;
+    outline: 0;
+    border: none;
+    border-radius: 0 0 7px 7px;
+    background: none;
+}

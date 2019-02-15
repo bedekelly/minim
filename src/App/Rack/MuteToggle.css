@@ -1,0 +1,28 @@
+.mute-toggle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: 0;
+    border: 1px solid #666;
+    border-radius: 0 0 7px 0;
+    color: #666;
+    cursor: pointer;
+    transition: all ease 0.1s;
+    outline: 0;
+}
+
+.rack.selected .mute-toggle {
+    color: #aaa;
+    border-color: #aaa;
+}
+
+.rack.selected .mute-toggle:hover {
+    background: #aaa;
+    color: #333;
+}
+
+.mute-toggle:hover {
+    color: #333;
+    background: #666;
+    transition: all ease 0.1s;
+}

@@ -30,7 +30,6 @@ button {
   padding: 10px;
 }
 
-
 .add-rack {
   border: 1px solid whitesmoke;
   border-radius: 1vh;
@@ -39,7 +38,7 @@ button {
   color: whitesmoke;
   position: absolute;
   bottom: 3vh;
-  left: 3vh;
+  right: 3vh;
   filter: opacity(20%);
   transition: all ease 0.15s;
   font-family: monospace;

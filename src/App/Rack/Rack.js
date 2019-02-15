@@ -4,21 +4,35 @@ import { SourceTypes } from '../Sources/SourceTypes';
 import { EffectTypes } from '../Effects/EffectTypes'
 
 import SortableEffectsList from './SortableEffectsList';
-
+import EditableTextBox from './EditableTextBox';
 import { SourceModal, EffectsModal } from './Modals';
+import MuteToggle from './MuteToggle';
 import Sequencer from '../Sequencer';
 import Recorder from '../Recorder';
+
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/pro-solid-svg-icons';
+
 
 import { arrayMove } from 'react-sortable-hoc';
 
 import './Rack.css';
+
+library.add(faTimes);
 
 
 class Rack extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { source: null, effects: [], sourceModalOpen: false, effectsModalOpen: false };
+        this.state = { 
+            source: null, 
+            effects: [],
+            name: "Rack",
+            sourceModalOpen: false, 
+            effectsModalOpen: false
+        };
         this.appAudio = this.props.appAudio;
         this.rackAudio = this.appAudio.racks[this.props.id];
         this.wrapperRef = React.createRef();
@@ -72,10 +86,17 @@ class Rack extends React.Component {
         
     }
     
+    setMuted(value) {
+        
+    }
+    
+    setName(name) {
+        this.setState({ name })
+    }
+    
     render() {
         const EffectsList = SortableEffectsList(this.appAudio);
         return <React.Fragment>
-            
             { this.state.effectsModalOpen && 
                 <EffectsModal
                     x={100 + this.wrapperRef.current.getBoundingClientRect().x}
@@ -91,7 +112,11 @@ class Rack extends React.Component {
                     items={ SourceTypes }>
                 </SourceModal> }
             <section className={ "rack" + (this.props.selected ? " selected" : "") } onClick={ this.props.select } ref={ this.wrapperRef }>
-                <button className="delete-rack" onClick={ () => this.deleteSelf() }>X</button>
+                <MuteToggle muted={ this.state.muted } onChange={ value => this.setMuted(value) }/>
+                <EditableTextBox value={ this.state.name } onChange={ value => this.setName(value) } klass="rack-title"></EditableTextBox>
+                <button className="delete-rack" onClick={ () => this.deleteSelf() }>
+                    <FontAwesomeIcon icon={ ["fas", "times" ]}></FontAwesomeIcon>
+                </button>
                 <div className="components-wrapper" >
                     { /*<Recorder audio={ this.rackAudio.recorder } appAudio={ this.appAudio }></Recorder> */ }
                     { /* <Sequencer audio={ this.rackAudio.sequencer } appAudio={ this.appAudio }/> */ }
