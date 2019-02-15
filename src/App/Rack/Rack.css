@@ -50,11 +50,10 @@
 }
 
 .rack {
-    /* border-width: 3px;
+    border-width: 2px;
     border-style: solid;
-    border-image: radial-gradient(#6CD4FF, #FE938C 85%);
-    border-image-slice: 1; */
-    box-shadow: 0 0 20px inset black;
+    border-color: #666;
+    border-image-slice: 1;
     margin: 3vh;
     max-width: 400px;
     min-width: 400px;
@@ -66,7 +65,7 @@
 }
 
 .rack.selected {
-    box-shadow: 0 0 20px inset whitesmoke;
+    border-color: #aaa;
 }
 
 .rack .add-source {
@@ -74,9 +73,21 @@
     margin: 3vh auto 3vh auto;
     height: 140px;
     border-radius: 7px;
-    border: 3px solid whitesmoke;
+    border-width: 3px;
+    border-style: solid;
+    border-color: #aaa;
+    border-image-slice: 1;
     position: relative;
+    filter: opacity(20%);
     cursor: pointer;
+    transition: all ease 0.15s;
+}
+
+
+
+.rack .add-source:hover {
+    filter: opacity(100%);
+    transition: all ease 0.15s;
 }
 
 .rack .add-source:after {
@@ -98,8 +109,14 @@
     border: 3px solid whitesmoke;
     position: relative;
     cursor: pointer;
-    display: block;
     margin: 10px;
+    filter: opacity(20%);
+    transition: all ease 0.15s;
+}
+
+.rack .add-effect:hover {
+    filter: opacity(100%);
+    transition: all ease 0.15s;
 }
 
 .rack .add-effect:after {
