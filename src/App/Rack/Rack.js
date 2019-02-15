@@ -6,7 +6,7 @@ import { EffectTypes } from '../Effects/EffectTypes'
 import SortableEffectsList from './SortableEffectsList';
 
 import { SourceModal, EffectsModal } from './Modals';
-// import Sequencer from '../Sequencer';
+import Sequencer from '../Sequencer';
 import Recorder from '../Recorder';
 
 import { arrayMove } from 'react-sortable-hoc';
@@ -50,7 +50,10 @@ class Rack extends React.Component {
             id={this.state.source.id} 
             appAudio={this.appAudio}>
         </Component>
-        else return <div className="add-source" onClick={ () => this.openSourceModal() }></div>
+        else return <div className="add-source" onClick={ () => this.openSourceModal() }>
+            <span className="add-source-plus">+</span>
+            <span className="add-source-title">Instrument</span>
+        </div>
     }
     
     onSortEnd({oldIndex, newIndex}) {
@@ -65,9 +68,14 @@ class Rack extends React.Component {
         this.setState({effects: this.state.effects.filter(effectsToKeep)});
     }
     
+    deleteSelf() {
+        
+    }
+    
     render() {
         const EffectsList = SortableEffectsList(this.appAudio);
         return <React.Fragment>
+            
             { this.state.effectsModalOpen && 
                 <EffectsModal
                     x={100 + this.wrapperRef.current.getBoundingClientRect().x}
@@ -83,9 +91,10 @@ class Rack extends React.Component {
                     items={ SourceTypes }>
                 </SourceModal> }
             <section className={ "rack" + (this.props.selected ? " selected" : "") } onClick={ this.props.select } ref={ this.wrapperRef }>
+                <button className="delete-rack" onClick={ () => this.deleteSelf() }>X</button>
                 <div className="components-wrapper" >
+                    { /*<Recorder audio={ this.rackAudio.recorder } appAudio={ this.appAudio }></Recorder> */ }
                     { /* <Sequencer audio={ this.rackAudio.sequencer } appAudio={ this.appAudio }/> */ }
-                    <Recorder audio={ this.rackAudio.recorder } appAudio={ this.appAudio }></Recorder>
                     <section className={"components"}>
                         { this.sourceComponent() }
                         { <EffectsList 
@@ -96,7 +105,10 @@ class Rack extends React.Component {
                             useDragHandle
                             helperClass={"being-dragged"}
                             /> }
-                        <div className="add-effect" onClick={ () => this.openEffectsModal() }></div>
+                        <div className="add-effect" onClick={ () => this.openEffectsModal() }>
+                            <span className="add-effect-plus">+</span>
+                            <span className="add-effect-title">Effect</span>
+                        </div>
                     </section>
                 </div>
             </section>

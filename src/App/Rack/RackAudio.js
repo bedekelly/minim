@@ -21,7 +21,7 @@ class RackAudio {
 
     constructor(appAudio) {
         this.source = null;
-        // this.sequencer = new SequencerAudio(appAudio.context);
+        this.sequencer = new SequencerAudio(appAudio.context);
         this.recorder = new RecorderAudio(appAudio.context);
         this.appAudio = appAudio;
         this.effects = [];

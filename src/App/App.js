@@ -69,7 +69,7 @@ class App extends Component {
 
     render() {
         return <section className="app">
-            <button className="add-rack" onClick={() => this.addRack()}>Add Rack</button>
+            <button className="add-rack" onClick={() => this.addRack()}>+ Rack</button>
             { this.state.racks.map(rack => 
                 <Rack 
                     key={rack.id} id={rack.id} appAudio={this.appAudio} 
@@ -77,9 +77,10 @@ class App extends Component {
                     playing={this.state.playing} select={() => this.selectRack(rack.id)}>
                 </Rack>
             ) }
-        
+            {/*
             <button className="play-all" onMouseDown={() => this.playAll()}>Play All</button>
             <button className="pause-all" onClick={() => this.pauseAll()}>Pause All</button>
+            */}
         </section>;
     }
 }

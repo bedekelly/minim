@@ -53,6 +53,7 @@
     border-width: 2px;
     border-style: solid;
     border-color: #666;
+    border-radius: 7px;
     border-image-slice: 1;
     margin: 3vh;
     max-width: 400px;
@@ -83,21 +84,9 @@
     transition: all ease 0.15s;
 }
 
-
-
 .rack .add-source:hover {
     filter: opacity(100%);
     transition: all ease 0.15s;
-}
-
-.rack .add-source:after {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translateY(-50%) translateX(-50%);
-    content: '+';
-    font-size: 48pt;
-    color: whitesmoke;
 }
 
 .rack .add-effect {
@@ -119,12 +108,72 @@
     transition: all ease 0.15s;
 }
 
-.rack .add-effect:after {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translateY(-50%) translateX(-50%);
-    content: '+';
-    font-size: 32pt;
+
+.add-source,.add-effect {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     color: whitesmoke;
+    font-family: monospace;
 }
+
+.add-source-plus {
+    font-size: 32pt;
+    font-weight: bold;
+}
+
+.add-source {
+    user-select: none;
+    font-size: 24pt;
+}
+
+.add-effect-plus {
+    font-size: 24pt;
+    font-weight: bold;
+}
+
+.add-effect {
+    font-size: 14pt;
+    user-select: none;
+}
+
+.add-effect-title {
+    margin-left: 4px;
+}
+
+.add-effect:hover .add-effect-title {
+    filter: opacity(1);
+}
+
+
+.rack.selected .delete-rack {
+    border-color: #aaa;
+    transition: all ease 0.1s;
+}
+
+.delete-rack {
+    outline: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: none;
+    border: none;
+    border-bottom: 2px solid;
+    border-left: 2px solid;
+    border-radius: 0 0 0 7px;
+    padding: 6px;
+    cursor: pointer;
+    border-color: #666;
+    color: #aaa;
+    font-weight: bold;
+    font-family: monospace;
+    transition: all ease 0.1s;
+}
+
+.delete-rack:hover {
+    background: red;
+    color: white;
+    transition: all ease 0.1s;
+}
+
