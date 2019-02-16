@@ -28,7 +28,8 @@ class RackAudio {
 
         // Todo: global fx rack
         this.destination = this.appAudio.context.destination;
-        // this.sequencer.bpm = 80;
+        this.output = this.appAudio.context.createGain();
+        this.output.connect(this.destination);
     }
 
     pause() {
@@ -77,7 +78,7 @@ class RackAudio {
 
     outputOf(index) {
         return (index >= this.effects.length-1) ? 
-            this.destination : this.effects[index+1];
+            this.output : this.effects[index+1];
     }
 
     inputOf(index) {
@@ -115,7 +116,7 @@ class RackAudio {
     }
 
     get startOfFxChain() {
-        return (this.effects[0] && this.effects[0].input) || this.destination;
+        return (this.effects[0] && this.effects[0].input) || this.output;
     }
 
     get currentOutput() {
@@ -147,8 +148,18 @@ class RackAudio {
 
         // Route the current output to this effect.
         if (lastOutput) lastOutput.routeTo(effect);
-        effect.routeTo(this.destination);
+        effect.routeTo(this.output);
         return id;
+    }
+    
+    mute() {
+        this.muted = true;
+        this.output.gain.setValueAtTime(0, 0);
+    }
+    
+    unmute() {
+        this.muted = false;
+        this.output.gain.setValueAtTime(1, 0);
     }
 }
 

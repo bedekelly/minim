@@ -26,3 +26,8 @@
     background: #666;
     transition: all ease 0.1s;
 }
+
+.mute-toggle.muted {
+    background: #aaa;
+    color: #333 !important;
+}

@@ -34,7 +34,7 @@ class Rack extends React.Component {
             effectsModalOpen: false
         };
         this.appAudio = this.props.appAudio;
-        this.rackAudio = this.appAudio.racks[this.props.id];
+        this.audio = this.appAudio.racks[this.props.id];
         this.wrapperRef = React.createRef();
     }
     
@@ -47,12 +47,12 @@ class Rack extends React.Component {
     }
 
     addSource(sourceType) {
-        const { id, component } = this.rackAudio.addSource(sourceType);
+        const { id, component } = this.audio.addSource(sourceType);
         this.setState({ sourceModalOpen: false, source: { id, component, type: sourceType }});
     }
 
     addEffect(effectType) {
-        const effect = this.rackAudio.addEffect(effectType);
+        const effect = this.audio.addEffect(effectType);
         this.setState({ effectsModalOpen: false, effects: [...this.state.effects, {id: effect, effectType}]})
     }
 
@@ -71,23 +71,29 @@ class Rack extends React.Component {
     }
     
     onSortEnd({oldIndex, newIndex}) {
-        this.rackAudio.moveEffect({oldIndex, newIndex});
+        this.audio.moveEffect({oldIndex, newIndex});
         this.setState({
           effects: arrayMove(this.state.effects, oldIndex, newIndex),
       })}
 
     removeEffect(id) {
-        this.rackAudio.removeEffect(id);
+        this.audio.removeEffect(id);
         const effectsToKeep = effect => effect.id !== id;
         this.setState({effects: this.state.effects.filter(effectsToKeep)});
     }
     
     deleteSelf() {
-        
+        this.props.deleteSelf();
     }
     
-    setMuted(value) {
+    setMute(mute) {
+        if (mute) {
+            this.audio.mute();
+        } else {
+            this.audio.unmute();
+        }
         
+        this.setState({ mute })
     }
     
     setName(name) {
@@ -112,14 +118,14 @@ class Rack extends React.Component {
                     items={ SourceTypes }>
                 </SourceModal> }
             <section className={ "rack" + (this.props.selected ? " selected" : "") } onClick={ this.props.select } ref={ this.wrapperRef }>
-                <MuteToggle muted={ this.state.muted } onChange={ value => this.setMuted(value) }/>
+                <MuteToggle muted={ this.state.mute } onChange={ value => this.setMute(value) }/>
                 <EditableTextBox value={ this.state.name } onChange={ value => this.setName(value) } klass="rack-title"></EditableTextBox>
                 <button className="delete-rack" onClick={ () => this.deleteSelf() }>
                     <FontAwesomeIcon icon={ ["fas", "times" ]}></FontAwesomeIcon>
                 </button>
                 <div className="components-wrapper" >
-                    { /*<Recorder audio={ this.rackAudio.recorder } appAudio={ this.appAudio }></Recorder> */ }
-                    { /* <Sequencer audio={ this.rackAudio.sequencer } appAudio={ this.appAudio }/> */ }
+                    { /*<Recorder audio={ this.audio.recorder } appAudio={ this.appAudio }></Recorder> */ }
+                    { /* <Sequencer audio={ this.audio.sequencer } appAudio={ this.appAudio }/> */ }
                     <section className={"components"}>
                         { this.sourceComponent() }
                         { <EffectsList 

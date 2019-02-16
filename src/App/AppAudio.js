@@ -125,6 +125,12 @@ class AppAudio {
         this.selectedRack = id;
         return { id };
     }
+    
+    deleteRack(id) {
+        const rack = this.racks[id];
+        rack.output.disconnect();
+        delete this.racks[id];
+    }
 }
 
 

@@ -66,6 +66,13 @@ class App extends Component {
     get selectedRack() {
         return this.state.selectedRack;
     }
+    
+    deleteRack(id) {
+        this.appAudio.deleteRack(id);
+        this.setState({
+            racks: this.state.racks.filter(r => r.id !== id)
+        })
+    }
 
     render() {
         return <section className="app">
@@ -74,13 +81,12 @@ class App extends Component {
                 <Rack 
                     key={rack.id} id={rack.id} appAudio={this.appAudio} 
                     selected={ this.state.selectedRack === rack.id }
-                    playing={this.state.playing} select={() => this.selectRack(rack.id)}>
+                    playing={this.state.playing} select={() => this.selectRack(rack.id)}
+                    deleteSelf={ () => this.deleteRack(rack.id) }>
                 </Rack>
             ) }
-            {/*
             <button className="play-all" onMouseDown={() => this.playAll()}>Play All</button>
             <button className="pause-all" onClick={() => this.pauseAll()}>Pause All</button>
-            */}
         </section>;
     }
 }

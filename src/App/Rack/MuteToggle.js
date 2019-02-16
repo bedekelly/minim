@@ -11,9 +11,9 @@ library.add(faVolume, faVolumeMute);
 
 
 export default function MuteToggle(props) {
-    const icon = props.muted ? "volume" : "volume-mute";
+    const icon = props.muted ? "volume-mute" : "volume";
     const className = "mute-toggle " + (props.muted ? "muted" : "");
-    return <button className={ className }>
+    return <button className={ className } onClick={ () => props.onChange(!props.muted) }>
         <FontAwesomeIcon icon={ [ "fas", icon ]}></FontAwesomeIcon>
     </button>
 }
