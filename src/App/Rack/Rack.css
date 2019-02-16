@@ -202,3 +202,22 @@ input.rack-title {
     border-radius: 0 0 7px 7px;
     background: none;
 }
+
+.add-button {
+    background: none;
+    border: 1px solid #666;
+    border-radius: 7px;
+    color: #666;
+    cursor: pointer;
+    transition: all ease 0.1s;
+    margin-top: 1vh;
+    margin-bottom: 3vh;
+    font-size: 12pt;
+    font-family: monospace;
+}
+
+.add-button:hover {
+    color: whitesmoke;
+    border-color: whitesmoke;
+    transition: all ease 0.1s;
+}

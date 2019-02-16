@@ -36,7 +36,6 @@ class App extends Component {
             // Todo: use Promise.all() here to allow asynchronous loading.
             await this.appAudio.context.audioWorklet.addModule(`worklets/${worklet}.js`);
         }
-        console.log(`Loaded BitCrusher`);
     }
 
     async addRack() {

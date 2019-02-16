@@ -1,6 +1,6 @@
 .bit-crusher {
     height: 123px;
-    background: whitesmoke;
+    background-image: linear-gradient(to top, rgb(119, 183, 130), rgb(52, 98, 127));
     width: 200px;
     padding-top: 23px;
     border-radius: 7px;

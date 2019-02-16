@@ -100,6 +100,36 @@ class Rack extends React.Component {
         this.setState({ name })
     }
     
+    recorderComponent() {
+        if (this.state.recorderAdded) {
+            return <Recorder audio={ this.audio.recorder } appAudio={ this.appAudio }/>
+        } else if (this.state.sequencerAdded) {
+            return null;
+        } else {
+            return <button className="add-button add-recorder" onClick={ () => this.addRecorder() }>+ Recorder</button>
+        }        
+    }
+    
+    sequencerComponent() {
+        if (this.state.sequencerAdded) {
+            return <Sequencer audio={ this.audio.sequencer } appAudio={ this.appAudio }/>
+        } else if (this.state.recorderAdded) {
+            return null;
+        } else {
+            return <button className="add-button add-sequencer" onClick={ () => this.addSequencer() }>+ Sequencer</button>
+        }        
+    }
+    
+    addSequencer() {
+        this.audio.addSequencer();
+        this.setState({ sequencerAdded: true });
+    }
+    
+    addRecorder() {
+        this.audio.addRecorder();
+        this.setState({ recorderAdded: true });
+    }
+    
     render() {
         const EffectsList = SortableEffectsList(this.appAudio);
         return <React.Fragment>
@@ -125,8 +155,10 @@ class Rack extends React.Component {
                 </button>
                 <div className="components-wrapper" >
                     { /*<Recorder audio={ this.audio.recorder } appAudio={ this.appAudio }></Recorder> */ }
-                    { /* <Sequencer audio={ this.audio.sequencer } appAudio={ this.appAudio }/> */ }
+                    { /*  */ }
                     <section className={"components"}>
+                        { this.sequencerComponent() }
+                        { this.recorderComponent() }
                         { this.sourceComponent() }
                         { <EffectsList 
                             effects={this.state.effects}

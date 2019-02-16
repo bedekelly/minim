@@ -21,15 +21,20 @@ class RackAudio {
 
     constructor(appAudio) {
         this.source = null;
-        this.sequencer = new SequencerAudio(appAudio.context);
-        this.recorder = new RecorderAudio(appAudio.context);
         this.appAudio = appAudio;
         this.effects = [];
 
-        // Todo: global fx rack
         this.destination = this.appAudio.context.destination;
         this.output = this.appAudio.context.createGain();
         this.output.connect(this.destination);
+    }
+    
+    addSequencer() {
+        this.sequencer = new SequencerAudio(this.appAudio.context);
+    }
+    
+    addRecorder() {
+        this.recorder = new RecorderAudio(this.appAudio.context);
     }
 
     pause() {
