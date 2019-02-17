@@ -209,12 +209,12 @@ class Synth extends React.PureComponent {
             { data: [128, 60], time: now + 5 }
         ]
         
-        const stackedSingleNote = [
-            { data: [144, 60], time: now + 0},
-            { data: [144, 60], time: now + 1},
-            { data: [128, 60], time: now + 2},
-            { data: [128, 60], time: now + 3}
-        ]
+        // const stackedSingleNote = [
+        //     { data: [144, 60], time: now + 0},
+        //     { data: [144, 60], time: now + 1},
+        //     { data: [128, 60], time: now + 2},
+        //     { data: [128, 60], time: now + 3}
+        // ]
         
         for (let barStart of [0, 6]) {
             this.audio.scheduleNotes(monophonic.map(({data, time}) => ({
@@ -250,8 +250,8 @@ class Synth extends React.PureComponent {
                 </div>
 
                 <div className="waveform">
-                  <label htmlFor="sine">
-                    <input type="radio" name="waveform" value="sine" id="sine" 
+                  <label htmlFor={"sine" +this.props.id}>
+                    <input type="radio" name={"waveform" + this.props.id} value="sine" id={"sine" +this.props.id}
                         checked={ this.state.osc1.waveform === "sine" }
                         onChange={ e => this.changeOsc1Waveform(e.target.value) }
                         ></input>
@@ -261,8 +261,8 @@ class Synth extends React.PureComponent {
                 </div>
 
                 <div className="waveform">
-                  <label htmlFor="sawtooth">
-                    <input type="radio" name="waveform" value="sawtooth" id="sawtooth"
+                  <label htmlFor={"sawtooth" + this.props.id}>
+                    <input type="radio" name={"waveform" + this.props.id} value="sawtooth" id={"sawtooth" +this.props.id}
                         checked={ this.state.osc1.waveform === "sawtooth" }
                         onChange={ e => this.changeOsc1Waveform(e.target.value) }
                         ></input>
@@ -272,8 +272,8 @@ class Synth extends React.PureComponent {
                 </div>
 
                 <div className="waveform">
-                  <label htmlFor="triangle">
-                    <input type="radio" name="waveform" value="triangle" id="triangle"
+                  <label htmlFor={"triangle" + this.props.id}>
+                    <input type="radio" name={"waveform" + this.props.id} value="triangle" id={"triangle" +this.props.id}
                         checked={ this.state.osc1.waveform === "triangle" }
                         onChange={ e => this.changeOsc1Waveform(e.target.value) }
                         ></input>
@@ -283,8 +283,8 @@ class Synth extends React.PureComponent {
                 </div>
 
                 <div className="waveform square">
-                  <label htmlFor="square">
-                    <input type="radio" name="waveform" value="square" id="square"
+                  <label htmlFor={"square" + this.props.id}>
+                    <input type="radio" name={"waveform" + this.props.id} value="square" id={"square" + this.props.id}
                         checked={ this.state.osc1.waveform === "square" }
                         onChange={ e => this.changeOsc1Waveform(e.target.value) }
                         ></input>
@@ -317,8 +317,8 @@ class Synth extends React.PureComponent {
                 </div>
 
                 <div className="waveform">
-                  <label htmlFor="sine2">
-                    <input type="radio" name="waveform-two" value="sine" id="sine2"
+                  <label htmlFor={"sine2" + this.props.id}>
+                    <input type="radio" name={"waveform-two"+this.props.id} value="sine" id={"sine2" + this.props.id}
                         checked={ this.state.osc2.waveform === "sine" }
                         onChange={ e => this.changeOsc2Waveform(e.target.value) }
                         ></input>
@@ -328,8 +328,8 @@ class Synth extends React.PureComponent {
                 </div>
 
                 <div className="waveform">
-                  <label htmlFor="sawtooth2">
-                    <input type="radio" name="waveform-two" value="sawtooth" id="sawtooth2"
+                  <label htmlFor={"sawtooth2"+this.props.id}>
+                    <input type="radio" name={"waveform-two"+this.props.id} value="sawtooth" id={"sawtooth2"+this.props.id}
                         checked={ this.state.osc2.waveform === "sawtooth" }
                         onChange={ e => this.changeOsc2Waveform(e.target.value) }
                         ></input>
@@ -339,8 +339,8 @@ class Synth extends React.PureComponent {
                 </div>
 
                 <div className="waveform">
-                  <label htmlFor="triangle2">
-                    <input type="radio" name="waveform-two" value="triangle" id="triangle2"
+                  <label htmlFor={"triangle2"+this.props.id}>
+                    <input type="radio" name={"waveform-two"+this.props.id} value="triangle" id={"triangle2"+this.props.id}
                         checked={ this.state.osc2.waveform === "triangle" }
                         onChange={ e => this.changeOsc2Waveform(e.target.value) }
                         ></input>
@@ -350,8 +350,8 @@ class Synth extends React.PureComponent {
                 </div>
 
                 <div className="waveform square">
-                  <label htmlFor="square2">
-                    <input type="radio" name="waveform-two" value="square" id="square2"
+                  <label htmlFor={"square2"+this.props.id}>
+                    <input type="radio" name={"waveform-two"+this.props.id} value="square" id={"square2"+this.props.id}
                         checked={ this.state.osc2.waveform === "square" }
                         onChange={ e => this.changeOsc2Waveform(e.target.value) }
                         ></input>
