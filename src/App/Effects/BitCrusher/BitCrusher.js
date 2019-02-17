@@ -34,6 +34,7 @@ export default class BitCrusher extends React.Component {
     }
     
     changeBitDepth(bitDepth) {
+        bitDepth = Math.round(bitDepth);
         this.audio.bitDepth = bitDepth;
         this.setState({ bitDepth });
     }
@@ -102,6 +103,7 @@ export default class BitCrusher extends React.Component {
             <Knob min={1} max={16} 
                 value={ this.state.bitDepth }
                 default={ 12 }
+                precision={ 0 }
                 id={ this.props.id + "-bit-depth" }
                 appAudio={ this.audio.appAudio }
                 onChange={ value => this.changeBitDepth(value) }
