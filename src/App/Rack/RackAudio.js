@@ -24,7 +24,7 @@ class RackAudio {
         this.appAudio = appAudio;
         this.effects = [];
 
-        this.destination = this.appAudio.destination;
+        this.destination = this.appAudio.startOfFxChain;
         this.output = this.appAudio.context.createGain();
         this.output.connect(this.destination);
     }
@@ -122,6 +122,12 @@ class RackAudio {
 
     get startOfFxChain() {
         return (this.effects[0] && this.effects[0].input) || this.output;
+    }
+    
+    updateOutput() {
+        this.destination = this.appAudio.startOfFxChain;
+        this.output.disconnect();
+        this.output.connect(this.destination);
     }
 
     get currentOutput() {

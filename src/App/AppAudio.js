@@ -77,25 +77,16 @@ class AppAudio {
 
     inputOf(index) {
         return (index > 0) ? 
-            this.globalEffects.length[index-1] : this.source;
+            this.globalEffects[index-1] : null;
     }
 
-    moveGlobalEffect({oldIndex, newIndex}) {
-        // A -> E -> B becomes A -> B.
-        const oldOutput = this.outputOf(oldIndex);
-        const oldInput = this.inputOf(oldIndex);
-        const effect = this.globalEffects[oldIndex];
-        if (oldInput) oldInput.routeTo(oldOutput);
-
-        // Transform our effects array to match the components.
-        this.globalEffects = arrayMove(this.globalEffects, oldIndex, newIndex);
-
-        // C -> D becomes C -> E -> D.
-        const newInput = this.inputOf(newIndex);
-        const newOutput = this.outputOf(newIndex);
-
-        if (newInput) newInput.routeTo(effect);
-        effect.routeTo(newOutput);
+    updateOutputs() {
+        for (let rack of Object.values(this.racks)) {
+            rack.updateOutput();
+        }
+        if (this.currentOutput) {
+            this.currentOutput.routeTo(this.context.destination);
+        }
     }
 
     unregisterAllHandlers(componentId) {
@@ -149,6 +140,9 @@ class AppAudio {
         // Route the current output to this effect.
         if (lastOutput) lastOutput.routeTo(effect);
         effect.routeTo(this.context.destination);
+        
+        this.updateOutputs();
+        
         return id;
     }
     
@@ -169,6 +163,31 @@ class AppAudio {
         // Unregister component for MIDI messages.
         // Todo: reinstate this.
         this.unregisterAllHandlers(id);
+        
+        this.updateOutputs();
+    }
+    
+    moveGlobalEffect({oldIndex, newIndex}) {
+        
+        debugger;
+        
+        // A -> E -> B becomes A -> B.
+        const oldOutput = this.outputOf(oldIndex);
+        const oldInput = this.inputOf(oldIndex);
+        const effect = this.globalEffects[oldIndex];
+        if (oldInput) oldInput.routeTo(oldOutput);
+        
+        // Transform our effects array to match the components.
+        this.globalEffects = arrayMove(this.globalEffects, oldIndex, newIndex);
+
+        // C -> D becomes C -> E -> D.
+        const newInput = this.inputOf(newIndex);
+        const newOutput = this.outputOf(newIndex);
+
+        if (newInput) newInput.routeTo(effect);
+        effect.routeTo(newOutput);
+        
+        this.updateOutputs();
     }
     
     midiLearn(componentId) {
@@ -187,7 +206,7 @@ class AppAudio {
     }
     
     get startOfFxChain() {
-        return (this.globalEffects[0] && this.globalEffects[0].input) || this.output;
+        return (this.globalEffects[0] && this.globalEffects[0].input) || this.context.destination;
     }
     
     get currentOutput() {
