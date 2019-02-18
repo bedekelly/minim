@@ -14,7 +14,8 @@ class TapeLooperAudio {
         this.relativeStartTime = 0;
         this.playbackRate = 1;
         this.type = SourceType.TapeLooper;
-        this.realism = false;
+        this.looping = true;
+        this.realism = true;
         this._loopStart = 0;
         this._loopEnd = 0;
         this.node = null;
@@ -23,6 +24,23 @@ class TapeLooperAudio {
     midiMessage(message) {
         console.log("Tape looper ignoring MIDI message: ", message);
         console.log(message.data);
+    }
+    
+    toggleLooping() {
+        this.relativeStartTime = this.relativeCurrentTime;
+        this.absoluteStartTime = this.context.currentTime;
+        this.looping = !this.looping;
+        if (this.node) this.node.loop = this.looping;
+        
+        if (!this.looping) {
+            // Setup on-ended callback to move play head to start again.
+            this.node.onended = event => {
+                this.stop();
+            }
+        } else {
+            // Remove on-ended callback.
+            this.node.onended = event => console.log(event);
+        }
     }
 
     async gotEncodedBuffer(arrayBuffer) {
@@ -45,7 +63,7 @@ class TapeLooperAudio {
         // Note: this DOES need to happen every time we resume audio!
         const bufferSourceNode = this.node = this.context.createBufferSource();
         bufferSourceNode.buffer = this.buffer;
-        bufferSourceNode.loop = true;
+        bufferSourceNode.loop = this.looping;
         bufferSourceNode.loopStart = this._loopStart;
         
         if (this._loopEnd !== undefined) 
@@ -65,6 +83,13 @@ class TapeLooperAudio {
             this.speedBufferUpToPlaying()
         } else {
             bufferSourceNode.playbackRate.setValueAtTime(this.playbackRate, 0);
+        }
+        
+        if (!this.looping) {
+            // Setup on-ended callback to move play head to start again.
+            this.node.onended = event => {
+                this.stop();
+            }
         }
     }
 
@@ -90,7 +115,7 @@ class TapeLooperAudio {
         // a time before the current play-head, the source node will
         // warp back to the start. We reflect that change in any
         // request for the relative current time.
-        const inLoopNow = this.checkInLoop();
+        const inLoopNow = this.looping && this.checkInLoop();
         const relativeCurrentTime = this.relativeCurrentTime;
         if (inLoopNow && relativeCurrentTime > value) {
             this.relativeStartTime = this._loopStart;
@@ -139,9 +164,13 @@ class TapeLooperAudio {
         }
     }
 
-    stop() {
-        this.disconnect();
+    async stop() {
+        await this.pause();
+        this.absoluteStartTime = this.context.currentTime;
         this.relativeStartTime = 0;
+        if (this.stopGraphics) {
+            this.stopGraphics()
+        }
     }
     
     checkInLoop() {
@@ -159,6 +188,7 @@ class TapeLooperAudio {
     
     get relativeCurrentTime() {
         if (this.paused) {
+            console.log("paused");
             return this.relativeStartTime;
         }
         
@@ -168,15 +198,17 @@ class TapeLooperAudio {
         const { loopStart, loopEnd, playbackRate, relativeStartTime, absoluteStartTime, duration } = this;
         const wallClockTimeElapsed = (absoluteCurrentTime - absoluteStartTime);
         const relativeTimeElapsed = wallClockTimeElapsed * playbackRate;
-        const songPositionWithoutLoopMarkers = (relativeStartTime + relativeTimeElapsed) % duration;
-        
-        if (this.inLoop) {
+        let songPositionWithoutLoopMarkers = (relativeStartTime + relativeTimeElapsed);
+        if (this.looping) songPositionWithoutLoopMarkers %= duration;
+
+        if (this.looping && this.inLoop) {
             // If so, calculate the time given that we've been in the loop for some time.
             return (relativeStartTime + relativeTimeElapsed - loopStart) % (loopEnd - loopStart) + loopStart;
-        } else {
+        } else if (this.looping) {
             this.inLoop = this.checkInLoop();
-            return songPositionWithoutLoopMarkers;
         }
+        
+        return Math.min(songPositionWithoutLoopMarkers, duration);
     }
 
     async pause() {

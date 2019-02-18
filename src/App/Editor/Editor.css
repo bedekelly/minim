@@ -52,6 +52,10 @@ canvas.play-head {
   z-index: 1;
 }
 
+.greyed-out {
+    filter: grayscale(100%) opacity(60%);
+}
+
 .left-section .bar {
   position: absolute;
   border-radius: 5px;
@@ -83,7 +87,6 @@ canvas.play-head {
   background: black;
   cursor: ew-resize;
 }
-
 
 .blurbackground {
     position: fixed;
@@ -127,8 +130,7 @@ canvas.play-head {
   padding-top: 6.5px;
 }
 
-.editor .controls > button:active {
+.editor .controls > button:active, .editor .controls > button.toggled {
   background: radial-gradient(ellipse at center, #dd2c35 0%, lightgrey 160%);
   color: whitesmoke;
 }
-

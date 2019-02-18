@@ -33,7 +33,10 @@ class Editor extends React.Component {
         this.audio = props.audio;
         this.canvasRef = React.createRef();
         this.playHeadCanvasRef = React.createRef();
-        this.state = { ready: false, loopStart: this.audio.loopStart, loopEnd: this.audio.loopEnd };
+        this.state = {
+            ready: false, loopStart: this.audio.loopStart, 
+            loopEnd: this.audio.loopEnd
+        };
         this.nextAnimationId = null;
     }
     
@@ -204,8 +207,8 @@ class Editor extends React.Component {
     }
 
     render() {
-        
         const playPause = this.props.playing ? this.props.pause : this.props.play;
+        const loopClass = "loop" + (this.props.looping ? " toggled" : "");
         
         return <React.Fragment>
             <div className="blurbackground" onClick={ () => this.close() }></div>
@@ -214,7 +217,7 @@ class Editor extends React.Component {
               <button className="rewind" onMouseDown={ this.props.rewind }>
                   <FontAwesomeIcon icon={["fas", "fast-backward"]}></FontAwesomeIcon>
               </button>
-              <button className="loop" onMouseDown={ this.props.toggleLoop }>
+              <button className={ loopClass } onMouseDown={ this.props.toggleLoop }>
                   <FontAwesomeIcon icon="sync-alt"></FontAwesomeIcon>
               </button>
               <button className="playpause" onMouseDown={ playPause }>
@@ -228,10 +231,10 @@ class Editor extends React.Component {
               </button>
             </div> 
               <div className="frame">
-                  
                 { this.state.ready && <LoopStartBar 
                     audio={ this.audio } 
                     padding={ 20 } 
+                    enabled={ this.props.looping }
                     canvas={ this.canvasRef.current }
                     value={ this.state.loopStart }
                     onChange={value => this.onLoopStartChange(value)}></LoopStartBar> }
@@ -245,6 +248,7 @@ class Editor extends React.Component {
                 { this.state.ready && <LoopEndBar
                     audio={ this.audio }
                     padding={ 20 }
+                    enabled={ this.props.looping }
                     canvas={ this.canvasRef.current }
                     value={ this.state.loopEnd }
                     onChange={ value => this.onLoopEndChange(value) }

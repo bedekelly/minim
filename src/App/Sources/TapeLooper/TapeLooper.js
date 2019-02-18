@@ -17,18 +17,25 @@ class TapeLooper extends React.Component {
         this.state = {
             zoomed: false,
             hasTape: false,
+            playing: false,
+            looping: true,
             playbackRate: this.audio.playbackRate
         }
-        
     }
 
     async stop() {
-        this.props.sourceNode.stop();
+        // this.audio.stop();
+        this.setState({ playing: false });
     }
 
     onDragOver(event) {
-        // this.setState({ zoomed: true });
         event.preventDefault();
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.playing !== prevProps.playing) {
+            this.setState({ playing: this.props.playing })
+        }
     }
 
     onDragLeave(event) {
@@ -70,14 +77,36 @@ class TapeLooper extends React.Component {
         this.setState({editorOpen: false});
     }
     
+    play() {
+        this.audio.play();
+        this.setState({ playing: true });
+    }
+    
+    pause() {
+        this.audio.pause();
+        this.setState({ playing: false });
+    }
+    
+    toggleLoop() {
+        this.audio.toggleLooping();
+        this.setState({ looping: !this.state.looping });
+    }
+    
+    componentDidMount() {
+        this.audio.stopGraphics = () => {
+            this.stop();
+        }
+    }
+    
     editor() {
         return <Editor 
                 close={() => this.closeEditor()} 
                 audio={this.audio}
-                playing={ this.props.playing }
-                play={ () => console.log("play") }
-                pause={ () => console.log("Pause") }
-                toggleLoop={ () => console.log("Loop toggle") }
+                playing={ this.state.playing }
+                looping={ this.state.looping }
+                play={ () => this.play() }
+                pause={ () => this.pause()}
+                toggleLoop={ () => this.toggleLoop() }
                 rewind={ () => console.log("Rewind") }
                 fastForward={ () => console.log("Fast-forward") }
                ></Editor>
@@ -87,7 +116,7 @@ class TapeLooper extends React.Component {
         const classNames = [
             "tape-looper",
             this.state.hasTape ? "has-tape" : ' ',
-            this.props.playing ? "playing" : ' ',
+            this.state.playing ? "playing" : ' ',
             this.state.zoomed ? "zoomed" : ' '
         ].join(" ");
 
@@ -115,9 +144,7 @@ class TapeLooper extends React.Component {
             </Knob>
             <p className="speed-title">Speed</p>
             { this.audio.buffer ? <div className="button editor-button" onClick={() => this.openEditor()}>~</div> : null }
-
             <TapeComponents></TapeComponents>
-            
             { this.state.editorOpen ? this.editor() : null}
         </div>
     }

@@ -71,7 +71,8 @@ class LoopStartBar extends React.Component {
             document.addEventListener("mouseup", onMouseUp);
         }
         
-        return <div className="left-section" style={ { width: `${this.state.width}px` } }>
+        const className = "left-section" + (props.enabled ? "" : " greyed-out");
+        return <div className={ className } style={ { width: `${this.state.width}px` } }>
           <div className="bar" onMouseDown={onMouseDown}></div>
         </div> 
     }
