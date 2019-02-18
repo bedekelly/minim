@@ -50,6 +50,7 @@ canvas.play-head {
   height: 100%;
   border-radius: 7px 0 0 7px;
   z-index: 1;
+  pointer-events: none;
 }
 
 .greyed-out {
@@ -65,6 +66,7 @@ canvas.play-head {
   width: 2px;
   background: black;
   cursor: ew-resize;
+  pointer-events: all;
 }
 
 .right-section {
@@ -75,6 +77,7 @@ canvas.play-head {
   width: 20px;
   height: 100%;
   border-radius: 0 7px 7px 0;
+  pointer-events: none;
 }
 
 .right-section .bar {
@@ -86,6 +89,7 @@ canvas.play-head {
   width: 2px;
   background: black;
   cursor: ew-resize;
+  pointer-events: all;
 }
 
 .blurbackground {
