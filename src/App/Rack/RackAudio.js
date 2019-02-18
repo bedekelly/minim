@@ -2,6 +2,7 @@ import uuid from "uuid4";
 
 import PanAudio from '../Effects/Pan/PanAudio';
 import FilterAudio from '../Effects/Filter/FilterAudio';
+import HighPassFilterAudio from '../Effects/HighPassFilter/HighPassFilterAudio';
 import GainAudio from '../Effects/Gain/GainAudio';
 import CompressorAudio from '../Effects/Compressor/CompressorAudio';
 import ReverbAudio from '../Effects/Reverb/ReverbAudio';
@@ -139,6 +140,7 @@ class RackAudio {
         const effectAudios = {
             [EffectType.Pan]: PanAudio,
             [EffectType.Filter]: FilterAudio,
+            [EffectType.HighPassFilter]: HighPassFilterAudio,
             [EffectType.Gain]: GainAudio,
             [EffectType.Compressor]: CompressorAudio,
             [EffectType.Reverb]: ReverbAudio,

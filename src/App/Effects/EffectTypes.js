@@ -6,19 +6,21 @@ const EffectType = Object.freeze({
     Reverb: Symbol("Reverb"),
     Echo: Symbol("Echo"),
     Distortion: Symbol("Distortion"),
-    BitCrusher: Symbol("BitCrusher")
+    BitCrusher: Symbol("BitCrusher"),
+    HighPassFilter: Symbol("HighPassFilter")
 });
 
 
 const EffectTypes = [
-    {type: EffectType.Pan, text: "Pan", image: "https://lorempixel.com/200/120"},
-    {type: EffectType.Filter, text: "Filter", image: "https://lorempixel.com/200/120"},
-    {type: EffectType.Gain, text: "Volume", image: "https://lorempixel.com/200/120"},
-    {type: EffectType.Compressor, text: "Compressor", image: "https://lorempixel.com/200/120"},
-    {type: EffectType.Reverb, text: "Reverb", image: "https://lorempixel.com/200/120"},
-    {type: EffectType.Echo, text: "Echo", image: "https://lorempixel.com/200/120"},
-    {type: EffectType.Distortion, text: "Distortion", image: "https://lorempixel.com/200/120"},
-    {type: EffectType.BitCrusher, text: "Bit Crusher", image: "https://lorempixel.com/200/120"}
+    {type: EffectType.Pan, text: "Pan"},
+    {type: EffectType.Filter, text: "Muffler"},
+    {type: EffectType.HighPassFilter, text: "High Pass"},
+    {type: EffectType.Gain, text: "Volume"},
+    {type: EffectType.Compressor, text: "Compressor"},
+    {type: EffectType.Reverb, text: "Reverb"},
+    {type: EffectType.Echo, text: "Echo"},
+    {type: EffectType.Distortion, text: "Distortion"},
+    {type: EffectType.BitCrusher, text: "Bit Crusher"}
 ];
 
 
