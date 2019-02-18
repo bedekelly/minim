@@ -132,6 +132,7 @@ button {
     position: absolute;
     top: 0;
     left: 0;
+    overflow: visible;
 }
 
 
@@ -143,7 +144,6 @@ button {
     border-radius: 7px;
     margin-left: 6vh;
     user-select: none;
-    overflow-x: scroll;
     overflow-y: visible;
     box-sizing: border-box;
     border: 5px solid lightgrey;
@@ -216,6 +216,7 @@ button {
     flex-direction: row;
     flex-wrap:nowrap;
     justify-content: flex-start;
+    overflow-x: scroll;
     align-content: center;
     height: 100%;
 }
