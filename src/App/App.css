@@ -102,3 +102,124 @@ button {
   background: whitesmoke;
   color: #333;
 }
+
+.open-global-effects-rack {
+    position: absolute;
+    bottom: 3vh;
+    left: 50%;
+    transform: translateX(-50%);
+    background: none;
+    color: #666;
+    border: 1px solid;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all ease 0.1s;
+    outline: 0;
+}
+
+.open-global-effects-rack:hover {
+    color: whitesmoke;
+    transition: all ease 0.1s;
+}
+
+
+.global-effects-rack {
+    display: grid;
+    align-items: center;
+    justify-items: left;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+
+.global-effects-rack .effects-rack {
+    background: #333;
+    height: 280px;
+    z-index: 1001;
+    width: calc(91vw - 200px);
+    border-radius: 7px;
+    margin-left: 6vh;
+    user-select: none;
+    overflow-x: scroll;
+    box-sizing: border-box;
+    border: 5px solid lightgrey;
+    font-family: monospace;
+}
+
+
+.global-effects-rack .add-effect {
+    box-sizing: border-box;
+    width: 100px;
+    margin: 0 auto;
+    height: 100px;
+    border-radius: 7px;
+    border: 3px solid whitesmoke;
+    position: relative;
+    cursor: pointer;
+    margin: 10px;
+    filter: opacity(20%);
+    transition: all ease 0.15s;
+}
+
+.effect.being-dragged {
+    z-index: 9999 !important;
+    margin-top: 3vh;
+    margin-left: 3vh;
+}
+
+.global-effects-rack .add-effect:hover {
+    filter: opacity(100%);
+    transition: all ease 0.15s;
+}
+
+
+.global-effects-rack .add-effect {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: whitesmoke;
+    font-family: monospace;
+}
+
+.global-effects-rack .add-effect-plus {
+    font-size: 24pt;
+    font-weight: bold;
+}
+
+.global-effects-rack .add-effect {
+    font-size: 14pt;
+    user-select: none;
+}
+
+.global-effects-rack .add-effect-title {
+    margin-left: 4px;
+}
+
+.global-effects-rack .add-effect:hover .add-effect-title {
+    filter: opacity(1);
+}
+
+.global-effects-rack .picker {
+    position: absolute;
+    right: 6vh;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.global-effects-rack .sortable-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap:nowrap;
+    justify-content: flex-start;
+    align-content: center;
+    height: 100%;
+}
+
+.global-effects-rack .sortable-container .effect {
+    margin: 20px;
+}
+

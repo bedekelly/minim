@@ -1,8 +1,16 @@
 class EffectAudio {
     constructor(parentRack) {
         this.parentRack = parentRack;
-        this.context = parentRack.appAudio.context;
-        this.appAudio = parentRack.appAudio;
+        
+        if (parentRack.appAudio) {
+            this.context = parentRack.appAudio.context;
+            this.appAudio = parentRack.appAudio;
+        }
+        else {
+            this.context = parentRack.context;
+            this.appAudio = parentRack;
+        }
+        
         this.wetNode = this.context.createGain();
         this.dryNode = this.context.createGain();
         this.dryNode.gain.setValueAtTime(0, 0);

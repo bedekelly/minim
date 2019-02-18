@@ -1,14 +1,28 @@
 import uuid from "uuid4";
 
 import RackAudio from './Rack/RackAudio';
+import { arrayMove } from 'react-sortable-hoc';
+import PanAudio from './Effects/Pan/PanAudio';
+import FilterAudio from './Effects/Filter/FilterAudio';
+import GainAudio from './Effects/Gain/GainAudio';
+import CompressorAudio from './Effects/Compressor/CompressorAudio';
+import ReverbAudio from './Effects/Reverb/ReverbAudio';
+import EchoAudio from './Effects/Echo/EchoAudio';
+import DistortionAudio from './Effects/Distortion/DistortionAudio';
+import BitCrusherAudio from './Effects/BitCrusher/BitCrusherAudio';
+
+import { EffectType } from './Effects/EffectTypes'
 
 
 class AppAudio {
+
+    processors = [ "bit-crusher" ];
 
     constructor() {
         this.racks = {};
         this.sources = {};
         this.effects = {};
+        this.globalEffects = [];
         this.midiControlledComponents = {};
         this.context = null;
         this.componentMidiHandlers = {};
@@ -56,6 +70,34 @@ class AppAudio {
         this.componentMidiHandlers[componentId] = handler;
     }
 
+    outputOf(index) {
+        return (index >= this.globalEffects.length-1) ? 
+            this.context.destination : this.globalEffects[index+1];
+    }
+
+    inputOf(index) {
+        return (index > 0) ? 
+            this.globalEffects.length[index-1] : this.source;
+    }
+
+    moveGlobalEffect({oldIndex, newIndex}) {
+        // A -> E -> B becomes A -> B.
+        const oldOutput = this.outputOf(oldIndex);
+        const oldInput = this.inputOf(oldIndex);
+        const effect = this.globalEffects[oldIndex];
+        if (oldInput) oldInput.routeTo(oldOutput);
+
+        // Transform our effects array to match the components.
+        this.globalEffects = arrayMove(this.globalEffects, oldIndex, newIndex);
+
+        // C -> D becomes C -> E -> D.
+        const newInput = this.inputOf(newIndex);
+        const newOutput = this.outputOf(newIndex);
+
+        if (newInput) newInput.routeTo(effect);
+        effect.routeTo(newOutput);
+    }
+
     unregisterAllHandlers(componentId) {
         console.warn("Unregistering handlers not implemented");
         // Todo: loop through all handlers with IDs starting with the
@@ -81,6 +123,54 @@ class AppAudio {
         }
     }
     
+    addGlobalEffect(effectType) {
+        // Make an EffectAudio and add it to this rack's effect.
+        const effectAudios = {
+            [EffectType.Pan]: PanAudio,
+            [EffectType.Filter]: FilterAudio,
+            [EffectType.Gain]: GainAudio,
+            [EffectType.Compressor]: CompressorAudio,
+            [EffectType.Reverb]: ReverbAudio,
+            [EffectType.Echo]: EchoAudio,
+            [EffectType.Distortion]: DistortionAudio,
+            [EffectType.BitCrusher]: BitCrusherAudio
+        };
+        const defaultEffectAudio = FilterAudio;
+        const EffectAudio = effectAudios[effectType] || defaultEffectAudio;
+        let effect = new EffectAudio(this);
+        const lastOutput = this.currentOutput;
+        this.globalEffects.push(effect);
+
+        // Add an ID to register this effect.
+        const id = uuid();
+        this.effects[id] = effect;
+        effect.id = id;
+
+        // Route the current output to this effect.
+        if (lastOutput) lastOutput.routeTo(effect);
+        effect.routeTo(this.context.destination);
+        return id;
+    }
+    
+    removeGlobalEffect(id) {
+        // Find and connect the old input and output of this effect.
+        const effectIndex = this.globalEffects.findIndex(effect => effect.id === id);
+        const oldInput = this.inputOf(effectIndex);
+        const oldOutput = this.outputOf(effectIndex);
+        if (oldInput) oldInput.routeTo(oldOutput);
+
+        // Clean up the effect by disconnecting it.
+        const effect = this.globalEffects[effectIndex];
+        effect.disconnect();
+
+        // Remove the effect from this rack's list.
+        this.globalEffects.splice(effectIndex, 1);
+        
+        // Unregister component for MIDI messages.
+        // Todo: reinstate this.
+        this.unregisterAllHandlers(id);
+    }
+    
     midiLearn(componentId) {
         this.learningMidi = true;
         this.midiLearnTarget = componentId;
@@ -92,6 +182,18 @@ class AppAudio {
         }
     }
 
+    get destination() {
+        return this.startOfFxChain;
+    }
+    
+    get startOfFxChain() {
+        return (this.globalEffects[0] && this.globalEffects[0].input) || this.output;
+    }
+    
+    get currentOutput() {
+        return this.globalEffects[this.globalEffects.length-1] || this.source;
+    }
+
     pause() {
         for (let source of Object.values(this.racks)) {
             source.pause();
@@ -99,7 +201,16 @@ class AppAudio {
     }
 
     async initialise() {
-        return await this.makeContext();
+        await this.makeContext();
+        return this.loadProcessors();
+        
+    }
+    
+    async loadProcessors() {
+        for (let worklet of this.processors) {
+            // Todo: use Promise.all() here to allow asynchronous loading.
+            await this.context.audioWorklet.addModule(`worklets/${worklet}.js`);
+        }
     }
 
     async makeContext() {

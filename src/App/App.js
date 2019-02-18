@@ -2,8 +2,13 @@ import React, {Component} from 'react';
 import "stereo-panner-shim";
 import viewportFix from "viewport-units-buggyfill";
 
+import { arrayMove } from 'react-sortable-hoc';
+
 import Rack from "./Rack";
 import AppAudio from './AppAudio';
+import SortableEffectsList from './Rack/SortableEffectsList';
+import { EffectsModal } from './Rack/Modals';
+import { EffectTypes } from './Effects/EffectTypes'
 
 import './App.css';
 
@@ -16,26 +21,17 @@ viewportFix.init();
  */
 class App extends Component {
 
-    processors = [ "bit-crusher" ];
-
     constructor(props) {
         super(props);
         this.appAudio = new AppAudio();
-        this.state = { loaded: false, racks: [], playing: false, selectedRack: this.appAudio.selectedRack }
+        this.state = { loaded: false, racks: [], playing: false, selectedRack: this.appAudio.selectedRack,
+        globalEffects: [] }
     }
     
     async initialise() {
         if (this.state.loaded) return;
         await this.appAudio.initialise();
-        await this.loadProcessors();
         await this.setState({loaded: true});
-    }
-
-    async loadProcessors() {
-        for (let worklet of this.processors) {
-            // Todo: use Promise.all() here to allow asynchronous loading.
-            await this.appAudio.context.audioWorklet.addModule(`worklets/${worklet}.js`);
-        }
     }
 
     async addRack() {
@@ -72,9 +68,60 @@ class App extends Component {
             racks: this.state.racks.filter(r => r.id !== id)
         })
     }
+    
+    globalEffectsComponent() {
+        const EffectsList = SortableEffectsList(this.appAudio);
+        if (!this.state.globalEffectsRackOpen) return null;
+        return <section className="global-effects-rack">
+            <div className="effects-rack">
+                { <EffectsList 
+                    effects={this.state.globalEffects}
+                    removeEffect={ id => this.removeEffect(id) }
+                    onSortEnd={ result => this.onSortEnd(result) }
+                    axis="xy"
+                    lockAxis="x"
+                    lockToContainerEdges={true}
+                    useDragHandle
+                    helperClass={"being-dragged"}
+                    /> }
+            </div>
+            <EffectsModal
+                close={ () => this.closeGlobalEffectsRack() }
+                chooseItem={ effect => this.addGlobalEffect(effect) }
+                items={ EffectTypes }>
+            </EffectsModal>
+        </section>
+    }
+    
+    onSortEnd({oldIndex, newIndex}) {
+        this.appAudio.moveGlobalEffect({oldIndex, newIndex});
+        this.setState({
+          globalEffects: arrayMove(this.state.globalEffects, oldIndex, newIndex),
+      })}
+
+    removeEffect(id) {
+        this.appAudio.removeGlobalEffect(id);
+        const effectsToKeep = effect => effect.id !== id;
+        this.setState({globalEffects: this.state.globalEffects.filter(effectsToKeep)});
+    }
+
+    addGlobalEffect(effectType) {
+        const effectId = this.appAudio.addGlobalEffect(effectType);
+        this.setState({ globalEffects: [...this.state.globalEffects, {id: effectId, effectType}]});
+    }
+
+    async openGlobalEffectsRack() {
+        await this.initialise();
+        return this.setState({ globalEffectsRackOpen: true });
+    }
+    
+    closeGlobalEffectsRack() {
+        this.setState({ globalEffectsRackOpen: false });
+    }
 
     render() {
         return <section className="app">
+            { this.globalEffectsComponent() }
             <button className="add-rack" onClick={() => this.addRack()}>+ Rack</button>
             { this.state.racks.map(rack => 
                 <Rack 
@@ -84,6 +131,7 @@ class App extends Component {
                     deleteSelf={ () => this.deleteRack(rack.id) }>
                 </Rack>
             ) }
+            <button className="open-global-effects-rack" onClick={ () => this.openGlobalEffectsRack() }>Global Effects</button>
             <button className="play-all" onMouseDown={() => this.playAll()}>Play All</button>
             <button className="pause-all" onClick={() => this.pauseAll()}>Pause All</button>
         </section>;

@@ -24,7 +24,7 @@ class RackAudio {
         this.appAudio = appAudio;
         this.effects = [];
 
-        this.destination = this.appAudio.context.destination;
+        this.destination = this.appAudio.destination;
         this.output = this.appAudio.context.createGain();
         this.output.connect(this.destination);
     }
