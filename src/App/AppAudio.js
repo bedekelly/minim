@@ -169,8 +169,6 @@ class AppAudio {
     
     moveGlobalEffect({oldIndex, newIndex}) {
         
-        debugger;
-        
         // A -> E -> B becomes A -> B.
         const oldOutput = this.outputOf(oldIndex);
         const oldInput = this.inputOf(oldIndex);

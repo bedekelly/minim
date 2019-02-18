@@ -144,6 +144,7 @@ button {
     margin-left: 6vh;
     user-select: none;
     overflow-x: scroll;
+    overflow-y: visible;
     box-sizing: border-box;
     border: 5px solid lightgrey;
     font-family: monospace;
@@ -222,4 +223,3 @@ button {
 .global-effects-rack .sortable-container .effect {
     margin: 20px;
 }
-
