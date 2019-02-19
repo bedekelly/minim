@@ -232,17 +232,20 @@ class Synth extends React.PureComponent {
                   <Knob min={-3} max={3} value={this.state.osc1.octave} precision={ 0 }
                         default={ 0 }
                         appAudio={ this.props.appAudio }
+                        label="Octave"
                         id={ this.props.id + "-osc1-octave" }
                         onChange={ value => this.changeOsc1Octave(value) }></Knob>
                   <div className="label">Oct</div>
                   <Knob min={-12} max={12} value={this.state.osc1.semi} precision={ 0 }
                         default={ 0 }
+                        label="Semi"
                         appAudio={ this.props.appAudio }
                         id={ this.props.id + "-osc1-semi" }
                         onChange={ value => this.changeOsc1Semi(value) }></Knob>
                   <div className="label">Semi</div>
                   <Knob min={-50} max={50} value={this.state.osc1.tune} precision={ 0 }
                         default={ 0 }
+                        label="Tune"
                         appAudio={ this.props.appAudio }
                         id={ this.props.id + "-osc1-tune" }
                         onChange={ value => this.changeOsc1Tune(value) }></Knob>
@@ -299,18 +302,21 @@ class Synth extends React.PureComponent {
                   <Knob min={-3} max={3} value={this.state.osc2.octave} precision={ 0 }
                         appAudio={ this.props.appAudio }
                         default={ 0 }
+                        label="Octave"
                         id={ this.props.id + "-osc2-octave" }
                         onChange={ value => this.changeOsc2Octave(value) }></Knob>
                   <div className="label">Oct</div>
                   <Knob min={-12} max={12} value={this.state.osc2.semi} precision={ 0 }
                         appAudio={ this.props.appAudio }
                         default={ 0 }
+                        label="Semi"
                         id={ this.props.id + "-osc2-semi" }
                         onChange={ value => this.changeOsc2Semi(value) }></Knob>
                   <div className="label">Semi</div>
                   <Knob min={-50} max={50} value={this.state.osc2.tune} precision={ 0 }
                         appAudio={ this.props.appAudio }
                         default={ 0 }
+                        label="Tune"
                         id={ this.props.id + "-osc2-tune" }
                         onChange={ value => this.changeOsc2Tune(value) }></Knob>
                   <div className="label">Tune</div>
@@ -367,9 +373,12 @@ class Synth extends React.PureComponent {
                                  >{ this.state.filter.type }</span></h2>
                 <div className="knobs">
                   <Knob min={1000} max={12000} value={this.state.filterFreq}
-                        precision={ 0 }
+                        precision={ 2 }
                         onChange={value => this.changeFilterFreq(value)}
                         appAudio={ this.props.appAudio }
+                        label="Frequency"
+                        units="kHz"
+                        scale={ 0.001 }
                         default={ 12000 }
                         id={ this.props.id + "-filter-freq" }
                         midiLearn={ () => this.midiLearn("setFilterFrequency", 0, 1000) }></Knob>
@@ -378,6 +387,8 @@ class Synth extends React.PureComponent {
                         precision={ 1 }
                         appAudio={ this.props.appAudio }
                         default={ 0 }
+                        label="Resonance"
+                        units="dB"
                         id={ this.props.id + "-filter-res" }
                         onChange={value => this.changeFilterRes(value)}
                         midiLearn={ () => this.midiLearn("setFilterResonance", 0, 30) }></Knob>
@@ -392,6 +403,9 @@ class Synth extends React.PureComponent {
                     <Slider min={ 0 } max={ 1 } step={ 0.01 }
                         value={ this.state.filterEnvelope.attack }
                         default={ 0 }
+                        units="s"
+                        label="Attack"
+                        precision={ 2 }
                         onChange={ value => this.setFilterAttack(value) }
                         appAudio={ this.props.appAudio }
                         id={ this.props.id + "-filter-attack" }
@@ -401,6 +415,9 @@ class Synth extends React.PureComponent {
                     <Slider min={ 0 } max={ 1 } step={ 0.01 } 
                         value={ this.state.filterEnvelope.decay }
                         default={ 0 }
+                        units="s"
+                        label="Decay"
+                        precision={ 2 }
                         onChange={ value => this.setFilterDecay(value) }
                         appAudio={ this.props.appAudio }
                         id={ this.props.id + "-filter-decay" }
@@ -410,6 +427,10 @@ class Synth extends React.PureComponent {
                     <Slider min={ 0 } max={ 1 } step={ 0.01 } 
                         value={ this.state.filterEnvelope.sustain }
                         default={ 1 }
+                        units="%"
+                        label="Sustain"
+                        precision={ 0 }
+                        scale={ 100 }
                         onChange={ value => this.setFilterSustain(value) }
                         appAudio={ this.props.appAudio }
                         id={ this.props.id + "-filter-sustain" }
@@ -419,6 +440,9 @@ class Synth extends React.PureComponent {
                     <Slider min={ 0.01 } max={ 1 } step={ 0.01 } 
                         value={ this.state.filterEnvelope.release }
                         default={ 0.01 }
+                        units="s"
+                        label="Release"
+                        precision={ 2 }
                         onChange={ value => this.setFilterRelease(value) }
                         appAudio={ this.props.appAudio }
                         id={ this.props.id + "-filter-release" }
@@ -434,6 +458,8 @@ class Synth extends React.PureComponent {
                 <div className="lfo-layout">
                   <Knob min={ 0 } max={ 25 } value={ this.state.lfo.rate }
                         default={ 0 }
+                        label="Rate"
+                        units="Hz"
                         onChange={ value => this.setLFORate(value) }
                         appAudio={ this.props.appAudio }
                         id={ this.props.id + "-lfo-rate" }
@@ -479,6 +505,9 @@ class Synth extends React.PureComponent {
                     <Slider min={ 0 } max={ 1 } step={ 0.001 } 
                         value={ this.state.ampEnvelope.attack }
                         default={ 0 }
+                        label="Attack"
+                        precision={ 2 }
+                        units="s"
                         onChange={ value => this.setAmpAttack(value) }
                         appAudio={ this.props.appAudio }
                         id={ this.props.id + "-amp-attack" }
@@ -488,6 +517,9 @@ class Synth extends React.PureComponent {
                     <Slider min={ 0 } max={ 1 } step={ 0.001 } 
                         value={ this.state.ampEnvelope.decay }
                         default={ 0 }
+                        label="Decay"
+                        precision={ 2 }
+                        units="s"
                         onChange={ value => this.setAmpDecay(value) }
                         appAudio={ this.props.appAudio }
                         id={ this.props.id + "-amp-decay" }
@@ -497,6 +529,10 @@ class Synth extends React.PureComponent {
                     <Slider min={ 0 } max={ 1 } step={ 0.001 } 
                         value={ this.state.ampEnvelope.sustain }
                         default={ 1 }
+                        label="Sustain"
+                        precision={ 0 }
+                        units="%"
+                        scale={ 100 }
                         onChange={ value => this.setAmpSustain(value) }
                         appAudio={ this.props.appAudio }
                         id={ this.props.id + "-amp-sustain" }
@@ -506,6 +542,9 @@ class Synth extends React.PureComponent {
                     <Slider min={ 0.01 } max={ 1 } step={ 0.01 } 
                         value={ this.state.ampEnvelope.release }
                         default={ 0.01 }
+                        precision={ 2 }
+                        units="s"
+                        label="Release"
                         onChange={ value => this.setAmpRelease(value) }
                         appAudio={ this.props.appAudio }
                         id={ this.props.id + "-amp-release" }

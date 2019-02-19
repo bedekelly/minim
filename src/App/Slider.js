@@ -19,40 +19,84 @@ function linMap(value, fromLower, fromUpper, toLower, toUpper) {
 export default class Slider extends React.Component {
     constructor(props) {
         super(props);
+        this.sliderRef = React.createRef();
         this.props = props;
         this.registerHandler();
+        this.state = {
+            dragging: false
+        }
     }
     
-    onClick(event) {
-        
-        // Disable right-click.
+    onMouseDown(event) {
+        const that = this;
+
+        // Don't set any listeners after a right-click.
         if (event.button !== 0) {
             event.preventDefault();
+            return;
         }
 
         // Alt-click means we should start listening for MIDI events.
-        else if (event.altKey) {
+        if (event.altKey) {
             event.preventDefault();
-            console.log(this.props.id);
             this.props.appAudio.midiLearn(this.props.id);
+            return;
         }
         
-        else if (event.metaKey) {
+        if (event.metaKey) {
             event.preventDefault();
             this.props.onChange(this.props.default);
             return;
+        }
+        
+        /**
+         * Stop listening to the user's mouse movements.
+         */
+        function mouseUp(event) {
+            document.removeEventListener("mouseup", mouseUp);
+            that.setState({ dragging: false });
+        }
+        
+        document.addEventListener("mouseup", mouseUp);
+        event.stopPropagation();
+        
+        this.setState({ dragging: true });
+    }
+    
+    knobValueStyle() {
+        const { x, y, height, width } = this.sliderRef.current.getBoundingClientRect();
+        let realWidth = width === 300 ? 25 : width;
+        const yDiff = this.showBottom ? height + 20 : -70;
+        return {
+            top: `${y + yDiff}px`,
+            left: `${x + realWidth/2}px`
         }
     }
     
     render() {
         const { min, max, step } = this.props;
-        return <input type="range" min={ min } max={ max } 
-            className="slider" step={ step }
-            value={ this.props.value } 
-            style={ { cursor: "pointer" } }
-            onClick={ event => this.onClick(event) }
-            onChange={ event => this.props.onChange(event.target.valueAsNumber) }
-        ></input>
+        const valueClass = "value " + (this.pixelDiff > 0 ? "bottom" : "top");
+        const scale = this.props.scale || 1;
+        const units = this.props.units || "";
+        const precision = this.props.precision !== undefined ? this.props.precision : 1;
+
+        return <React.Fragment>
+            { this.state.dragging && 
+                <div 
+                 style={ this.knobValueStyle() } 
+                 className={ valueClass }>
+                     { `${this.props.label}: ${(this.props.value * scale).toFixed(precision)}${units}` }
+                 </div> }
+             <input type="range" min={ min } max={ max } 
+                 className="slider" step={ step }
+                 ref={ this.sliderRef }
+                 value={ this.props.value } 
+                 style={ { cursor: "pointer" } }
+                 onMouseDown={ event => this.onMouseDown(event) }
+                 onChange={ event => this.props.onChange(event.target.valueAsNumber) }
+             ></input>
+        </React.Fragment>
+        
     }
     
     gotMidi(value) {

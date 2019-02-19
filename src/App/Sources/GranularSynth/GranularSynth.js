@@ -70,6 +70,9 @@ export default class GranularSynth extends React.Component {
              min={ this.MIN_LENGTH }
              max={ this.MAX_LENGTH }
              value={ this.state.length }
+             default={ this.MIN_LENGTH }
+             label="Length"
+             units="s"
              appAudio={ this.props.appAudio }
              id={ this.props.id + "-length" }
              onChange={ length => this.setLength(length) }
@@ -81,6 +84,8 @@ export default class GranularSynth extends React.Component {
              min={ this.MIN_SPACE }
              max={ this.MAX_SPACE }
              value={ this.state.space }
+             label="Spacing"
+             units="s"
              id={ this.props.id + "-spacing" }
              appAudio={ this.props.appAudio }
              onChange={ space => this.setSpace(space) }

@@ -28,14 +28,13 @@
   box-sizing: border-box;
   position: fixed;
   top: 0;
-  left: 0;
   background: #00aabb;
   border-radius: .4em;
   text-align: center;
   font-family: monospace;
   font-size: 16pt;
   line-height: 1;
-  width: 100px;
+  transform: translateX(-50%);
   height: 50px;
   padding: 15px;
   user-select: none;

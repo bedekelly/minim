@@ -28,6 +28,11 @@ class HighPassFilter extends React.Component {
                 onChange={ value => this.frequencyChange(value) }
                 appAudio={ this.props.appAudio }
                 id={ this.props.id + "-frequency" }
+                units="kHz"
+                label="Cut"
+                scale={ 0.001 }
+                precision={ 2 }
+                default={ 2500 }
                 ></Slider>
         </div>;
     }

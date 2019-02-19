@@ -56,6 +56,9 @@ export default class Distortion extends React.Component {
                  <Knob min={ 0 } max={ this.audio.max } 
                      value={this.state.amount}
                      default={ 0 }
+                     units="%"
+                     scaling={ 100/this.audio.max }
+                     label="Distortion"
                      appAudio={ this.props.appAudio }
                      id={ this.props.id + "-distortion" }
                      onChange={ amount => this.setAmount(amount) } precision={ 0 }/>

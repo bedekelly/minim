@@ -27,7 +27,11 @@ class Gain extends React.Component {
         return <div className="gain">
             <Knob min={ this.MIN_GAIN } max={ this.MAX_GAIN } 
                 value={this.state.value} 
-                onChange={value => this.setGain(value)} 
+                onChange={value => this.setGain(value)}
+                scale={ 100 }
+                precision={ 0 }
+                units="%"
+                label="Volume"
                 appAudio={ this.props.appAudio }
                 id={ `${this.props.id}-gain` }
                 default={ this.DEFAULT_GAIN }

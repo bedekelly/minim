@@ -6,10 +6,10 @@ class HighPassFilterAudio extends EffectAudio {
         super(parentRack);
         const filter = this.node = this.context.createBiquadFilter();
         filter.type = "highpass";
-        filter.frequency.setValueAtTime(1000, this.context.currentTime);
+        filter.frequency.setValueAtTime(2500, this.context.currentTime);
         filter.Q.setValueAtTime(1.5, this.context.currentTime);
         filter.gain.setValueAtTime(3, this.context.currentTime);
-        this._value = 1000;
+        this._value = 2500;
     }
     
     set value(value) {

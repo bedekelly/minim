@@ -137,12 +137,11 @@ class Knob extends React.Component {
     
     knobValueStyle() {
         const { x, y, height, width } = this.knobRef.current.getBoundingClientRect();
-        // Hack: for some reason width is showing as 300 for a 25px knob?!
-        let realWidth = width !== 50 ? 25 : 50;
+        let realWidth = width === 300 ? 25 : width;
         const yDiff = this.showBottom ? height + 20 : -70;
         return {
             top: `${y + yDiff}px`,
-            left: `${x - 50 + realWidth/2}px`
+            left: `${x + realWidth/2}px`
         }
     }
   
@@ -152,13 +151,15 @@ class Knob extends React.Component {
   
     render() {
         const valueClass = "value " + (this.pixelDiff > 0 ? "bottom" : "top");
+        const scale = this.props.scale || 1;
+        const units = this.props.units || "";
         return <React.Fragment>
             <div className="knob" ref={ this.knobRef }>
                 { this.state.dragging && 
                     <div 
                      style={ this.knobValueStyle() } 
                      className={ valueClass }>
-                         { this.props.value.toFixed(this.precision) }
+                         { `${this.props.label}: ${(this.props.value * scale).toFixed(this.precision)}${units}` }
                      </div> }
                  <div className="knob-inner" style={this.knobStyle()} onMouseDown={ event => this.onMouseDown(event) }>
                      <div className="notch"></div>
@@ -194,7 +195,9 @@ Knob.propTypes = {
     onChange: PropTypes.func.isRequired,
     default: PropTypes.number.isRequired,
     appAudio: PropTypes.any.isRequired,
-    id: PropTypes.string.isRequired
+    id: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
+    units: PropTypes.string
 }
 
 

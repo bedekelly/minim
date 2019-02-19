@@ -38,6 +38,10 @@ export default class Echo extends React.Component {
                     <Knob min={ 0 } max={ 0.8 }
                           value={ this.state.feedback } 
                           default={ 0.2 }
+                          units="%"
+                          scale={ 100 }
+                          precision={ 0 }
+                          label="Feedback"
                           appAudio={ this.props.appAudio }
                           id={ this.props.id + "-feedback" }
                           onChange={ value => this.setFeedback(value) }></Knob>
@@ -45,6 +49,9 @@ export default class Echo extends React.Component {
                     <Knob min={ 0 } max={ 1 }
                           value={ this.state.time } 
                           default={ 0.3 }
+                          label="Time"
+                          units="s"
+                          precision={ 2 }
                           appAudio={ this.props.appAudio }
                           id={ this.props.id + "-time" }
                           onChange={ value => this.setTime(value) }></Knob>
@@ -52,6 +59,10 @@ export default class Echo extends React.Component {
                     <Knob min={ 1000 } max={ 10000 }
                           value={ this.state.cutoff } 
                           default={ 10000 }
+                          label="Cutoff"
+                          units="kHz"
+                          scale={ 0.001 }
+                          precision={ 2 }
                           appAudio={ this.props.appAudio }
                           id={ this.props.id + "-cutoff" }
                           onChange={ value => this.setCutoff(value) }></Knob>

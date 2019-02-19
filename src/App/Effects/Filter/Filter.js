@@ -27,6 +27,11 @@ class Filter extends React.Component {
                 value={ this.state.value }
                 onChange={ value => this.frequencyChange(value) }
                 appAudio={ this.props.appAudio }
+                units="kHz"
+                label="Cut"
+                default={ 2500 }
+                scale={ 0.001 }
+                precision={ 2 }
                 id={ this.props.id + "-frequency" }
                 ></Slider>
         </div>;

@@ -159,9 +159,12 @@ class TapeLooper extends React.Component {
             <Knob 
                 min={ this.PLAYBACK_MIN } 
                 max={ this.PLAYBACK_MAX } 
-                precision={ 2 }
+                precision={ 0 }
                 value={ this.state.playbackRate }
                 default={ 1 }
+                label="Speed"
+                units="%"
+                scale={ 100 }
                 id={ this.props.id + "-playback-speed" }
                 onChange={ value => this.setPlaybackRate(value) }
                 appAudio={ this.props.appAudio }>

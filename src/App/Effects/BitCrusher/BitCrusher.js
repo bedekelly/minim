@@ -61,7 +61,7 @@ export default class BitCrusher extends React.Component {
             let p = 4 * (row * width + col);
             
             const r = 50 + 50 * (1 + Math.tan(-t/2000 + x + y - 100));
-            const g = 90 + (row) % 128;
+            const g = 90 + row % 128;
             const b = 128 * (1 + Math.sin(x/width));
             
             pixels[p] = r;
@@ -103,6 +103,7 @@ export default class BitCrusher extends React.Component {
             <Knob min={1} max={16} 
                 value={ this.state.bitDepth }
                 default={ 12 }
+                label={"Bits"}
                 precision={ 0 }
                 id={ this.props.id + "-bit-depth" }
                 appAudio={ this.audio.appAudio }
@@ -115,6 +116,10 @@ export default class BitCrusher extends React.Component {
             <Knob min={0} max={1} 
                 value={ this.state.frequencyReduction }
                 default={ 0.5 }
+                scale={ 100 }
+                precision={ 0 }
+                units="%"
+                label={ "Frequencies" }
                 id={ this.props.id + "-frequency-reduction"}
                 appAudio={ this.audio.appAudio }
                 onChange={ value => this.changeFrequencyReduction(value) }
