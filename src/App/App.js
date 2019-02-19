@@ -79,8 +79,6 @@ class App extends Component {
                     removeEffect={ id => this.removeEffect(id) }
                     onSortEnd={ result => this.onSortEnd(result) }
                     axis="xy"
-                    lockAxis="x"
-                    lockToContainerEdges={true}
                     useDragHandle
                     helperClass={"being-dragged"}
                     /> }

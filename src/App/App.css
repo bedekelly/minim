@@ -167,8 +167,8 @@ button {
 
 .effect.being-dragged {
     z-index: 9999 !important;
-    margin-top: 3vh;
-    margin-left: 3vh;
+    /* margin-top: 3vh;
+    margin-left: 3vh; */
 }
 
 .global-effects-rack .add-effect:hover {
