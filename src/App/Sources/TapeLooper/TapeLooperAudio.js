@@ -12,6 +12,7 @@ class TapeLooperAudio {
         this.context = this.appAudio.context;
         this.absoluteStartTime = 0;
         this.relativeStartTime = 0;
+        this.originalDuration = 0;
         this.playbackRate = 1;
         this.type = SourceType.TapeLooper;
         this.looping = true;
@@ -30,7 +31,10 @@ class TapeLooperAudio {
         this.relativeStartTime = this.relativeCurrentTime;
         this.absoluteStartTime = this.context.currentTime;
         this.looping = !this.looping;
-        if (this.node) this.node.loop = this.looping;
+        
+        if (!this.node) return;
+        
+        this.node.loop = this.looping;
         
         if (!this.looping) {
             // Setup on-ended callback to move play head to start again.
@@ -39,7 +43,7 @@ class TapeLooperAudio {
             }
         } else {
             // Remove on-ended callback.
-            this.node.onended = event => console.log(event);
+            this.node.onended = () => {};
         }
     }
 
@@ -52,6 +56,7 @@ class TapeLooperAudio {
         this.relativeStartTime = 0;
         this.absoluteStartTime = context.currentTime;
         this.buffer = await prom;
+        this.originalDuration = this.buffer.duration;
         this.loopEnd = this.buffer.duration;
     }
 
@@ -148,12 +153,37 @@ class TapeLooperAudio {
     }
 
     scrubToFraction(fraction) {
-        const newTime = fraction * this.buffer.duration;
+        this.skipToTime(fraction * this.originalDuration);
+    }
+    
+    skipToTime(newTime) {
+        this.inLoop = this.checkInLoop();
+        if (newTime > this.loopEnd && this.looping) return;
         this.relativeStartTime = newTime;
         this.absoluteStartTime = this.context.currentTime;
         if (!this.paused) {
             this.disconnect();
             this.play();
+        }
+    }
+
+    skipToStartOfSong() {
+        this.skipToTime(0);
+    }
+    
+    skipToStartOfLoopOrSong() {
+        if (this.relativeCurrentTime > this.loopStart) {
+            this.skipToTime(this.loopStart)
+        } else {
+            this.skipToStartOfSong();
+        }
+    }
+    
+    skipToEndOfLoopOrSong() {
+        if (this.relativeCurrentTime < this.loopEnd) {
+            this.skipToTime(this.loopEnd)
+        } else {
+            this.stop()
         }
     }
 
@@ -188,7 +218,6 @@ class TapeLooperAudio {
     
     get relativeCurrentTime() {
         if (this.paused) {
-            console.log("paused");
             return this.relativeStartTime;
         }
         

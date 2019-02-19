@@ -5,6 +5,8 @@ import Editor from '../../Editor/Editor.js';
 import TapeComponents from './TapeComponents';
 import Knob from '../../Knob';
 
+const DOUBLE_CLICK_TIME = 600;  // milliseconds.
+
 
 class TapeLooper extends React.Component {
 
@@ -17,6 +19,7 @@ class TapeLooper extends React.Component {
         this.state = {
             zoomed: false,
             hasTape: false,
+            lastTimeSkippedBackward: 0,
             playing: false,
             looping: true,
             playbackRate: this.audio.playbackRate
@@ -98,6 +101,27 @@ class TapeLooper extends React.Component {
         }
     }
     
+    skipBackward() {
+        const now = Date.now();
+        console.log(now, this.state.lastTimeSkippedBackward);
+        console.log(now - this.state.lastTimeSkippedBackward);
+        if (now - this.state.lastTimeSkippedBackward < DOUBLE_CLICK_TIME) {
+            // Skip to start of song.
+            console.log("double click", { now, DOUBLE_CLICK_TIME })
+            this.audio.skipToStartOfSong();
+        } else {
+            this.audio.skipToStartOfLoopOrSong();
+        }
+        
+        this.setState({
+            lastTimeSkippedBackward: now
+        })
+    }
+    
+    skipForward() {
+        this.audio.skipToEndOfLoopOrSong();
+    }
+    
     editor() {
         return <Editor 
                 close={() => this.closeEditor()} 
@@ -107,8 +131,8 @@ class TapeLooper extends React.Component {
                 play={ () => this.play() }
                 pause={ () => this.pause()}
                 toggleLoop={ () => this.toggleLoop() }
-                rewind={ () => console.log("Rewind") }
-                fastForward={ () => console.log("Fast-forward") }
+                rewind={ () => this.skipBackward() }
+                fastForward={ () => this.skipForward() }
                ></Editor>
     }
     
