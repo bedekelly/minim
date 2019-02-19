@@ -119,7 +119,7 @@ export default class BitCrusher extends React.Component {
                 scale={ 100 }
                 precision={ 0 }
                 units="%"
-                label={ "Frequencies" }
+                label={ "Frequency" }
                 id={ this.props.id + "-frequency-reduction"}
                 appAudio={ this.audio.appAudio }
                 onChange={ value => this.changeFrequencyReduction(value) }
