@@ -12,8 +12,6 @@ import { faTimes } from '@fortawesome/pro-solid-svg-icons';
 library.add(faTimes);
 
 
-
-
 const SIZE = 300;
 const COLOURS = [
     "rgb(0, 0, 0)",
@@ -74,14 +72,18 @@ export default class Sequencer extends React.PureComponent {
             draggingNote: null,
             closestPoint: null,
             mousePos: { x: -10, y: -10 },
-            selectedDrum: 0
+            selectedDrum: 0,
+            canDragRing: false
         };
+        
+        this.keyDown = this.keyDown.bind(this);
+        this.keyUp = this.keyUp.bind(this);
     }
     
     get frequency() {
         return this.state.bpm / 60;
     }
-    
+
     radiusOfRing(num) {
         const totalSpace = SIZE / 2 - 20;
         const circleRadius = totalSpace / this.state.beatsPerMeasure;
@@ -99,18 +101,28 @@ export default class Sequencer extends React.PureComponent {
     componentDidUpdate() {
         this.context = this.canvas.current.getContext("2d");
     }
-    
+
+    keyDown(event) {
+        if (!(event.code === "MetaLeft" || event.code === "ControlLeft" )) return;
+        this.setState({ canDragRing: true });
+    }
+
+    async keyUp(event) {
+        if (!(event.code === "MetaLeft" || event.code === "ControlLeft" )) return;
+        if (this.state.draggingRing) await this.stopDraggingRing();
+    }
+
     refreshContext() {
         if (!this.context.clearRect ) this.context = this.canvas.current.getContext("2d");
         return this.context;
     }
-    
+
     renderFrame() {
         this.refreshContext();
 
         // Calculate clockwise progress through the bar, in radians.
         const outermostAngleTravelled = this.audio.currentProgress * -2 * Math.PI;
-        
+
         // Update the canvas with the current state.
         this.context.clearRect(0, 0, SIZE, SIZE);
         this.drawRings(outermostAngleTravelled);
@@ -119,14 +131,14 @@ export default class Sequencer extends React.PureComponent {
         if (this.state.draggingNote) this.drawDraggingNote();
         requestAnimationFrame(timestamp => this.renderFrame(timestamp));
     }
-    
+
     drawDraggingNote() {
         const point = this.getClosestPointToMouse();
         if (!point) return;
         const colour = COLOURS[this.state.draggingNote.drum];
         this.drawNote(point.coords.x - SIZE/2, point.coords.y - SIZE/2, colour);
     }
-    
+
     drawPositionIndicator(ring, outermostAngleTravelled) {
         const ctx = this.refreshContext();
         const radius = this.radiusOfRing(ring);
@@ -139,17 +151,38 @@ export default class Sequencer extends React.PureComponent {
         ctx.arc(SIZE/2+x, SIZE/2+y, 4, 0, 2 * Math.PI);
         ctx.fill();
     }
-    
+
+    getAngleAtMouse() {
+        let { x, y } = this.state.mousePos;
+        return Math.PI - Math.atan2(x, y);
+    }
+
+    closeToRing(ring) {
+        let { x, y } = this.state.mousePos;
+        const radius = this.radiusOfRing(ring);
+        const distanceFromMiddle = Math.hypot(x, y);
+        return Math.abs(radius - distanceFromMiddle) < 5;
+    }
+
+    closestRing() {
+        for (let ring=1; ring <= this.state.beatsPerMeasure; ring++) {
+            if (this.closeToRing(ring)) return ring;
+        }
+        return null;
+    }
+
     drawRings(angleTravelled) {
         for (let ring=1; ring<=this.state.beatsPerMeasure; ring++) {
-            this.drawRing(ring);
+            const bold = (this.state.canDragRing && !this.state.draggingRing && this.closeToRing(ring)) || 
+                    this.state.draggingRing === ring;
+            this.drawRing(ring, bold);
             this.drawPositionIndicator(ring, angleTravelled);
         }
     }
 
-    drawRing(ring) {
+    drawRing(ring, bold) {
         const ctx = this.refreshContext();
-        ctx.lineWidth = 2;
+        ctx.lineWidth = bold ? 4 : 2;
         ctx.fillStyle = "#555";
         ctx.strokeStyle = "#555";
 
@@ -158,7 +191,7 @@ export default class Sequencer extends React.PureComponent {
         ctx.arc(SIZE/2, SIZE/2, radius, 0, 2 * Math.PI);
         ctx.stroke();
     }
-    
+
     snap(x, y, radius) {
         let circleX = x;
         let circleY = y;
@@ -212,6 +245,7 @@ export default class Sequencer extends React.PureComponent {
         if (!closestPoint || closestPoint.dist > 17) return;
         if (this.state.dragging) return;
         if (this.hoveringOverNote) return;
+        if (this.state.canDragRing) return;
         this.drawNote(
             closestPoint.coords.x - SIZE/2, 
             closestPoint.coords.y - SIZE/2, 
@@ -223,6 +257,7 @@ export default class Sequencer extends React.PureComponent {
         size |= 7;
         const ctx = this.refreshContext();
         ctx.fillStyle = colour;
+        ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.arc(SIZE/2+x, SIZE/2+y, 7, 0, 2 * Math.PI);
         ctx.fill();
@@ -232,23 +267,44 @@ export default class Sequencer extends React.PureComponent {
     
     drawAllNotes() {
         for (let { ring, angle, drum } of this.state.notes) {
+            let angleDiff = 0;
+            if (this.state.draggingRing === ring) {
+                angleDiff = this.getAngleAtMouse() - this.state.ringStartDragAngle;
+            }
+
+            let newAngle = angle + angleDiff;
+            if (this.state.snap) {
+                const distanceRoundCircle = newAngle / 2 / Math.PI;
+                const steps = this.state.beatsPerMeasure * 4;
+                const roundedDistance = Math.round(distanceRoundCircle * steps) / steps;
+                newAngle = Math.PI * 2 * roundedDistance;
+            }
+
             const radius = this.radiusOfRing(ring);
-            const x = radius * Math.sin(angle);
-            const y = -radius * Math.cos(angle);
+            const x = radius * Math.sin(newAngle);
+            const y = -radius * Math.cos(newAngle);
+
             const fill = COLOURS[drum];
             this.drawNote(x, y, fill);
         }
     }
-    
+
     componentDidMount() {
         this.renderFrame();
+        document.addEventListener("keydown", this.keyDown);
+        document.addEventListener("keyup", this.keyUp);
     }
-    
+
+    componentWillUnmount() {
+        document.removeEventListener("keydown", this.keyDown);
+        document.removeEventListener("keyup", this.keyUp);
+    }
+
     onMouseMove(event) {
         const { x: canvasX, y: canvasY } = this.canvas.current.getBoundingClientRect();
         this.setState({mousePos: {y: event.clientY-SIZE/2-canvasY, x: event.clientX-SIZE/2-canvasX}});
     }
-    
+
     async addNoteAt(ring, angle, x, y, note) {
         const drum = note ? note.drum : this.state.selectedDrum;
         await this.setState({notes: [...this.state.notes, { ring, angle, drum, x, y }]});
@@ -284,7 +340,13 @@ export default class Sequencer extends React.PureComponent {
         await this.setState({ notes: removeFromArray(hoverNote, this.state.notes) });
         this.refreshSequencerNotes();
     }
-    
+
+    startDragging(ringToDrag) {
+        const { x, y } = this.state.mousePos;
+        const angle = Math.PI - Math.atan2(x, y);
+        this.setState({ draggingRing: ringToDrag, ringStartDragAngle: angle });
+    }
+
     onMouseDown(event) {
         event.preventDefault();
         event.stopPropagation();
@@ -294,6 +356,9 @@ export default class Sequencer extends React.PureComponent {
         if (hoverNote) {
             const notes = removeFromArray(hoverNote, this.state.notes)
             this.setState({ draggingNote: hoverNote, notes })
+        } else if (this.state.canDragRing) {
+            const ringToDrag = this.closestRing();
+            if (ringToDrag) this.startDragging(ringToDrag);
         } else this.addNoteHere()
     }
 
@@ -322,13 +387,34 @@ export default class Sequencer extends React.PureComponent {
     }
 
     async onMouseUp(event) {
-        if (!this.state.draggingNote) return;
+        if (!(this.state.draggingNote || this.state.draggingRing)) return;
         const note = this.state.draggingNote;
-        await this.addNoteHere(note);
+        if (this.state.draggingNote) await this.addNoteHere(note);
+        else if (this.state.draggingRing) await this.stopDraggingRing();
         await this.setState({ draggingNote: null });
         this.refreshSequencerNotes();
     }
     
+    stopDraggingRing() {
+        let angleDiff = this.getAngleAtMouse() - this.state.ringStartDragAngle;
+        console.log(angleDiff);
+        let newAngle = angleDiff;
+        if (this.state.snap) {
+            const distanceRoundCircle = newAngle / 2 / Math.PI;
+            const steps = this.state.beatsPerMeasure * 4;
+            const roundedDistance = Math.round(distanceRoundCircle * steps) / steps;
+            newAngle = Math.PI * 2 * roundedDistance;
+        }
+        this.rotateRingBy(this.state.draggingRing, newAngle)
+        return this.setState({ canDragRing: false, draggingRing: null });
+    }
+    
+    rotateRingBy(ring, angleDiff) {
+        for (let { ring, angle, drum } of this.state.notes) {
+            
+        }
+    }
+
     onRightClick(event) {
         event.preventDefault();
         event.stopPropagation();
@@ -347,10 +433,10 @@ export default class Sequencer extends React.PureComponent {
 
     render() {
         return <div className="sequencer">
-            <TextValue 
-                value={this.state.beatsPerMeasure} 
-                min={this.minBeatsPerMeasure} 
-                max={7} 
+            <TextValue
+                value={this.state.beatsPerMeasure}
+                min={this.minBeatsPerMeasure}
+                max={7}
                 label={ "beats" }
                 onChange={ beatsPerMeasure => this.setBeatsPerMeasure(beatsPerMeasure) } />
             <TextValue 
@@ -365,7 +451,8 @@ export default class Sequencer extends React.PureComponent {
                 onContextMenu={ e => this.onRightClick(e) }
                 id="canvas" width={ `${SIZE}px` } height={ `${SIZE}px` } 
                 ref={ this.canvas }></canvas>
-            <Toggle className="lock" value={ this.state.snap } onChange={ () => this.setState({ snap: !this.state.snap })} />
+            <Toggle className="lock" value={ this.state.snap } 
+                onChange={ () => this.setState({ snap: !this.state.snap })} />
             <MPCDrumSelector 
                 value={ this.state.selectedDrum } 
                 onChange={ selectedDrum => this.setState({ selectedDrum })} 
