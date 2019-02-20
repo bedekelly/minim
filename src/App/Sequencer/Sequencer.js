@@ -110,6 +110,7 @@ export default class Sequencer extends React.PureComponent {
     async keyUp(event) {
         if (!(event.code === "MetaLeft" || event.code === "ControlLeft" )) return;
         if (this.state.draggingRing) await this.stopDraggingRing();
+        else this.setState({ canDragRing: false });
     }
 
     refreshContext() {
@@ -173,8 +174,12 @@ export default class Sequencer extends React.PureComponent {
 
     drawRings(angleTravelled) {
         for (let ring=1; ring<=this.state.beatsPerMeasure; ring++) {
-            const bold = (this.state.canDragRing && !this.state.draggingRing && this.closeToRing(ring)) || 
-                    this.state.draggingRing === ring;
+            const bold = (
+                this.state.canDragRing && 
+                !this.state.draggingRing && 
+                this.closeToRing(ring) && 
+                !this.hoveringOverNote
+            ) || this.state.draggingRing === ring;
             this.drawRing(ring, bold);
             this.drawPositionIndicator(ring, angleTravelled);
         }
@@ -412,7 +417,11 @@ export default class Sequencer extends React.PureComponent {
     async rotateRingBy(selectedRing, angleDiff) {
         const newNotes = this.state.notes.map(note => {
             if (note.ring !== selectedRing) return note;
-            return { ...note, angle: note.angle + angleDiff };
+            const angle = note.angle + angleDiff;
+            const radius = this.radiusOfRing(note.ring);
+            const x = SIZE/2 + radius * Math.sin(angle);
+            const y = SIZE/2 + -radius * Math.cos(angle);
+            return { ...note, x, y, angle };
         });
         await this.setState({ notes: newNotes });
         this.refreshSequencerNotes();
