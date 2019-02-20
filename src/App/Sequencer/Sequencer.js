@@ -409,10 +409,13 @@ export default class Sequencer extends React.PureComponent {
         return this.setState({ canDragRing: false, draggingRing: null });
     }
     
-    rotateRingBy(ring, angleDiff) {
-        for (let { ring, angle, drum } of this.state.notes) {
-            
-        }
+    async rotateRingBy(selectedRing, angleDiff) {
+        const newNotes = this.state.notes.map(note => {
+            if (note.ring !== selectedRing) return note;
+            return { ...note, angle: note.angle + angleDiff };
+        });
+        await this.setState({ notes: newNotes });
+        this.refreshSequencerNotes();
     }
 
     onRightClick(event) {
