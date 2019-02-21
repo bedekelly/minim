@@ -17,6 +17,11 @@ export default class AmbienceAudio {
         this.outputNode = this.context.createGain();
         this.sourceNodes = [];
         this.currentSound = 0;
+        this.loaded = false;
+    }
+    
+    get sound() {
+        return this.SOUNDS[this.currentSound];
     }
     
     nextIndex() {
@@ -62,6 +67,7 @@ export default class AmbienceAudio {
         if (name === undefined) debugger;
         const url = BUFFER_URL(name);
         this.soundBuffers[index] = await this.fetchAndLoadAudio(url);
+        return this.soundBuffers[index];
     }
 
     startScheduling() {
@@ -117,7 +123,10 @@ export default class AmbienceAudio {
         await this.loadSoundBuffer(this.currentSound);
         this.playAt(0);
         this.startScheduling();
-        for (let i=0; i<this.SOUNDS.length; i++) { this.loadSoundBuffer(i) };
+        const promises = [];
+        for (let i=0; i<this.SOUNDS.length; i++) { promises.push(this.loadSoundBuffer(i)) };
+        await Promise.all(promises);
+        this.loaded = true;
     }
 
     routeTo(destination) {
