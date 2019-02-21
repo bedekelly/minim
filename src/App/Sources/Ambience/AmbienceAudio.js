@@ -6,7 +6,7 @@ const CROSSOVER = 2;
 
 export default class AmbienceAudio {
     
-    SOUNDS = ["Wind", "Record Crackle"]
+    SOUNDS = ["Wind", "Record Crackle", "Rainstorm"]
     
     constructor(parentRack) {
         this.soundBuffers = {};
@@ -104,6 +104,7 @@ export default class AmbienceAudio {
     playAt(time) {
         const sourceNode = this.context.createBufferSource();
         const buffer = sourceNode.buffer = this.currentBuffer;
+        if (buffer === undefined) console.log({ thisCurrentSound: this.currentSound, sounds: this.SOUNDS, thisSoundBuffers: this.soundBuffers });
         sourceNode.start(time);
         
         const gainNode = this.context.createGain();

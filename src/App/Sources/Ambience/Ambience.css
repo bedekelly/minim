@@ -34,7 +34,7 @@
   position: absolute;
   top: calc(50% - 15px);
   padding: 0;
-  padding-bottom: 1px;
+  font-family: monospace;
   cursor: pointer;
   color: whitesmoke;
   border: 2px solid #444;

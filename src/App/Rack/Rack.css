@@ -214,6 +214,7 @@ input.rack-title {
     margin-bottom: 3vh;
     font-size: 12pt;
     font-family: monospace;
+    outline: 0;
 }
 
 .add-button:hover {
