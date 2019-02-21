@@ -23,7 +23,7 @@ class HighPassFilter extends React.Component {
 
     render() {
         return <div className="hi-filter">
-            <Slider min={ 500 } max={ 10000 }
+            <Slider min={ 50 } max={ 6000 }
                 value={ this.state.value }
                 onChange={ value => this.frequencyChange(value) }
                 appAudio={ this.props.appAudio }

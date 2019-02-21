@@ -37,6 +37,7 @@
 
 .rice .waveform {
   border-radius: 7px;
+  position: relative;
   grid-area: waveform;
   display: grid;
   place-items: center;
@@ -94,4 +95,11 @@
     font-size: 18pt;
     color: #666;
     user-select: none;
+}
+
+.rice .position-indicator {
+    width: 2px;
+    position: absolute;
+    height: 80px;
+    background: red;
 }

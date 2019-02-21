@@ -17,6 +17,26 @@ function linMap(value, fromLower, fromUpper, toLower, toUpper) {
 }
 
 
+/**
+ * Clamp a value to the range lower <= value <= upper.
+ */
+function bounded(value, lower, upper) {
+  if (value > upper) return upper;
+  if (value < lower) return lower;
+  return value;
+}
+
+
+/**
+ * Linearly map a value from one range to another, then clamp the
+ * result to the second range.
+ */
+function boundedLinMap(value, fromLower, fromUpper, toLower, toUpper) {
+  const newValue = linMap(value, fromLower, fromUpper, toLower, toUpper);
+  return bounded(newValue, toLower, toUpper);
+}
+
+
 class WaveformDisplay extends React.Component {
     
     constructor(props) {
@@ -93,11 +113,21 @@ class WaveformDisplay extends React.Component {
     }
     
     componentDidUpdate() {
+        this.buffer = this.props.buffer;
         this.writeData();
+    }
+    
+    canvasClicked(event) {
+        const x = event.clientX;
+        const { width, x: leftX } = this.canvas.current.getBoundingClientRect();
+        const padding = 10;
+        const fraction = boundedLinMap(x - leftX, padding, width - padding, 0, 1);
+        this.props.selectGrain(fraction);
     }
     
     render() {
         return <canvas 
+                onClick={ event => this.canvasClicked(event) }
                 className="waveform-display"
                 width={ `${this.width}px` } 
                 height={ `${this.height}px` } 

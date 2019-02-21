@@ -34,7 +34,6 @@ class AppAudio {
 
     onMidiMessage(input, message) {
         let control, value;
-        console.log(message, message.data);
         let isControlMessage = (message.data[0] >> 4 === 11)
         if (isControlMessage) {
             control = message.data[1];
