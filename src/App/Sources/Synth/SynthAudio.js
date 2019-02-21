@@ -163,8 +163,8 @@ export default class SynthAudio {
     }
 
     noteOnAtTime(pitch, time, id) {
-        console.log("Current time: ", this.context.currentTime);
-        console.log(`noteOnAtTime(${pitch}, ${time ? time : this.context.currentTime})`);
+        // console.log("Current time: ", this.context.currentTime);
+        // console.log(`noteOnAtTime(${pitch}, ${time ? time : this.context.currentTime})`);
         const oscOneNote = pitch + this.osc1.octave * 12 + this.osc1.semi + this.osc1.tune/100;
         const oscTwoNote = pitch + this.osc2.octave * 12 + this.osc2.semi + this.osc2.tune/100;
         const pitchOne = midiToPitch(oscOneNote);
@@ -272,7 +272,7 @@ export default class SynthAudio {
     }
     
     noteOffAtTime(pitch, time) {
-        console.log(`noteOffAtTime(${pitch}, ${time ? time : this.context.currentTime})`);
+        // console.log(`noteOffAtTime(${pitch}, ${time ? time : this.context.currentTime})`);
         
         // Apply noteOff messages to every non-cleaned-up note of the given pitch.
         let notes = this.notes[pitch];
@@ -292,12 +292,13 @@ export default class SynthAudio {
 
     midiMessage(message, time, id) {
         time = time ? time : 0;
-        const { data: [messageType, note] } = message;
-        if (messageType === NOTE_OFF) {
+        const { data: [messageType, note, velocity] } = message;
+        console.log(messageType);
+        if (messageType === NOTE_OFF || velocity === 0) {
             this.noteOffAtTime(note, time, id);
         } else if (messageType === NOTE_ON) {
             this.noteOnAtTime(note, time, id);
-        }
+        } 
     }
     
     scheduleNotes(notes) {

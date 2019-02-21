@@ -42,13 +42,11 @@ class App extends Component {
     }
 
     playAll() {
-        if (this.state.playing) return;
         this.appAudio.play();
         this.setState({playing: true})
     }
 
     pauseAll() {
-        if (!this.state.playing) return;
         this.appAudio.pause();
         this.setState({playing: false});
     }

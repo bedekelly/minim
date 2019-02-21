@@ -247,12 +247,14 @@ export default class SequencerAudio {
     }
 
     play() {
+        if (this.playing) return;
         this.playing = true;
         this.lastEventAbsoluteTime = this.context.currentTime;
         this.startScheduling();
     }
 
     pause() {
+        if (!this.playing) return;
         this.lastEventRelativeTime = this.currentRelativeTime;
         this.playing = false;
         this.lastEventAbsoluteTime = this.context.currentTime;
