@@ -8,8 +8,9 @@ import './Sequencer.css';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/pro-solid-svg-icons';
-library.add(faTimes);
+import { faPlay, faPause, faStop, faTimes } from '@fortawesome/pro-solid-svg-icons';
+
+library.add(faPlay, faPause, faStop, faTimes);
 
 
 const SIZE = 300;
@@ -463,8 +464,19 @@ export default class Sequencer extends React.PureComponent {
                 onContextMenu={ e => this.onRightClick(e) }
                 id="canvas" width={ `${SIZE}px` } height={ `${SIZE}px` } 
                 ref={ this.canvas }></canvas>
-            <Toggle className="lock" value={ this.state.snap } 
-                onChange={ () => this.setState({ snap: !this.state.snap })} />
+            
+            <div className="bottom-left-buttons">
+                <Toggle className="lock" value={ this.state.snap }
+                    onChange={ () => this.setState({ snap: !this.state.snap })} />
+                <button className="stop" onClick={ () => this.audio.stop() }>
+                    <FontAwesomeIcon icon={ ["fas", "stop"] }></FontAwesomeIcon>
+                </button>
+                <button className="playpause" onClick={ () => this.audio.playPause() }>
+                    <FontAwesomeIcon icon={ ["fas", "play"] }></FontAwesomeIcon>
+                </button>
+            </div>
+            
+            
             <MPCDrumSelector 
                 value={ this.state.selectedDrum } 
                 onChange={ selectedDrum => this.setState({ selectedDrum })} 

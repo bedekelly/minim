@@ -269,4 +269,12 @@ export default class SequencerAudio {
         // console.log("sending notes to ", source);
         this.soundSource = source;
     }
+    
+    playPause() {
+        if (this.playing) {
+            this.pause()
+        } else {
+            this.play();
+        }
+    }
 }

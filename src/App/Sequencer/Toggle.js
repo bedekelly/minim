@@ -12,6 +12,6 @@ library.add(faLockAlt, faUnlockAlt);
 export default function Toggle(props) {
     const iconValue = props.value ? "lock-alt" : "unlock-alt";
     const icon = <FontAwesomeIcon icon={ ["fas", iconValue] }></FontAwesomeIcon>
-    const className = props.className ? `toggle ${props.className}` : "toggle";
-    return <span className={ className } onClick={ props.onChange }>{ icon }</span>
+    const className = `toggle ${props.className || ''} ${props.value ? "on" : "off"}`;
+    return <button className={ className } onClick={ props.onChange }>{ icon }</button>
 }

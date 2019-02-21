@@ -1,8 +1,8 @@
 .sequencer {
   background: whitesmoke;
-  border-radius: 7px;
+  border-radius: 14px;
   border: 10px solid #444;
-  box-shadow: 0 0 40px, 0 0 10px inset;
+  box-shadow: 0 0 40px;
   position: relative;
   display: grid;
   place-items: center;
@@ -106,8 +106,26 @@
     color: inherit;
 }
 
-.sequencer .lock {
+.sequencer .bottom-left-buttons {
     position: absolute;
-    bottom: 24px;
-    left: 50px;
+    bottom: 0;
+    left: 0;
+}
+
+.sequencer .bottom-left-buttons button {
+    cursor: pointer;
+    border-right: 0;
+    outline: 0;
+    border: 0;
+    border-right: 1px solid lightgrey;
+    border-top: 1px solid lightgrey;
+    background: whitesmoke;
+}
+
+.sequencer .bottom-left-buttons button:active {
+    background: lightgrey;
+}
+
+.sequencer .bottom-left-buttons button:active:not(:hover) {
+    background: whitesmoke;
 }

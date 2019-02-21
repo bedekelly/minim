@@ -1,7 +1,25 @@
 .toggle {
     cursor: pointer;
+    border-right: 0;
+    outline: 0;
+    border: 0;
+    border-right: 1px solid lightgrey;
+    border-top: 1px solid lightgrey;
+    background: whitesmoke;
 }
 
-.toggle:hover {
-    scale: 1.1;
+.toggle:active {
+    background: lightgrey;
+}
+
+.toggle:first-of-type {
+    border-radius: 0 0 0 3px;
+}
+
+.toggle.on {
+    background: lightgrey;
+}
+
+.toggle.on:active {
+    background: whitesmoke;
 }
