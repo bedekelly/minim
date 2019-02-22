@@ -77,7 +77,6 @@ export default class Sequencer extends React.PureComponent {
             canDragRing: false,
             playing: false
         };
-        
         this.keyDown = this.keyDown.bind(this);
         this.keyUp = this.keyUp.bind(this);
     }

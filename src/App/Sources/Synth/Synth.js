@@ -3,7 +3,6 @@ import React from 'react';
 import './Synth.css';
 
 import Knob from '../../Knob';
-import Slider from '../../Slider';
 
 import FilterFrequency from './FilterFrequency';
 import FilterEnvelope from './FilterEnvelope';
