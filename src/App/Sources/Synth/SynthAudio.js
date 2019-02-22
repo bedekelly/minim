@@ -276,6 +276,10 @@ export default class SynthAudio {
         
         // Apply noteOff messages to every non-cleaned-up note of the given pitch.
         let notes = this.notes[pitch];
+        if (!notes) {
+            console.warn("Couldn't find any playing notes to cancel; returning.");
+            return;
+        }
         
         for (let note of notes) {
             if (note.noteOffEnvelopeAppliedTime <= time ) continue;
