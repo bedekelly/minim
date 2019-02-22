@@ -260,7 +260,7 @@ export default class Sequencer extends React.PureComponent {
     }
     
     drawNote(x, y, colour, size) {
-        size |= 7;
+        if (!size) size = 7;
         const ctx = this.refreshContext();
         ctx.fillStyle = colour;
         ctx.lineWidth = 2;
@@ -276,19 +276,18 @@ export default class Sequencer extends React.PureComponent {
             let angleDiff = 0;
             if (this.state.draggingRing === ring) {
                 angleDiff = this.getAngleAtMouse() - this.state.ringStartDragAngle;
-            }
-
-            let newAngle = angle + angleDiff;
-            if (this.state.snap) {
-                const distanceRoundCircle = newAngle / 2 / Math.PI;
-                const steps = this.state.beatsPerMeasure * 4;
-                const roundedDistance = Math.round(distanceRoundCircle * steps) / steps;
-                newAngle = Math.PI * 2 * roundedDistance;
+                if (this.state.snap) {
+                    const distanceRoundCircle = angleDiff / 2 / Math.PI;
+                    const steps = this.state.beatsPerMeasure * 4;
+                    const roundedDistance = Math.round(distanceRoundCircle * steps) / steps;
+                    angleDiff = Math.PI * 2 * roundedDistance;
+                }
+                angle += angleDiff;
             }
 
             const radius = this.radiusOfRing(ring);
-            const x = radius * Math.sin(newAngle);
-            const y = -radius * Math.cos(newAngle);
+            const x = radius * Math.sin(angle);
+            const y = -radius * Math.cos(angle);
 
             const fill = COLOURS[drum];
             this.drawNote(x, y, fill);
