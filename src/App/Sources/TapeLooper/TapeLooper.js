@@ -1,7 +1,7 @@
 import React from "react";
 
 import './TapeLooper.css';
-import Editor from '../../Editor/Editor.js';
+import Editor from './Editor';
 import TapeComponents from './TapeComponents';
 import Knob from '../../Knob';
 
