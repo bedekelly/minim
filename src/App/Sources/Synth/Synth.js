@@ -16,12 +16,6 @@ class Synth extends React.PureComponent {
         super(props);
         this.audio = props.appAudio.sources[props.id];
         this.state = {
-            ampEnvelope: {
-                attack: this.audio.ampEnvelope.attack,
-                decay: this.audio.ampEnvelope.decay,
-                sustain: this.audio.ampEnvelope.sustain,
-                release: this.audio.ampEnvelope.release
-            },
             osc1: {
                 waveform: this.audio.osc1.waveform,
                 octave: this.audio.osc1.octave,
@@ -33,10 +27,6 @@ class Synth extends React.PureComponent {
                 octave: this.audio.osc2.octave,
                 semi: this.audio.osc2.semi,
                 tune: this.audio.osc2.tune
-            },
-            lfo: {
-                rate: this.audio.lfo.rate,
-                destination: this.audio.lfo.destination
             }
         }
     }
@@ -93,39 +83,11 @@ class Synth extends React.PureComponent {
         this.audio.osc2.tune = value;
         const osc2 = this.state.osc2;
         this.setState({ osc2: { ...osc2, tune: value }})
-    }
-    
-    playTestSeries = () => {
-        const now = this.audio.context.currentTime;
-        console.log(now);
-        
-        const monophonic = [
-            { data: [144, 60], time: now + 0 },
-            { data: [128, 60], time: now + 1 },
-            { data: [144, 65], time: now + 2 },
-            { data: [128, 65], time: now + 3 },
-            { data: [144, 60], time: now + 4 },
-            { data: [128, 60], time: now + 5 }
-        ]
-        
-        // const stackedSingleNote = [
-        //     { data: [144, 60], time: now + 0},
-        //     { data: [144, 60], time: now + 1},
-        //     { data: [128, 60], time: now + 2},
-        //     { data: [128, 60], time: now + 3}
-        // ]
-        
-        for (let barStart of [0, 6]) {
-            this.audio.scheduleNotes(monophonic.map(({data, time}) => ({
-                data, time: time + barStart
-            })));
-        }
-    }
+    }    
     
     render() {
         return (
             <div className="synth">
-              { /* <button onMouseDown={ this.playTestSeries }>Test series</button> */ }
               <div className="comp osc one">
                 <div className="knobs">
                   <Knob min={-3} max={3} value={this.state.osc1.octave} precision={ 0 }
