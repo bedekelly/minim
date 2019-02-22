@@ -74,7 +74,8 @@ export default class Sequencer extends React.PureComponent {
             closestPoint: null,
             mousePos: { x: -10, y: -10 },
             selectedDrum: 0,
-            canDragRing: false
+            canDragRing: false,
+            playing: false
         };
         
         this.keyDown = this.keyDown.bind(this);
@@ -443,6 +444,16 @@ export default class Sequencer extends React.PureComponent {
         return 1;
     }
 
+    stop() {
+        this.audio.stop();
+        this.setState({ playing: false });
+    }
+    
+    playPause() {
+        this.audio.playPause();
+        this.setState({ playing: this.audio.playing });
+    }
+
     render() {
         return <div className="sequencer">
             <TextValue
@@ -467,11 +478,13 @@ export default class Sequencer extends React.PureComponent {
             <div className="bottom-left-buttons">
                 <Toggle className="lock" value={ this.state.snap }
                     onChange={ () => this.setState({ snap: !this.state.snap })} />
-                <button className="stop" onClick={ () => this.audio.stop() }>
+                <button className="stop" onClick={ () => this.stop() }>
                     <FontAwesomeIcon icon={ ["fas", "stop"] }></FontAwesomeIcon>
                 </button>
-                <button className="playpause" onClick={ () => this.audio.playPause() }>
-                    <FontAwesomeIcon icon={ ["fas", "play"] }></FontAwesomeIcon>
+                <button className="playpause" onClick={ () => this.playPause() }>
+                    { this.state.playing ?
+                         <FontAwesomeIcon icon={ ["fas", "pause"] }></FontAwesomeIcon>
+                         : <FontAwesomeIcon icon={ ["fas", "play"] }></FontAwesomeIcon> }
                 </button>
             </div>
             
