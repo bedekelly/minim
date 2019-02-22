@@ -61,7 +61,7 @@ canvas.play-head {
   position: absolute;
   border-radius: 5px;
   box-sizing: border-box;
-  right: -2px;
+  right: 0;
   height: 100%;
   width: 2px;
   background: black;
@@ -84,7 +84,7 @@ canvas.play-head {
   position: absolute;
   border-radius: 5px;
   box-sizing: border-box;
-  left: -2px;
+  left: 0;
   height: 100%;
   width: 2px;
   background: black;
