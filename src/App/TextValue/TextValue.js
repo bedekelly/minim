@@ -48,6 +48,7 @@ export default class TextValue extends React.PureComponent {
         function mouseUp(event) {
             document.removeEventListener("mouseup", mouseUp);
             document.removeEventListener("mousemove", mouseMove);
+            that.setState({ active: false });
         }
 
         function mouseMove(event) {
@@ -62,11 +63,12 @@ export default class TextValue extends React.PureComponent {
 
         document.addEventListener("mouseup", mouseUp);
         document.addEventListener("mousemove", mouseMove);
+        this.setState({ active: true });
     }
 
     render() {
         return <span 
-            className="text-value-control" 
+            className={ "text-value-control" + (this.state.active ? " active" : "") }
             onMouseDown={ event => this.startListening(event) }
             >{ this.props.value }
             {this.props.label && 

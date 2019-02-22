@@ -71,6 +71,10 @@
     font-weight: bold;
 }
 
+.sequencer .text-value-control.active {
+    font-weight: bold;
+}
+
 .sequencer .text-value-control:first-of-type {
     left: 20px;
 }
