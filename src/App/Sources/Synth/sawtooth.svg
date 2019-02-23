@@ -1,0 +1,18 @@
+<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+
+ <g>
+  <title>background</title>
+  <rect fill="none" id="canvas_background" height="42" width="42" y="-1" x="-1"/>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <g id="svg_1">
+   <path id="svg_2" d="m14.3,19.2" stroke-miterlimit="10" stroke="#000000" fill="#000000"/>
+  </g>
+  <g stroke="null" id="svg_3">
+   <polygon stroke="null" id="svg_4" points="53.76315689086914,34.900001525878906 53.76315689086914,10.95263385772705 17.842103958129883,34.900001525878906 17.842103958129883,10.95263385772705 -16.16315746307373,33.58289337158203 -17.600000381469727,31.66710662841797 20.236841201782227,6.40263032913208 20.236841201782227,30.349998474121094 56.157894134521484,6.40263032913208 56.157894134521484,30.349998474121094 90.16315460205078,7.719738006591797 91.5999984741211,9.635525703430176 "/>
+  </g>
+  <text id="svg_5" font-family="'Helvetica Neue', Helvetica, Arial-Unicode, Arial, Sans-serif" font-weight="bold" font-size="5px" fill="#000000" y="115" x="0">Created by Aurélien Lemesre</text>
+  <text id="svg_6" font-family="'Helvetica Neue', Helvetica, Arial-Unicode, Arial, Sans-serif" font-weight="bold" font-size="5px" fill="#000000" y="120" x="0">from the Noun Project</text>
+ </g>
+</svg>

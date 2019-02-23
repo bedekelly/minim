@@ -9,6 +9,11 @@ import FilterEnvelope from './FilterEnvelope';
 import LFO from './LFO';
 import AmpEnvelope from './AmpEnvelope';
 
+import SawtoothIcon from './sawtooth.svg';
+import SineIcon from './sine.svg';
+import SquareIcon from './square.svg';
+import TriangleIcon from './triangle.svg';
+
 
 class Synth extends React.PureComponent {
     
@@ -120,7 +125,7 @@ class Synth extends React.PureComponent {
                         onChange={ e => this.changeOsc1Waveform(e.target.value) }
                         ></input>
                     <div className="light"></div>
-                    <img src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/1415658/sinepro.svg' alt=''></img>
+                    <img src={ SineIcon } alt=''></img>
                   </label>
                 </div>
 
@@ -131,7 +136,7 @@ class Synth extends React.PureComponent {
                         onChange={ e => this.changeOsc1Waveform(e.target.value) }
                         ></input>
                     <div className="light"></div>
-                    <img src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/1415658/sawtoothpro.svg' alt=''></img>
+                    <img src={ SawtoothIcon } alt=''></img>
                   </label>
                 </div>
 
@@ -142,7 +147,7 @@ class Synth extends React.PureComponent {
                         onChange={ e => this.changeOsc1Waveform(e.target.value) }
                         ></input>
                     <div className="light"></div>
-                    <img src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/1415658/trianglepro.svg' alt=''></img>
+                    <img src={ TriangleIcon } alt=''></img>
                   </label>
                 </div>
 
@@ -153,7 +158,7 @@ class Synth extends React.PureComponent {
                         onChange={ e => this.changeOsc1Waveform(e.target.value) }
                         ></input>
                     <div className="light"></div>
-                    <img src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/1415658/squarepro.svg' alt=''></img>
+                    <img src={ SquareIcon } alt=''></img>
                   </label>
                 </div>
 
@@ -190,7 +195,7 @@ class Synth extends React.PureComponent {
                         onChange={ e => this.changeOsc2Waveform(e.target.value) }
                         ></input>
                     <div className="light"></div>
-                    <img src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/1415658/sinepro.svg' alt=''></img>
+                    <img src={ SineIcon } alt=''></img>
                   </label>
                 </div>
 
@@ -201,7 +206,7 @@ class Synth extends React.PureComponent {
                         onChange={ e => this.changeOsc2Waveform(e.target.value) }
                         ></input>
                     <div className="light"></div>
-                    <img src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/1415658/sawtoothpro.svg' alt=''></img>
+                    <img src={ SawtoothIcon } alt=''></img>
                   </label>
                 </div>
 
@@ -212,7 +217,7 @@ class Synth extends React.PureComponent {
                         onChange={ e => this.changeOsc2Waveform(e.target.value) }
                         ></input>
                     <div className="light"></div>
-                    <img src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/1415658/trianglepro.svg' alt=''></img>
+                    <img src={ TriangleIcon } alt=''></img>
                   </label>
                 </div>
 
@@ -223,7 +228,7 @@ class Synth extends React.PureComponent {
                         onChange={ e => this.changeOsc2Waveform(e.target.value) }
                         ></input>
                     <div className="light"></div>
-                    <img src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/1415658/squarepro.svg' alt=''></img>
+                    <img src={ SquareIcon } alt=''></img>
                   </label>
                 </div>
 
