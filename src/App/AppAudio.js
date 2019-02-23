@@ -49,6 +49,7 @@ class AppAudio {
 
             // Reset our state so controllers work normally again.
             this.learningMidi = false;
+            this.setLearning && this.setLearning(false);
             this.midiLearnTarget = null;
         } 
 
@@ -90,21 +91,15 @@ class AppAudio {
     }
 
     unregisterAllHandlers(componentId) {
-        console.warn("Unregistering handlers not implemented");
-        // Todo: loop through all handlers with IDs starting with the
-        // given ID, and unregister them.
-        
-        /*
-        for (let input of Object.keys(this.midiHandlers)) {
-            for (let control of Object.keys(this.midiHandlers[input])) {
-                const handler = this.midiHandlers[input][control]
+        debugger;
+        for (let input of Object.keys(this.midiControlledComponents)) {
+            for (let control of Object.keys(this.midiControlledComponents[input])) {
+                const handler = this.midiControlledComponents[input][control]
                 if (handler.id === componentId ) {
-                    delete this.midiHandlers[input][control];
+                    delete this.midiControlledComponents[input][control];
                 }
             }
         }
-        delete this.components[componentId];
-        */
     }
 
     async setupMidi() {
@@ -191,6 +186,7 @@ class AppAudio {
     midiLearn(componentId) {
         this.learningMidi = true;
         this.midiLearnTarget = componentId;
+        this.setLearning && this.setLearning(true);
     }
 
     playAll() {

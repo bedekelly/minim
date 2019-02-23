@@ -52,11 +52,14 @@ button {
     border-color: #333;
     color: #333;
     cursor: pointer;
-    transition: all ease 0.1s;
+    transition: color ease 0.1s;
 }
 
 .add-rack.center {
-    margin: 45vh auto;
+    margin-top: 45vh;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
 }
 
 .add-rack:hover {
@@ -239,4 +242,25 @@ button {
 .play-controls button:last-of-type.recording {
     color: whitesmoke;
     background: #e22;
+}
+
+.midi-learn {
+    background: none;
+    border: 1px solid #333;
+    border-bottom: none;
+    border-left: none;
+    color: #333;
+    font-family: monospace;
+    font-size: 9pt;
+    font-weight: bold;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 10px;
+    user-select: none;
+}
+
+.midi-learn.learning {
+    border-color: yellow;
+    color: yellow;
 }

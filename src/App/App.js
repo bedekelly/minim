@@ -31,7 +31,7 @@ class App extends Component {
         super(props);
         this.appAudio = new AppAudio();
         this.state = { loaded: false, racks: [], playing: false, selectedRack: this.appAudio.selectedRack,
-        globalEffects: [] }
+        globalEffects: [], learning: false }
     }
     
     async initialise() {
@@ -76,6 +76,10 @@ class App extends Component {
         this.setState({
             racks: this.state.racks.filter(r => r.id !== id)
         })
+    }
+    
+    componentDidMount() {
+        this.appAudio.setLearning = learning => this.setState({ learning });
     }
     
     globalEffectsComponent() {
@@ -129,6 +133,7 @@ class App extends Component {
     render() {
         const noRacks = this.state.racks.length === 0;
         const addRackClass = `add-rack ${noRacks ? "center" : ""}`;
+        const midiLearningClass = `midi-learn ${this.state.learning ? "learning" : ""}`;
         return <section className="app">
             { this.globalEffectsComponent() }
             { this.state.racks.map(rack => 
@@ -143,6 +148,8 @@ class App extends Component {
             
             <button className="open-global-effects-rack" onClick={ () => this.openGlobalEffectsRack() }>Master FX</button>
             
+            <div className={ midiLearningClass }>MIDI Learning</div>
+    
             <div className="play-controls">
                 <button className="stop-all" onMouseDown={ () => this.stopAll()}>
                     <FontAwesomeIcon icon={ ["fas", "stop"] } size="lg"></FontAwesomeIcon>
