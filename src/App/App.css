@@ -31,28 +31,49 @@ button {
 }
 
 .add-rack {
-  border: 1px solid whitesmoke;
-  border-radius: 1vh;
-  outline: 0;
-  background: transparent;
-  color: whitesmoke;
-  position: absolute;
-  bottom: 3vh;
-  left: 3vh;
-  filter: opacity(20%);
-  transition: all ease 0.15s;
-  font-family: monospace;
-  cursor: pointer;
+    border-width: 2px;
+    border-style: solid;
+    background: none;
+    outline: 0;
+    border-radius: 7px;
+    border-image-slice: 1;
+    margin: 3vh;
+    max-width: 200px;
+    min-width: 200px;
+    position: relative;
+    height: 15vh;
+    margin: 45vh 0;
+    transform: translateY(-50%);
+    display: grid;
+    place-items: center;
+    font-family: monospace;
+    font-size: 20pt;
+    text-align: center;
+    border-color: #333;
+    color: #333;
+    cursor: pointer;
+    transition: all ease 0.1s;
+}
+
+.add-rack.center {
+    margin: 45vh auto;
 }
 
 .add-rack:hover {
-    filter: opacity(100%);
-    transition: all ease 0.25s;
+    color: whitesmoke;
+    border-color: whitesmoke;
+    transition: all ease 0.1s;
 }
 
-.add-rack:active {
-  color: #333;
-  background: whitesmoke;
+.add-rack p {
+    padding: 0;
+    margin: 0;
+}
+
+.add-rack .plus {
+    font-size: 28pt;
+    margin-bottom: -4px;
+    font-weight: bold;
 }
 
 .app {
@@ -65,21 +86,19 @@ button {
     position: fixed;
     bottom: 0;
     right: 0;
-    transform: translateX(-50%);
-    background: none;
-    color: #666;
-    border: 1px solid;
-    border-radius: 7px;
-    cursor: pointer;
-    transition: all ease 0.1s;
+    font-family: monospace;
+    border: none;
+    padding: 13px;
+    height: 40px;
+    border-radius: 7px 0 0 0;
+    font-weight: bold;
     outline: 0;
 }
 
-.open-global-effects-rack:hover {
+.open-global-effects-rack:active {
+    background: #666;
     color: whitesmoke;
-    transition: all ease 0.1s;
 }
-
 
 .global-effects-rack {
     display: grid;
@@ -189,4 +208,35 @@ button {
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
+}
+
+.play-controls button {
+    width: calc(220px / 5);
+    border-right: 0;
+    outline: 0;
+    border: 0;
+    border-left: 1px solid lightgrey;
+    height: 40px;
+}
+
+.play-controls button:active {
+    background: lightgrey;
+}
+
+.play-controls button:last-of-type {
+    border-radius: 0 7px 0 0;
+}
+
+.play-controls button:first-of-type {
+    border-radius: 7px 0 0 0;
+}
+
+.play-controls button:last-of-type:active {
+    color: whitesmoke;
+    background: #e22;
+}
+
+.play-controls button:last-of-type.recording {
+    color: whitesmoke;
+    background: #e22;
 }

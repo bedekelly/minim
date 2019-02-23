@@ -127,9 +127,10 @@ class App extends Component {
     }
     
     render() {
+        const noRacks = this.state.racks.length === 0;
+        const addRackClass = `add-rack ${noRacks ? "center" : ""}`;
         return <section className="app">
             { this.globalEffectsComponent() }
-            <button className="add-rack" onClick={() => this.addRack()}>+ Rack</button>
             { this.state.racks.map(rack => 
                 <Rack 
                     key={rack.id} id={rack.id} appAudio={this.appAudio} 
@@ -138,19 +139,23 @@ class App extends Component {
                     deleteSelf={ () => this.deleteRack(rack.id) }>
                 </Rack>
             ) }
-            <button className="open-global-effects-rack" onClick={ () => this.openGlobalEffectsRack() }>Global Effects</button>
+            <button className={ addRackClass } onClick={() => this.addRack()}><p className="plus">+</p><p>Rack</p></button>
+            
+            <button className="open-global-effects-rack" onClick={ () => this.openGlobalEffectsRack() }>Master FX</button>
             
             <div className="play-controls">
                 <button className="stop-all" onMouseDown={ () => this.stopAll()}>
-                    <FontAwesomeIcon icon={ ["fas", "stop"] }></FontAwesomeIcon>
+                    <FontAwesomeIcon icon={ ["fas", "stop"] } size="lg"></FontAwesomeIcon>
                 </button>
-                {this.state.playing ? 
-                    <button className="pause-all" onMouseDown={() => this.pauseAll()}>
-                        <FontAwesomeIcon icon={ ["fas", "pause"] }></FontAwesomeIcon>
-                    </button>
-                    : <button className="play-all" onMouseDown={() => this.playAll()}>
-                          <FontAwesomeIcon icon={ ["fas", "play"] }></FontAwesomeIcon>
-                      </button> }
+                <button className="pause-all" onMouseDown={() => this.pauseAll()}>
+                    <FontAwesomeIcon icon={ ["fas", "pause"] } size="lg"></FontAwesomeIcon>
+                </button>
+                <button className="play-all" onMouseDown={() => this.playAll()}>
+                    <FontAwesomeIcon icon={ ["fas", "play"] } size="lg"></FontAwesomeIcon>
+                </button>
+                <button className="record" onMouseDown={ () => console.log("record button pressed")}>
+                    <FontAwesomeIcon icon={ ["fas", "circle"] } size="lg"></FontAwesomeIcon>
+                </button>
             </div>
             
         </section>;

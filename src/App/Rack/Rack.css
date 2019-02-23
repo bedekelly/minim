@@ -186,7 +186,9 @@
     position: absolute;
     left: 50%;
     top: 10px;
+    user-select: none;
     height: 13pt;
+    cursor: text;
     font-size: 12pt;
     transform: translateX(-50%);
     transition: all ease 0.1s;
@@ -204,6 +206,7 @@ input.rack-title {
     border: none;
     border-radius: 0 0 7px 7px;
     background: none;
+    color: whitesmoke;
 }
 
 .add-button {
