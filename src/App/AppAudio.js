@@ -102,13 +102,22 @@ class AppAudio {
         }
     }
 
+    setupInput(input) {
+        input.onmidimessage = message => this.onMidiMessage(input, message);
+    }
+
     async setupMidi() {
         const midiAccess = await navigator.requestMIDIAccess({ sysex: false })
         for (let input of midiAccess.inputs.values()) {
-            input.onmidimessage = message => this.onMidiMessage(input, message);
+            this.setupInput(input);
         }
+        midiAccess.onstatechange = (event => {
+            for (let input of event.target.inputs.values()) {
+                this.setupInput(input);
+            }
+        })
     }
-    
+
     addGlobalEffect(effectType) {
         // Make an EffectAudio and add it to this rack's effect.
         const effectAudios = {
