@@ -38,10 +38,9 @@ button {
     border-radius: 7px;
     border-image-slice: 1;
     margin: 3vh;
-    max-width: 200px;
-    min-width: 200px;
     position: relative;
-    height: 15vh;
+    height: 20vh;
+    min-width: 20vh;
     margin: 45vh 0;
     transform: translateY(-50%);
     display: grid;
@@ -49,14 +48,17 @@ button {
     font-family: monospace;
     font-size: 20pt;
     text-align: center;
-    border-color: #333;
-    color: #333;
+    border-color: #888;
+    color: #888;
     cursor: pointer;
-    transition: color ease 0.1s;
+    border-radius: 0 50% 50% 0;
+    transition: border-color ease 0.1s,
+                color ease 0.1s;
 }
 
 .add-rack.center {
     margin-top: 45vh;
+    border-radius: 50%;
     position: absolute;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
@@ -65,7 +67,8 @@ button {
 .add-rack:hover {
     color: whitesmoke;
     border-color: whitesmoke;
-    transition: all ease 0.1s;
+    transition: border-color ease 0.1s,
+                color ease 0.1s;
 }
 
 .add-rack p {

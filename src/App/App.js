@@ -154,12 +154,16 @@ class App extends Component {
                 <button className="stop-all" onMouseDown={ () => this.stopAll()}>
                     <FontAwesomeIcon icon={ ["fas", "stop"] } size="lg"></FontAwesomeIcon>
                 </button>
-                <button className="pause-all" onMouseDown={() => this.pauseAll()}>
-                    <FontAwesomeIcon icon={ ["fas", "pause"] } size="lg"></FontAwesomeIcon>
-                </button>
-                <button className="play-all" onMouseDown={() => this.playAll()}>
-                    <FontAwesomeIcon icon={ ["fas", "play"] } size="lg"></FontAwesomeIcon>
-                </button>
+                {
+                    this.state.playing ? 
+                    <button className="pause-all" onMouseDown={() => this.pauseAll()}>
+                        <FontAwesomeIcon icon={ ["fas", "pause"] } size="lg"></FontAwesomeIcon>
+                    </button>
+                    :
+                    <button className="play-all" onMouseDown={() => this.playAll()}>
+                        <FontAwesomeIcon icon={ ["fas", "play"] } size="lg"></FontAwesomeIcon>
+                    </button>
+                }
                 <button className="record" onMouseDown={ () => console.log("record button pressed")}>
                     <FontAwesomeIcon icon={ ["fas", "circle"] } size="lg"></FontAwesomeIcon>
                 </button>
