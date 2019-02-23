@@ -20,14 +20,6 @@ export default class MPCAudio {
         this.futureSounds = [];
     }
     
-    play() {
-        // console.log("MPCAudio received signal to play; ignoring.");
-    }
-
-    pause() {
-        // console.log("MPCAudio received signal to pause; ignoring.");
-    }
-
     padIndexOf(note) {
         return (NUMBER_PADS - 1) - (note + CONTROLLER_NOTE_OFFSET)
     }
@@ -95,6 +87,7 @@ export default class MPCAudio {
         const id = uuid();
         this.futureSounds.push({ id, node})
         node.onended = () => this.removeNodeWithId(id);
+        console.log("playing", index, time);
     }
 
     playPad(index) {

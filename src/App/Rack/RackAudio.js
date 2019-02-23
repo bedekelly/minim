@@ -29,27 +29,39 @@ class RackAudio {
         this.output = this.appAudio.context.createGain();
         this.output.connect(this.destination);
     }
-    
+
     addSequencer() {
         this.sequencer = new SequencerAudio(this.appAudio.context);
+        if (this.source) {
+            this.sequencer.sendNotesTo(this.source);
+        }
     }
-    
+
     addRecorder() {
         this.recorder = new RecorderAudio(this.appAudio.context);
+        if (this.source) {
+            this.recorder.sendNotesTo(this.source);
+        }
     }
 
     pause() {
         console.log("rack pausing");
         this.sequencer && this.sequencer.pause();
         this.recorder && this.recorder.pause();
-        this.source && this.source.pause();
+        this.source && this.source.pause && this.source.pause();
     }
 
     play() {
         console.log("rack playing");
         this.recorder && this.recorder.play();
         this.sequencer && this.sequencer.play();
-        this.source && this.source.play();
+        this.source && this.source.play && this.source.play();
+    }
+    
+    stop() {
+        this.recorder && this.recorder.stop();
+        this.sequencer && this.sequencer.stop();
+        this.source && this.source.stop && this.source.stop();
     }
 
     midiMessage(message) {

@@ -12,6 +12,12 @@ import { EffectTypes } from './Effects/EffectTypes'
 
 import './App.css';
 
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlay, faPause, faStop } from '@fortawesome/pro-solid-svg-icons';
+
+library.add(faPlay, faPause, faStop);
+
 
 viewportFix.init();
 
@@ -42,13 +48,18 @@ class App extends Component {
     }
 
     playAll() {
-        this.appAudio.play();
-        this.setState({playing: true})
+        this.appAudio.playAll();
+        this.setState({playing: this.appAudio.playing});
     }
 
     pauseAll() {
-        this.appAudio.pause();
-        this.setState({playing: false});
+        this.appAudio.pauseAll();
+        this.setState({playing: this.appAudio.playing});
+    }
+    
+    stopAll() {
+        this.appAudio.stopAll();
+        this.setState({ playing: this.appAudio.playing });
     }
     
     selectRack(id) {
@@ -114,7 +125,7 @@ class App extends Component {
     closeGlobalEffectsRack() {
         this.setState({ globalEffectsRackOpen: false });
     }
-
+    
     render() {
         return <section className="app">
             { this.globalEffectsComponent() }
@@ -128,8 +139,20 @@ class App extends Component {
                 </Rack>
             ) }
             <button className="open-global-effects-rack" onClick={ () => this.openGlobalEffectsRack() }>Global Effects</button>
-            <button className="play-all" onMouseDown={() => this.playAll()}>Play All</button>
-            <button className="pause-all" onClick={() => this.pauseAll()}>Pause All</button>
+            
+            <div className="play-controls">
+                <button className="stop-all" onMouseDown={ () => this.stopAll()}>
+                    <FontAwesomeIcon icon={ ["fas", "stop"] }></FontAwesomeIcon>
+                </button>
+                {this.state.playing ? 
+                    <button className="pause-all" onMouseDown={() => this.pauseAll()}>
+                        <FontAwesomeIcon icon={ ["fas", "pause"] }></FontAwesomeIcon>
+                    </button>
+                    : <button className="play-all" onMouseDown={() => this.playAll()}>
+                          <FontAwesomeIcon icon={ ["fas", "play"] }></FontAwesomeIcon>
+                      </button> }
+            </div>
+            
         </section>;
     }
 }

@@ -193,7 +193,8 @@ class AppAudio {
         this.midiLearnTarget = componentId;
     }
 
-    play() {
+    playAll() {
+        this.playing = true;
         for (let source of Object.values(this.racks)) {
             source.play();
         }
@@ -211,9 +212,17 @@ class AppAudio {
         return this.globalEffects[this.globalEffects.length-1] || this.source;
     }
 
-    pause() {
+    pauseAll() {
+        this.playing = false;
         for (let source of Object.values(this.racks)) {
             source.pause();
+        }
+    }
+
+    stopAll() {
+        this.playing = false;
+        for (let rack of Object.values(this.racks)) {
+            rack.stop();
         }
     }
 

@@ -61,52 +61,10 @@ button {
   overflow-x: scroll;
 }
 
-.play-all {
-  position: absolute;
-  right: 3vh;
-  bottom: 3vh;
-  width: 16vh;
-  border: 1px solid whitesmoke;
-  background: transparent;
-  border-radius: 5px;
-  color: whitesmoke;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  outline: 0;
-  padding: 1.5vh;
-}
-
-.play-all:active {
-  background: whitesmoke;
-  color: #333;
-}
-
-.pause-all {
-  position: absolute;
-  right: 21vh;
-  bottom: 3vh;
-  width: 16vh;
-  border: 1px solid whitesmoke;
-  background: transparent;
-  border-radius: 5px;
-  color: whitesmoke;
-  display: grid;
-  flex-direction: column;
-  align-items: center;
-  outline: 0;
-  padding: 1.5vh;
-}
-
-.pause-all:active {
-  background: whitesmoke;
-  color: #333;
-}
-
 .open-global-effects-rack {
-    position: absolute;
-    bottom: 3vh;
-    left: 50%;
+    position: fixed;
+    bottom: 0;
+    right: 0;
     transform: translateX(-50%);
     background: none;
     color: #666;
@@ -223,4 +181,12 @@ button {
 
 .global-effects-rack .sortable-container .effect {
     margin: 20px;
+}
+
+
+.play-controls {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
 }

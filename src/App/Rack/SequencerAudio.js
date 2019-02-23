@@ -148,6 +148,7 @@ export default class SequencerAudio {
             }
         }
         
+        console.log(newNotesToSchedule);
         this.bulkSchedule(newNotesToSchedule);
     }
 
