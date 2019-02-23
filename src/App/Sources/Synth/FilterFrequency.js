@@ -61,7 +61,7 @@ export default class FilterFrequency extends React.Component {
                   id={ this.props.id + "-filter-freq" }
                   ></Knob>
             <div className="label freq">Freq</div>
-            <Knob min={0} max={100} value={this.state.filterRes}
+            <Knob min={0} max={30} value={this.state.filterRes}
                   precision={ 1 }
                   appAudio={ this.props.appAudio }
                   default={ 0 }
