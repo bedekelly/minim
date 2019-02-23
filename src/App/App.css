@@ -90,12 +90,24 @@ button {
     bottom: 0;
     right: 0;
     font-family: monospace;
-    border: none;
+    border: 1px solid #666;
+    color: #666;
+    border-bottom: none;
+    border-right: none;
+    background: none;
     padding: 13px;
     height: 40px;
     border-radius: 7px 0 0 0;
     font-weight: bold;
     outline: 0;
+    cursor: pointer;
+    transition: all ease 0.1s;
+}
+
+.open-global-effects-rack:hover {
+    color: whitesmoke;
+    border-color: whitesmoke;
+    transition: all ease 0.1s;
 }
 
 .open-global-effects-rack:active {
@@ -220,6 +232,7 @@ button {
     border: 0;
     border-left: 1px solid lightgrey;
     height: 40px;
+    cursor: pointer;
 }
 
 .play-controls button:active {
