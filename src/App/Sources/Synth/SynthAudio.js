@@ -111,6 +111,54 @@ export default class SynthAudio {
         }
     }
     
+    set osc1Tune(value) {
+        this.osc1.tune = value;
+        for (let { one, note } of Object.values(this.notes).flat()) {
+            const frequency = midiToPitch(note + this.osc1.octave * 12 + this.osc1.semi + this.osc1.tune/100);
+            one.frequency.setValueAtTime(frequency, 0);
+        }
+    }
+    
+    set osc1Semi(value) {
+        this.osc1.semi = value;
+        for (let { one, note } of Object.values(this.notes).flat()) {
+            const frequency = midiToPitch(note + this.osc1.octave * 12 + this.osc1.semi + this.osc1.tune/100);
+            one.frequency.setValueAtTime(frequency, 0);
+        }
+    }
+    
+    set osc1Oct(value) {
+        this.osc1.octave = value;
+        for (let { one, note } of Object.values(this.notes).flat()) {
+            const frequency = midiToPitch(note + this.osc1.octave * 12 + this.osc1.semi + this.osc1.tune/100);
+            one.frequency.setValueAtTime(frequency, 0);
+        }
+    }
+    
+    set osc2Tune(value) {
+        this.osc2.tune = value;
+        for (let { two, note } of Object.values(this.notes).flat()) {
+            const frequency = midiToPitch(note + this.osc2.octave * 12 + this.osc2.semi + this.osc2.tune/100);
+            two.frequency.setValueAtTime(frequency, 0);
+        }
+    }
+    
+    set osc2Semi(value) {
+        this.osc2.semi = value;
+        for (let { two, note } of Object.values(this.notes).flat()) {
+            const frequency = midiToPitch(note + this.osc2.octave * 12 + this.osc2.semi + this.osc2.tune/100);
+            two.frequency.setValueAtTime(frequency, 0);
+        }
+    }
+    
+    set osc2Oct(value) {
+        this.osc2.octave = value;
+        for (let { two, note } of Object.values(this.notes).flat()) {
+            const frequency = midiToPitch(note + this.osc2.octave * 12 + this.osc2.semi + this.osc2.tune/100);
+            two.frequency.setValueAtTime(frequency, 0);
+        }
+    }
+    
     set lfoDestination(value) {
         this.lfo.destination = value;
         
@@ -236,11 +284,11 @@ export default class SynthAudio {
         if (this.notes[pitch] === undefined) {
             this.notes[pitch] = [];
         }
-        this.notes[pitch].push({ id, one: oscOne, two: oscTwo, oneGain: oscOneGain, twoGain: oscTwoGain, amp: oscAmpGain, filter, noteOffTriggered: false });
+        this.notes[pitch].push({ note: pitch, id, one: oscOne, two: oscTwo, oneGain: oscOneGain, twoGain: oscTwoGain, amp: oscAmpGain, filter, noteOffTriggered: false });
     }
 
     noteOn(note) {
-        return this.noteOnAtTime(note, 0);
+        return this.noteOnAtTime(note, this.context.currentTime);
     }
     
     applyNoteOffEnvelope(note, time) {
@@ -297,7 +345,6 @@ export default class SynthAudio {
     midiMessage(message, time, id) {
         time = time ? time : 0;
         const { data: [messageType, note, velocity] } = message;
-        console.log(messageType);
         if (messageType === NOTE_OFF || velocity === 0) {
             this.noteOffAtTime(note, time, id);
         } else if (messageType === NOTE_ON) {

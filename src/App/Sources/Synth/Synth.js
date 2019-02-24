@@ -50,42 +50,42 @@ class Synth extends React.PureComponent {
     
     changeOsc1Octave(value) {
         value = Math.round(value);
-        this.audio.osc1.octave = value;
+        this.audio.osc1Oct = value;
         const osc1 = this.state.osc1;
         this.setState({ osc1: { ...osc1, octave: value }})
     }
     
     changeOsc1Semi(value) {
         value = Math.round(value);
-        this.audio.osc1.semi = value;
+        this.audio.osc1Semi = value;
         const osc1 = this.state.osc1;
         this.setState({ osc1: { ...osc1, semi: value }})
     }
     
     changeOsc1Tune(value) {
         value = Math.round(value);
-        this.audio.osc1.tune = value;
+        this.audio.osc1Tune = value;
         const osc1 = this.state.osc1;
         this.setState({ osc1: { ...osc1, tune: value }})
     }
     
     changeOsc2Octave(value) {
         value = Math.round(value);
-        this.audio.osc2.octave = value;
+        this.audio.osc2Oct = value;
         const osc2 = this.state.osc2;
         this.setState({ osc2: { ...osc2, octave: value }})
     }
     
     changeOsc2Semi(value) {
         value = Math.round(value);
-        this.audio.osc2.semi = value;
+        this.audio.osc2Semi = value;
         const osc2 = this.state.osc2;
         this.setState({ osc2: { ...osc2, semi: value }})
     }
     
     changeOsc2Tune(value) {
         value = Math.round(value);
-        this.audio.osc2.tune = value;
+        this.audio.osc2Tune = value;
         const osc2 = this.state.osc2;
         this.setState({ osc2: { ...osc2, tune: value }})
     }    
