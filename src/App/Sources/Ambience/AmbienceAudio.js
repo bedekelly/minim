@@ -64,7 +64,6 @@ export default class AmbienceAudio {
     async loadSoundBuffer(index) {
         if (this.soundBuffers[index]) return;
         const name = this.SOUNDS[index];
-        if (name === undefined) debugger;
         const url = BUFFER_URL(name);
         this.soundBuffers[index] = await this.fetchAndLoadAudio(url);
         return this.soundBuffers[index];

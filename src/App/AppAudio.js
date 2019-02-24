@@ -91,7 +91,6 @@ class AppAudio {
     }
 
     unregisterAllHandlers(componentId) {
-        debugger;
         for (let input of Object.keys(this.midiControlledComponents)) {
             for (let control of Object.keys(this.midiControlledComponents[input])) {
                 const handler = this.midiControlledComponents[input][control]
