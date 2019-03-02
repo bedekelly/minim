@@ -2,7 +2,7 @@ import React from 'react';
 
 import './Echo.css';
 
-import Knob from '../../Knob';
+import Knob from 'Components/Knob';
 
 
 export default class Echo extends React.Component {

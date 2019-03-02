@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Knob from '../../Knob';
+import Knob from 'Components/Knob';
 
 
 export default class LFO extends React.Component {

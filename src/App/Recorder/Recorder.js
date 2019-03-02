@@ -2,7 +2,7 @@ import React from 'react';
 
 import './Recorder.css';
 
-import TextValue from '../TextValue';
+import TextValue from 'Components/TextValue';
 
 
 import { library } from '@fortawesome/fontawesome-svg-core';

@@ -2,7 +2,7 @@ import React from 'react';
 
 import './Synth.css';
 
-import Knob from '../../Knob';
+import Knob from 'Components/Knob';
 
 import FilterFrequency from './FilterFrequency';
 import FilterEnvelope from './FilterEnvelope';

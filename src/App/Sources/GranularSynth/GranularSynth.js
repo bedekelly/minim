@@ -1,7 +1,7 @@
 import React from 'react';
 import './GranularSynth.css';
 
-import Knob from '../../Knob';
+import Knob from 'Components/Knob';
 import WaveformDisplay from './WaveformDisplay';
 
 

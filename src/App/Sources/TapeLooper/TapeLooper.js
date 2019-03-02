@@ -3,7 +3,7 @@ import React from "react";
 import './TapeLooper.css';
 import Editor from './Editor';
 import TapeComponents from './TapeComponents';
-import Knob from '../../Knob';
+import Knob from 'Components/Knob';
 
 const DOUBLE_CLICK_TIME = 600;  // milliseconds.
 

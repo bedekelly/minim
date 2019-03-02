@@ -11,7 +11,7 @@ import Distortion from './Distortion';
 import BitCrusher from './BitCrusher';
 
 import { EffectType } from './EffectTypes';
-import Knob from '../Knob';
+import Knob from 'Components/Knob';
 
 
 import './Effect.css';

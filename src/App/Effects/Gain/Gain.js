@@ -1,7 +1,7 @@
 import React from "react";
 
 import './Gain.css';
-import Knob from '../../Knob/Knob';
+import Knob from 'Components/Knob';
 
 
 class Gain extends React.Component {

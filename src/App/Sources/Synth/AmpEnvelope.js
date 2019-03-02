@@ -1,5 +1,5 @@
 import React from 'react';
-import Slider from '../../Slider';
+import Slider from 'Components/Slider';
 
 export default class AmpEnvelope extends React.Component {
     

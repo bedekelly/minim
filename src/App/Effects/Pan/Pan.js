@@ -1,7 +1,7 @@
 import React from "react";
 import './Pan.css';
 
-import Slider from '../../Slider';
+import Slider from 'Components/Slider';
 
 
 class Pan extends React.Component {

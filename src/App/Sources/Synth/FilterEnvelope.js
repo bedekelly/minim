@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Slider from '../../Slider';
+import Slider from 'Components/Slider';
 
 
 export default class FilterEnvelope extends React.Component {

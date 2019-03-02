@@ -1,5 +1,5 @@
 import React from 'react';
-import TextValue from '../TextValue';
+import TextValue from 'Components/TextValue';
 import MPCDrumSelector from './MPCDrumSelector';
 import Toggle from './Toggle';
 
