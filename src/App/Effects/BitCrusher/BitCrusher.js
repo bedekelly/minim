@@ -60,7 +60,7 @@ export default class BitCrusher extends React.Component {
             let x = hStep * (Math.round(col / hStep)) / width;
             let p = 4 * (row * width + col);
             
-            const r = 50 + 50 * (1 + Math.tan(-t/2000 + x + y - 100));
+            const r = 50 + 50 * (1 + Math.tan(-t/1000 + x + y - 100));
             const g = 90 + row % 128;
             const b = 128 * (1 + Math.sin(x/width));
             
