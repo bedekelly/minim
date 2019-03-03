@@ -1,3 +1,6 @@
+import InitialData from './InitialData';
+
+
 const NOTE_OFF = 128;
 const NOTE_ON = 144;
 
@@ -16,81 +19,39 @@ function midiToPitch(midi) {
 
 export default class SynthAudio {
 
-    setupLFOs() {
-        this.lfoNode = this.context.createOscillator();
-        this.lfoNode.frequency.setValueAtTime(this.lfo.rate, 0);
-        this.pitchLfo = this.context.createGain();
-        this.pitchLfo.gain.setValueAtTime(PITCH_LFO_AMP, 0);
-        this.ampLfo = this.context.createGain();
-        this.ampLfo.gain.setValueAtTime(AMP_LFO_AMP, 0);
-        this.filterLfo = this.context.createGain();
-        this.filterLfo.gain.setValueAtTime(this.filter.freq, 0)
-        this.lfoNode.connect(this.pitchLfo);
-        this.lfoNode.connect(this.ampLfo);
-        this.lfoNode.connect(this.filterLfo);
-        this.lfoNode.start();
-    }
-
     constructor(parentAudio) {
-        this.filter = {
-            freq: 12000,
-            res: 0,
-            type: "lowpass"
+        for (let [key, value] of Object.entries(InitialData)) {
+            this[key] = value;
         }
-
-        this.osc1 = {
-            waveform: "sine",
-            octave: 0,
-            semi: 0,
-            tune: 0
-        };
-
-        this.osc2 = {
-            waveform: "",
-            octave: 0,
-            semi: 0,
-            tune: 0
-        };
-
-        this.ampEnvelope = {
-            attack: 0,
-            decay: 0,
-            sustain: 1,
-            release: 0.01
-        };
-        
-        this.filterEnvelope = {
-            attack: 0,
-            decay: 0,
-            sustain: 1,
-            release: 0.01
-        }
-        
-        this.lfo = {
-            rate: 0,
-            destination: ""
-        };
-        
         this.context = parentAudio.appAudio.context;
         this.mainMix = this.context.createGain();
         this.notes = {};
         this.setupLFOs();
     }
+    
+    setupLFOs() {
+        // Create the actual low-frequency oscillator node.
+        this.lfoNode = this.context.createOscillator();
+        this.lfoNode.frequency.setValueAtTime(this.lfo.rate, 0);
 
-    set ampAttack(value) {
-        this.ampEnvelope.attack = value;
-    }
-    
-    set ampDecay(value) {
-        this.ampEnvelope.decay = value;
-    }
-    
-    set ampSustain(value) {
-        this.ampEnvelope.sustain = value;
-    }
-    
-    set ampRelease(value) {
-        this.ampEnvelope.release = value;
+        // Create a gain node which controls amplitude of pitch modulation.
+        this.pitchLfo = this.context.createGain();
+        this.pitchLfo.gain.setValueAtTime(PITCH_LFO_AMP, 0);
+
+        // Control amplitude of amp modulation.
+        this.ampLfo = this.context.createGain();
+        this.ampLfo.gain.setValueAtTime(AMP_LFO_AMP, 0);
+
+        // Control amplitude of filter modulation.
+        this.filterLfo = this.context.createGain();
+        this.filterLfo.gain.setValueAtTime(this.filter.freq, 0)
+
+        // Connect LFO node to all three gain nodes.
+        this.lfoNode.connect(this.pitchLfo);
+        this.lfoNode.connect(this.ampLfo);
+        this.lfoNode.connect(this.filterLfo);
+        
+        this.lfoNode.start();
     }
     
     set lfoRate(value) {
@@ -209,12 +170,52 @@ export default class SynthAudio {
             filter.type = this.filter.type;
         }
     }
-
+    
+    calculateNote(pitch, oscillator) {
+        const osc = `osc${oscillator}`
+        return pitch + this[osc].octave * 12 + this[osc].semi + this[osc].tune/100;
+    }
+    
+    applyEnvelopeStart({param, envelope, startTime, maxValue, timeConstant=3}) {
+        param.setValueAtTime(0, startTime);
+        param.setTargetAtTime(maxValue, startTime, envelope.attack / timeConstant);
+        let paramSustain = maxValue * envelope.sustain;
+        startTime = startTime < this.context.currentTime ? this.context.currentTime : startTime;
+        const paramDecayStart = startTime + envelope.attack;
+        param.setTargetAtTime(paramSustain, paramDecayStart, envelope.decay / timeConstant);
+    }
+    
+    playNoteAtTime(osc, pitch, time, gainNode, filterNode) {
+        // Start the tone playing.
+        osc.frequency.setValueAtTime(pitch, time);
+        osc.start(time);
+        
+        // Apply our filter envelope
+        this.applyEnvelopeStart({
+            param: filterNode.frequency, 
+            envelope: this.filterEnvelope, 
+            startTime: time,
+            maxValue: this.filter.freq
+        });
+        
+        // Apply our amp envelope:
+        this.applyEnvelopeStart({
+            param: gainNode.gain,
+            envelope: this.ampEnvelope,
+            startTime: time,
+            maxValue: FULL_VOLUME
+        })
+    }
+    
+    addNoteAtPitch(pitch, note) {
+        if (this.notes[pitch] === undefined) this.notes[pitch] = [];
+        this.notes[pitch].push(note);
+    }
+    
     noteOnAtTime(pitch, time, id) {
-        // console.log("Current time: ", this.context.currentTime);
-        // console.log(`noteOnAtTime(${pitch}, ${time ? time : this.context.currentTime})`);
-        const oscOneNote = pitch + this.osc1.octave * 12 + this.osc1.semi + this.osc1.tune/100;
-        const oscTwoNote = pitch + this.osc2.octave * 12 + this.osc2.semi + this.osc2.tune/100;
+        // Calculate notes and pitches.
+        const oscOneNote = this.calculateNote(pitch, 1);
+        const oscTwoNote = this.calculateNote(pitch, 2);
         const pitchOne = midiToPitch(oscOneNote);
         const pitchTwo = midiToPitch(oscTwoNote);
         
@@ -260,31 +261,10 @@ export default class SynthAudio {
         oscAmpGain.connect(this.mainMix);
 
         for (let [osc, pitch] of [[oscOne, pitchOne], [oscTwo, pitchTwo]]) {
-            osc.frequency.setValueAtTime(pitch, time);
-            osc.start(time);
-            
-            // Apply our filter envelope
-            const freq = filter.frequency;
-            freq.setValueAtTime(0, time);
-            freq.setTargetAtTime(this.filter.freq, time, this.filterEnvelope.attack / 3);
-            let filterSustain = this.filter.freq * this.filterEnvelope.sustain;
-            const startTime = time < this.context.currentTime ? this.context.currentTime : time;
-            const filterDecayTime = startTime + this.filterEnvelope.attack;
-            freq.setTargetAtTime(filterSustain, filterDecayTime, this.filterEnvelope.decay / 3);
-            
-            // Apply our amp envelope:
-            const ampGain = oscAmpGain.gain;
-            ampGain.setValueAtTime(0, time);
-            ampGain.setTargetAtTime(FULL_VOLUME, time, this.ampEnvelope.attack / 3);
-            // Assumption: ampEnvelope.sustain is between 0 and 1.
-            let ampSustain = this.ampEnvelope.sustain * FULL_VOLUME;
-            const ampDecayTime = startTime + this.ampEnvelope.attack;
-            ampGain.setTargetAtTime(ampSustain, ampDecayTime, this.ampEnvelope.decay / 3);
+            this.playNote(osc, pitch, time, oscAmpGain, filter);
         }
-        if (this.notes[pitch] === undefined) {
-            this.notes[pitch] = [];
-        }
-        this.notes[pitch].push({ note: pitch, id, one: oscOne, two: oscTwo, oneGain: oscOneGain, twoGain: oscTwoGain, amp: oscAmpGain, filter, noteOffTriggered: false });
+
+        this.addNoteAtPitch(pitch, { note: pitch, id, one: oscOne, two: oscTwo, oneGain: oscOneGain, twoGain: oscTwoGain, amp: oscAmpGain, filter, noteOffTriggered: false })
     }
 
     noteOn(note) {
@@ -320,8 +300,6 @@ export default class SynthAudio {
     }
     
     noteOffAtTime(pitch, time) {
-        // console.log(`noteOffAtTime(${pitch}, ${time ? time : this.context.currentTime})`);
-        
         // Apply noteOff messages to every non-cleaned-up note of the given pitch.
         let notes = this.notes[pitch];
         if (!notes) {
@@ -335,7 +313,6 @@ export default class SynthAudio {
             this.cleanupNoteIfAlreadyPlayed(note, time);
             note.noteOffEnvelopeAppliedTime = time;
         }
-
     }
     
     noteOff(note) {
@@ -366,14 +343,6 @@ export default class SynthAudio {
             }
         }
         this.notes = {};
-    }
-
-    play() {
-        console.log("SynthAudio got play message: ignoring.");
-    }
-
-    pause() {
-        console.log("SynthAudio got pause message: ignoring.");
     }
 
     routeTo(destination) {

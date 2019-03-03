@@ -28,7 +28,7 @@ class Synth extends React.Component {
               { components.map((Component, i) =>
                   <Component key={ i } id={ this.props.id } audio={ this.audio } appAudio={ this.appAudio } num={ i }/>
               )}
-            </div>              
+            </div>
         );
     }
 }

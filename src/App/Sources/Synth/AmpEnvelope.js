@@ -16,25 +16,25 @@ export default class AmpEnvelope extends React.Component {
     
     setAmpAttack(ampAttack) {
         ampAttack = parseFloat(ampAttack);
-        this.audio.ampAttack = ampAttack;
+        this.audio.ampEnvelope.attack = ampAttack;
         this.setState({ ampAttack });
     }
     
     setAmpDecay(ampDecay) {
         ampDecay = parseFloat(ampDecay);
-        this.audio.ampDecay = ampDecay;
+        this.audio.ampEnvelope.decay = ampDecay;
         this.setState({ ampDecay });
     }
     
     setAmpSustain(ampSustain) {
         ampSustain = parseFloat(ampSustain);
-        this.audio.ampSustain = ampSustain;
+        this.audio.ampEnvelope.sustain = ampSustain;
         this.setState({ ampSustain });
     }
     
     setAmpRelease(ampRelease) {
         ampRelease = parseFloat(ampRelease);
-        this.audio.ampRelease = ampRelease;
+        this.audio.ampEnvelope.release = ampRelease;
         this.setState({ ampRelease });
     }
     
