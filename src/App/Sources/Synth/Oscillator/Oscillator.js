@@ -19,7 +19,7 @@ export default class Oscillator extends React.Component {
     constructor(props) {
         super(props);
         this.audio = props.appAudio.sources[this.props.id];
-        this.num = props.num;
+        this.num = props.num + 1;
         this.osc = `osc${this.num}`;
         this.state = {
             waveform: this.audio[this.osc].waveform,

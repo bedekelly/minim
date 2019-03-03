@@ -19,14 +19,15 @@ class Synth extends React.Component {
     }
 
     render() {
+        const components = [
+            Oscillator, Oscillator, FilterEnvelope, 
+            FilterFrequency, LFO, AmpEnvelope
+        ]
         return (
             <div className="synth">
-              <Oscillator id={ this.props.id } audio={ this.audio } appAudio={ this.appAudio } num={ 1 } />
-              <Oscillator id={ this.props.id } audio={ this.audio } appAudio={ this.appAudio } num={ 2 } />
-              <FilterFrequency id={ this.props.id } audio={ this.audio } appAudio={ this.appAudio } />
-              <FilterEnvelope id={ this.props.id } audio={ this.audio } appAudio={ this.appAudio } />
-              <LFO id={ this.props.id } audio={ this.audio } appAudio={ this.appAudio } />
-              <AmpEnvelope id={ this.props.id } audio={ this.audio } appAudio={ this.appAudio } />
+              { components.map((Component, i) =>
+                  <Component key={ i } id={ this.props.id } audio={ this.audio } appAudio={ this.appAudio } num={ i }/>
+              )}
             </div>              
         );
     }
