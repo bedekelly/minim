@@ -29,18 +29,11 @@ export default class DistortionAudio extends EffectAudio {
         this.max = MAX_DISTORTION;
     }
 
-/*
-this.startFilterNode = this.context.createBiquadFilter();
-this.startFilterNode.type = "highpass";
-this.startFilterNode.frequency.setValueAtTime(3000, 0);
-*/
-
     setupNodes() {
         this.inputNode = this.distortionNode = this.context.createWaveShaper();
         this.filterNode = this.outputNode = this.context.createBiquadFilter();
         this.filterNode.type = "highshelf";
         this.filterNode.frequency.setValueAtTime(5000, 0);
-        // this.filterNode.gain.setValueAtTime(0, 0);
 
         this.inputNode.connect(this.outputNode);
 
@@ -67,7 +60,7 @@ this.startFilterNode.frequency.setValueAtTime(3000, 0);
     static curve(x, k, offset) {
         // return (Math.PI + k) * x / (Math.PI + k * Math.abs(x));
         const curveValue = offset + (Math.PI + k) * x / (Math.PI + k * Math.abs(x)) + Math.abs(x)/MAX_DISTORTION;
-        return Math.min(1, curveValue);
+        return Math.min(1, Math.max(-1, curveValue));
     }
 
     static makeDistortionCurve(k, offset, curve) {
