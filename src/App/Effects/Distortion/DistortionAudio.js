@@ -24,7 +24,6 @@ export default class DistortionAudio extends EffectAudio {
     constructor(parentRack) {
         super(parentRack);
         this.setupNodes();
-        this.offset = 0.05;
         this.amount = 0.01;
         this.max = MAX_DISTORTION;
     }
@@ -59,7 +58,7 @@ export default class DistortionAudio extends EffectAudio {
 
     static curve(x, k, offset) {
         // return (Math.PI + k) * x / (Math.PI + k * Math.abs(x));
-        const curveValue = offset + (Math.PI + k) * x / (Math.PI + k * Math.abs(x)) + Math.abs(x)/MAX_DISTORTION;
+        const curveValue = (Math.PI + k) * x / (Math.PI + k * Math.abs(x)) + Math.abs(x)/MAX_DISTORTION;
         return Math.min(1, Math.max(-1, curveValue));
     }
 
