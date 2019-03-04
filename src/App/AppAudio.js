@@ -196,6 +196,12 @@ class AppAudio {
         this.midiLearnTarget = componentId;
         this.setLearning && this.setLearning(true);
     }
+    
+    stopLearning() {
+        this.learningMidi = false;
+        this.midiLearnTarget = null;
+        this.setLearning && this.setLearning(false);
+    }
 
     playAll() {
         this.playing = true;

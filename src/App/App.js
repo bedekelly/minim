@@ -130,6 +130,10 @@ class App extends Component {
         this.setState({ globalEffectsRackOpen: false });
     }
     
+    stopLearning() {
+        this.appAudio.stopLearning();
+    }
+    
     render() {
         const noRacks = this.state.racks.length === 0;
         const addRackClass = `add-rack ${noRacks ? "center" : ""}`;
@@ -148,7 +152,7 @@ class App extends Component {
             
             <button className="open-global-effects-rack" onClick={ () => this.openGlobalEffectsRack() }>Master FX</button>
             
-            <div className={ midiLearningClass }>MIDI Learning</div>
+            <div className={ midiLearningClass } onClick={ () => this.stopLearning() }>MIDI Learning</div>
     
             <div className="play-controls">
                 <button className="stop-all" onMouseDown={ () => this.stopAll()}>

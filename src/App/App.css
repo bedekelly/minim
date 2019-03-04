@@ -271,4 +271,5 @@ button {
 .midi-learn.learning {
     border-color: yellow;
     color: yellow;
+    cursor: pointer;
 }
