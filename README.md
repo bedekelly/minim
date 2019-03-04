@@ -1,5 +1,5 @@
-# Name TBC
-Inspired by the minimalist music of Steve Reich, `<name>` is a playground for making music with loops, samples and powerful included effects.
+# Minim
+Inspired by the minimalist music of Steve Reich, *Minim* is a playground for making music with loops, samples and powerful included effects.
 
 Features include:
 * Audio loop trimming & real-time speed control
@@ -10,4 +10,4 @@ Features include:
 * Individual and global effects processors
 * Fully integrated MIDI-based hardware control with learning
 
-![Music maker app](Screenshot.png)
+![Screenshot of Minim app showing (from left to right) tape looper, granular synthesizer and circular sequencer](Screenshot.png)
