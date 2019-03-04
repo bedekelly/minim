@@ -18,7 +18,7 @@ class TapeLooperAudio {
         this.playbackRate = 1;
         this.type = SourceType.TapeLooper;
         this.looping = true;
-        this.realism = true;
+        this.realism = false;
         this._loopStart = 0;
         this._loopEnd = 0;
         this.node = null;
@@ -66,11 +66,15 @@ class TapeLooperAudio {
     }
 
     async play() {
-        this.paused = false;
+        // Don't spawn duplicate sounds if we're already playing.
+        if (!this.paused) return;
+        
+        // Don't try and play a sound if we haven't loaded one.
         if (!this.buffer) return;
         
         // Create and setup a source node which reads from an audio buffer.
         // Note: this DOES need to happen every time we resume audio!
+        this.paused = false;
         const bufferSourceNode = this.node = this.context.createBufferSource();
         bufferSourceNode.buffer = this.buffer;
         bufferSourceNode.loop = this.looping;
