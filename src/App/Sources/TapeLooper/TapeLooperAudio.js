@@ -172,6 +172,7 @@ class TapeLooperAudio {
         this.absoluteStartTime = this.context.currentTime;
         if (!this.paused) {
             this.disconnect();
+            this.paused = true;
             this.play();
         }
     }
