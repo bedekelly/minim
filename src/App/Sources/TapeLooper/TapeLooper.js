@@ -49,6 +49,7 @@ class TapeLooper extends React.Component {
     async fileLoaded(encodedBuffer) {
         await this.audio.gotEncodedBuffer(encodedBuffer);
         this.setState({ hasTape: true });
+        this.forceUpdate();
     }
 
     newFile(file) {

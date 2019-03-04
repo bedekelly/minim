@@ -1,3 +1,5 @@
+import uuid from 'uuid';
+
 import { SourceType } from '../SourceTypes';
 
 const MS_SPEED_UP = 100;
@@ -20,6 +22,7 @@ class TapeLooperAudio {
         this._loopStart = 0;
         this._loopEnd = 0;
         this.node = null;
+        this.audioId = null;
     }
 
     midiMessage(message) {
@@ -57,7 +60,9 @@ class TapeLooperAudio {
         this.absoluteStartTime = context.currentTime;
         this.buffer = await prom;
         this.originalDuration = this.buffer.duration;
+        this.loopStart = 0;
         this.loopEnd = this.buffer.duration;
+        this.audioId = uuid();
     }
 
     async play() {

@@ -39,11 +39,23 @@ class LoopStartBar extends React.Component {
     constructor(props) {
         super(props);
         this.props = props;
-        const { loopStart, duration } = props.audio;
+        this.state = { width: this.calculateWidth() };
+        this.loopStart = this.props.audio.loopStart;
+    }
+    
+    calculateWidth() {
+        const { loopStart, duration } = this.props.audio;
         const leftBound = 0;
-        const rightBound = props.canvas.width;
-        const width = props.padding + linMap(loopStart, 0, duration, leftBound, rightBound);
-        this.state = { width };
+        const rightBound = this.props.canvas.width;
+        const width = this.props.padding + linMap(loopStart, 0, duration, leftBound, rightBound);
+        return width;
+    }
+    
+    componentDidUpdate(newProps, newState) {
+        if (newProps.audio.loopStart !== this.loopStart) {
+            this.setState({ width: this.calculateWidth() });
+            this.loopStart = newProps.audio.loopStart;
+        }
     }
     
     render() {

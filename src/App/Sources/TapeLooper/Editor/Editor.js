@@ -35,19 +35,30 @@ class Editor extends React.Component {
         this.playHeadCanvasRef = React.createRef();
         this.state = {
             ready: false, loopStart: this.audio.loopStart, 
-            loopEnd: this.audio.loopEnd
+            loopEnd: this.audio.loopEnd,
+            audioId: this.audio.audioId
         };
         this.nextAnimationId = null;
     }
     
-    componentDidMount() {
+    startPlaying() {
         this.context = this.canvasRef.current.getContext("2d");
         this.canvasWidth = this.canvasRef.current.width;
         this.canvasHeight = this.canvasRef.current.height;
         
         // These calls block the main thread :(
+        this.setState({ 
+            audioId: this.audio.audioId,
+            loopStart: this.audio.loopStart, 
+            loopEnd: this.audio.loopEnd
+        });
+        console.log("Setting loopStart to ", this.audio.loopStart);
         this.renderWaveformToCanvas();
         this.animatePlayHead();
+    }
+    
+    componentDidMount() {
+        this.startPlaying();
     }
     
     set loopStart(value) {
@@ -67,7 +78,13 @@ class Editor extends React.Component {
     get loopEnd() {
         return this.state.loopEnd;
     }
-    
+
+    componentDidUpdate() {
+        if (this.audio.audioId !== this.state.audioId) {
+            this.startPlaying();
+        }
+    }
+
     animatePlayHead() {
         const that = this;
         const { audio } = this;
@@ -153,6 +170,9 @@ class Editor extends React.Component {
         const context = this.context;
         const minY = this.canvasHeight;
         const maxY = 0;
+        
+        // Clear any previous waveform data.
+        context.clearRect(0, 0, width, height);
         
         // Try to fix anti-aliasing.
         context.translate(0.5, 0.5);
