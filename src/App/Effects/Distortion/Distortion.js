@@ -57,7 +57,7 @@ export default class Distortion extends React.Component {
                      value={this.state.amount}
                      default={ 0 }
                      units="%"
-                     scale={ 100 / this.audio.max }
+                     scale={ 110 / this.audio.max }
                      label="Distortion"
                      appAudio={ this.props.appAudio }
                      id={ this.props.id + "-distortion" }
