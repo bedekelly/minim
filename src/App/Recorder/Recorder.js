@@ -116,11 +116,11 @@ export default class Recorder extends React.Component {
                     }
                 </button>
                 <button className="record" style={ this.recordingButtonStyle() }
-                        onClick={ () => this.toggleRecording() }>
+                        onMouseDown={ () => this.toggleRecording() }>
                     <FontAwesomeIcon size={ "lg" } icon={ [ "fas", "circle" ]} />
                 </button>
                 <button className="metronome" style={ this.metronomeButtonStyle() } 
-                        onClick={ () => this.toggleMetronome() }>
+                        onMouseDown={ () => this.toggleMetronome() }>
                     <img src={ MetronomeIcon } alt=""/>
                 </button>
             </section>

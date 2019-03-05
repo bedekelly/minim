@@ -8,7 +8,6 @@ import { fetchAudioData } from './helpers';
 export default class MetronomeAudio {
     constructor(audioContext, bpm, beatsPerMeasure) {
         this.context = audioContext;
-        this.sound = true;  // Todo: change to false
         this.barsLookahead = 4;
         this._bpm = bpm;
         this._beatsPerMeasure = beatsPerMeasure;
@@ -18,10 +17,16 @@ export default class MetronomeAudio {
         this.scheduleNextBars = this.scheduleNextBars.bind(this);
         this.output = this.context.createGain();
         this.output.connect(this.context.destination);
+        this.audible = false;
         this.scheduled = new Set();
         this.nodes = {};
         this.playing = false;
         this.loadSounds();
+    }
+    
+    set audible(value) {
+        const gain = value ? 1 : 0;
+        this.output.gain.setValueAtTime(gain, 0);
     }
     
     set beatsPerMeasure(value) {

@@ -39,7 +39,7 @@ export default class RecorderAudio {
 
     toggleMetronome() {
         this.metronomeAudible = !this.metronomeAudible;
-        this.metronome.setAudible(this.metronomeAudible);
+        this.metronome.audible = this.metronomeAudible;
     }
 
     play() {
