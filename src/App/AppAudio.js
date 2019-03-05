@@ -2,16 +2,16 @@ import uuid from "uuid4";
 
 import RackAudio from './Rack/RackAudio';
 import { arrayMove } from 'react-sortable-hoc';
-import PanAudio from './Effects/Pan/PanAudio';
-import FilterAudio from './Effects/Filter/FilterAudio';
-import GainAudio from './Effects/Gain/GainAudio';
-import CompressorAudio from './Effects/Compressor/CompressorAudio';
-import ReverbAudio from './Effects/Reverb/ReverbAudio';
-import EchoAudio from './Effects/Echo/EchoAudio';
-import DistortionAudio from './Effects/Distortion/DistortionAudio';
-import BitCrusherAudio from './Effects/BitCrusher/BitCrusherAudio';
+import PanAudio from './Rack/Effects/Pan/PanAudio';
+import FilterAudio from './Rack/Effects/Filter/FilterAudio';
+import GainAudio from './Rack/Effects/Gain/GainAudio';
+import CompressorAudio from './Rack/Effects/Compressor/CompressorAudio';
+import ReverbAudio from './Rack/Effects/Reverb/ReverbAudio';
+import EchoAudio from './Rack/Effects/Echo/EchoAudio';
+import DistortionAudio from './Rack/Effects/Distortion/DistortionAudio';
+import BitCrusherAudio from './Rack/Effects/BitCrusher/BitCrusherAudio';
 
-import { EffectType } from './Effects/EffectTypes'
+import { EffectType } from './Rack/Effects/EffectTypes'
 
 
 class AppAudio {

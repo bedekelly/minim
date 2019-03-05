@@ -6,7 +6,7 @@ import {
   SortableHandle
 } from 'react-sortable-hoc';
 
-import { Effect } from '../Effects'
+import { Effect } from './Effects'
 import './EffectHandle.css';
 
 

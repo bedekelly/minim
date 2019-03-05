@@ -8,7 +8,7 @@ import Rack from "./Rack";
 import AppAudio from './AppAudio';
 import SortableEffectsList from './Rack/SortableEffectsList';
 import { EffectsModal } from './Rack/Modals';
-import { EffectTypes } from './Effects/EffectTypes'
+import { EffectTypes } from './Rack/Effects/EffectTypes'
 
 import './App.css';
 

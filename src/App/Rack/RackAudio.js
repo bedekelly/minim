@@ -1,20 +1,20 @@
 import uuid from "uuid4";
 
-import PanAudio from '../Effects/Pan/PanAudio';
-import FilterAudio from '../Effects/Filter/FilterAudio';
-import HighPassFilterAudio from '../Effects/HighPassFilter/HighPassFilterAudio';
-import GainAudio from '../Effects/Gain/GainAudio';
-import CompressorAudio from '../Effects/Compressor/CompressorAudio';
-import ReverbAudio from '../Effects/Reverb/ReverbAudio';
-import EchoAudio from '../Effects/Echo/EchoAudio';
-import DistortionAudio from '../Effects/Distortion/DistortionAudio';
-import BitCrusherAudio from '../Effects/BitCrusher/BitCrusherAudio';
+import PanAudio from './Effects/Pan/PanAudio';
+import FilterAudio from './Effects/Filter/FilterAudio';
+import HighPassFilterAudio from './Effects/HighPassFilter/HighPassFilterAudio';
+import GainAudio from './Effects/Gain/GainAudio';
+import CompressorAudio from './Effects/Compressor/CompressorAudio';
+import ReverbAudio from './Effects/Reverb/ReverbAudio';
+import EchoAudio from './Effects/Echo/EchoAudio';
+import DistortionAudio from './Effects/Distortion/DistortionAudio';
+import BitCrusherAudio from './Effects/BitCrusher/BitCrusherAudio';
 
-import SequencerAudio from '../Sequencer/SequencerAudio';
-import RecorderAudio from '../Recorder/RecorderAudio';
+import SequencerAudio from './Sequencer/SequencerAudio';
+import RecorderAudio from './Recorder/RecorderAudio';
 
-import { EffectType } from '../Effects/EffectTypes'
-import { SourceTypes } from '../Sources/SourceTypes';
+import { EffectType } from './Effects/EffectTypes'
+import { SourceTypes } from './Sources/SourceTypes';
 import { arrayMove } from 'react-sortable-hoc';
 
 

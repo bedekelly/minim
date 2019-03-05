@@ -1,7 +1,7 @@
 import React from "react";
 
-import { SourceTypes } from '../Sources/SourceTypes';
-import { EffectTypes } from '../Effects/EffectTypes'
+import { SourceTypes } from './Sources/SourceTypes';
+import { EffectTypes } from './Effects/EffectTypes'
 
 import SortableEffectsList from './SortableEffectsList';
 import EditableTextBox from 'Components/EditableTextBox';
