@@ -11,7 +11,6 @@ export default class MetronomeAudio {
         this.barsLookahead = 4;
         this._bpm = bpm;
         this._beatsPerMeasure = beatsPerMeasure;
-        this.interval = 100;
         this.relativeStartTime = 0;
         this.absoluteStartTime = 0;
         this.scheduleNextBars = this.scheduleNextBars.bind(this);
@@ -22,6 +21,10 @@ export default class MetronomeAudio {
         this.nodes = {};
         this.playing = false;
         this.loadSounds();
+    }
+    
+    get schedulerInterval() {
+        return 1000 * (this.beatDuration / 3);
     }
     
     set audible(value) {
@@ -92,6 +95,8 @@ export default class MetronomeAudio {
 
     playSoundAtTime(sound, time) {
         if (!this.buffers) return;
+        if (time < this.context.currentTime) return;
+
         const node = this.context.createBufferSource();
         node.buffer = this.buffers[sound];
         node.connect(this.output);
@@ -108,9 +113,15 @@ export default class MetronomeAudio {
     scheduleSoundAtBeat(sound, bar, beat) {
         const key = `${sound},${bar},${beat}`;
         if (this.scheduled.has(key)) return;
+
         const { absoluteStartTime, relativeStartTime, barDuration, beatDuration } = this;
-        const time = absoluteStartTime - relativeStartTime + bar * barDuration + beat * beatDuration;
-        if (time >= this.context.currentTime) this.playSoundAtTime(sound, time);
+        const time = (
+            absoluteStartTime - relativeStartTime 
+            + bar * barDuration 
+            + beat * beatDuration
+        );
+
+        this.playSoundAtTime(sound, time);
         this.scheduled.add(key);
     }
 
@@ -132,7 +143,7 @@ export default class MetronomeAudio {
 
     startScheduling() {
         this.scheduleNextBars();
-        this.interval = setInterval(this.scheduleNextBars, this.interval);
+        this.intervalID = setInterval(this.scheduleNextBars, this.schedulerInterval);
     }
 
     play() {
@@ -153,7 +164,7 @@ export default class MetronomeAudio {
 
     pause() {
         this.playing = false;
-        clearInterval(this.interval);
+        clearInterval(this.intervalID);
         this.cancelAllNotes();
         this.relativeStartTime = this.currentRelativeTime;
     }
