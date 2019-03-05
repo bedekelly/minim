@@ -4,11 +4,11 @@ import { SourceTypes } from '../Sources/SourceTypes';
 import { EffectTypes } from '../Effects/EffectTypes'
 
 import SortableEffectsList from './SortableEffectsList';
-import EditableTextBox from './EditableTextBox';
+import EditableTextBox from 'Components/EditableTextBox';
 import { SourceModal, EffectsModal } from './Modals';
 import MuteToggle from './MuteToggle';
-import Sequencer from '../Sequencer';
-import Recorder from '../Recorder';
+import Sequencer from './Sequencer';
+import Recorder from './Recorder';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

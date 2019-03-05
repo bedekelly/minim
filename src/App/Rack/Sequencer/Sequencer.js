@@ -439,7 +439,7 @@ export default class Sequencer extends React.PureComponent {
     }
 
     get minBeatsPerMeasure() {
-        let maxRing = 0;
+        let maxRing = 1;
         for (let { ring } of this.state.notes) {
             if (ring > maxRing) maxRing = ring;
         }
