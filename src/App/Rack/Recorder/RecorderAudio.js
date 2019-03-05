@@ -34,7 +34,7 @@ export default class RecorderAudio {
     get beatsPerMeasure() {
         return this._beatsPerMeasure;
     }
-
+    
     get schedulerInterval() {
         return 1000 * (this.beatDuration / 3);
     }
@@ -42,30 +42,34 @@ export default class RecorderAudio {
     get beatDuration() {
         return 60 / this.bpm;
     }
-
+    
     toggleRecording() {
         this.recording = !this.recording;
     }
-
+    
     toggleMetronome() {
         this.metronomeAudible = !this.metronomeAudible;
         this.metronome.audible = this.metronomeAudible;
     }
-
+    
     scheduleNextBars() {
         console.log("Scheduling next bars");
     }
-
+    
     startScheduling() {
         this.scheduleNextBars();
         this.intervalID = setInterval(this.scheduleNextBars, this.schedulerInterval);
     }
-
+    
+    midiMessage(message) {
+        console.log({ message, })
+    }
+    
     cancelAllNotes() {
         console.log("Cancel all notes on source");
         this.scheduled = new Set();
     }
-
+    
     play() {
         if (this.playing) return;
         this.playing = true;
@@ -74,7 +78,7 @@ export default class RecorderAudio {
         this.startScheduling();
         this.metronome.play();
     }
-
+    
     pause() {
         this.playing = false;
         clearInterval(this.intervalID);
@@ -82,13 +86,13 @@ export default class RecorderAudio {
         this.relativeStartTime = this.currentRelativeTime;
         this.metronome.pause();
     }
-
+    
     stop() {
         this.pause();
         this.relativeStartTime = 0;
         this.metronome.stop();
     }
-
+    
     togglePlaying() {
         if (this.playing) {
             this.pause();
