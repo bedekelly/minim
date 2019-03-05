@@ -10,17 +10,44 @@ export default class MetronomeAudio {
         this.context = audioContext;
         this.sound = true;  // Todo: change to false
         this.barsLookahead = 4;
-        this.bpm = bpm;
+        this._bpm = bpm;
+        this._beatsPerMeasure = beatsPerMeasure;
         this.interval = 100;
         this.relativeStartTime = 0;
         this.absoluteStartTime = 0;
-        this.beatsPerMeasure = beatsPerMeasure;
         this.scheduleNextBars = this.scheduleNextBars.bind(this);
         this.output = this.context.createGain();
         this.output.connect(this.context.destination);
         this.scheduled = new Set();
         this.nodes = {};
+        this.playing = false;
         this.loadSounds();
+    }
+    
+    set beatsPerMeasure(value) {
+        if (this.playing) {
+            this.pause();
+            this._beatsPerMeasure = value;
+            this.play();
+        }
+        else this._beatsPerMeasure = value;
+    }
+    
+    get beatsPerMeasure() {
+        return this._beatsPerMeasure;
+    }
+    
+    set bpm(value) {
+        if (this.playing) {
+            this.pause();
+            this._bpm = value;
+            this.play();
+        }
+        else this._bpm = value;
+    }
+    
+    get bpm() {
+        return this._bpm;
     }
 
     setAudible(audible) {
@@ -33,7 +60,7 @@ export default class MetronomeAudio {
             fetchAudioData(TICK_LOCATION, this.context),
             fetchAudioData(TOCK_LOCATION, this.context)
         ]);
-        this.buffers = { "tick": tickBuffer, "tock": tockBuffer };
+        this.buffers = { tick: tickBuffer, tock: tockBuffer };
     }
 
     get beatDuration() {
@@ -60,7 +87,6 @@ export default class MetronomeAudio {
 
     playSoundAtTime(sound, time) {
         if (!this.buffers) return;
-        console.log(`Playing ${sound} at ${time}`);
         const node = this.context.createBufferSource();
         node.buffer = this.buffers[sound];
         node.connect(this.output);
@@ -77,7 +103,8 @@ export default class MetronomeAudio {
     scheduleSoundAtBeat(sound, bar, beat) {
         const key = `${sound},${bar},${beat}`;
         if (this.scheduled.has(key)) return;
-        const time = this.absoluteStartTime - this.relativeStartTime + bar * this.barDuration + beat * this.beatDuration;
+        const { absoluteStartTime, relativeStartTime, barDuration, beatDuration } = this;
+        const time = absoluteStartTime - relativeStartTime + bar * barDuration + beat * beatDuration;
         if (time >= this.context.currentTime) this.playSoundAtTime(sound, time);
         this.scheduled.add(key);
     }
@@ -98,11 +125,17 @@ export default class MetronomeAudio {
         }
     }
 
-    play() {
-        this.absoluteStartTime = this.context.currentTime;
+    startScheduling() {
         this.scheduleNextBars();
         this.interval = setInterval(this.scheduleNextBars, this.interval);
+    }
+
+    play() {
+        if (this.playing) return;
+        this.playing = true;
+        this.absoluteStartTime = this.context.currentTime;
         this.relativeStartTime = this.currentRelativeTime;
+        this.startScheduling();
     }
 
     cancelAllNotes() {
@@ -114,11 +147,12 @@ export default class MetronomeAudio {
     }
 
     pause() {
+        this.playing = false;
         clearInterval(this.interval);
         this.cancelAllNotes();
         this.relativeStartTime = this.currentRelativeTime;
     }
-
+    
     stop() {
         this.pause();
         this.relativeStartTime = 0;

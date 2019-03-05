@@ -58,7 +58,7 @@ export default class TextValue extends React.PureComponent {
             const valueBreadth = max - min;
             const valueDiff = linMap(pixelDiff, -PIXEL_TOLERANCE, PIXEL_TOLERANCE, -valueBreadth, valueBreadth);
             const newValue = bounded(initialValue + valueDiff, min, max);
-            onChange(newValue);
+            onChange(Math.round(newValue));
         }
 
         document.addEventListener("mouseup", mouseUp);

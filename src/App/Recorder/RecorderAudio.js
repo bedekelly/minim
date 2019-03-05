@@ -6,13 +6,31 @@ export default class RecorderAudio {
         this.appAudio = appAudio;
         this.context = appAudio.context;
 
-        this.bpm = 60;
-        this.beatsPerMeasure = 4;
+        this._bpm = 60;
+        this._beatsPerMeasure = 4;
         this.metronome = new MetronomeAudio(appAudio, 60, 4);
 
         this.playing = false;
         this.recording = false;
         this.metronomeAudible = false;
+    }
+
+    set bpm(value) {
+        this._bpm = value;
+        this.metronome.bpm = value;
+    }
+    
+    get bpm() {
+        return this._bpm;
+    }
+    
+    set beatsPerMeasure(value) {
+        this._beatsPerMeasure = value;
+        this.metronome.beatsPerMeasure = value;
+    }
+    
+    get beatsPerMeasure() {
+        return this._beatsPerMeasure;
     }
 
     toggleRecording() {
