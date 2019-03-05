@@ -168,7 +168,7 @@ export default class MetronomeAudio {
         this.cancelAllNotes();
         this.relativeStartTime = this.currentRelativeTime;
     }
-    
+
     stop() {
         this.pause();
         this.relativeStartTime = 0;

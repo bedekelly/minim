@@ -38,7 +38,7 @@ class RackAudio {
     }
 
     addRecorder() {
-        this.recorder = new RecorderAudio(this.appAudio.context);
+        this.recorder = new RecorderAudio(this.appAudio);
         if (this.source) {
             this.recorder.sendNotesTo(this.source);
         }
