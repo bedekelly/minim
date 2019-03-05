@@ -9,6 +9,8 @@ export default class RecorderAudio {
 
         this._bpm = 60;
         this._beatsPerMeasure = 4;
+        this.absoluteStartTime = 0;
+        this.relativeStartTime = 0;
         this.metronome = new MetronomeAudio(this.context, 60, 4);
 
         this.playing = false;
@@ -43,6 +45,18 @@ export default class RecorderAudio {
         return 60 / this.bpm;
     }
     
+    get barDuration() {
+        return this.beatDuration * this.beatsPerMeasure;
+    }
+    
+    get timeSinceStarted() {
+        return this.context.currentTime - this.absoluteStartTime;
+    }
+
+    get currentRelativeTime() {
+        return (this.relativeStartTime + this.timeSinceStarted) % this.barDuration;
+    }
+    
     toggleRecording() {
         this.recording = !this.recording;
     }
@@ -54,6 +68,7 @@ export default class RecorderAudio {
     
     scheduleNextBars() {
         console.log("Scheduling next bars");
+        console.log(this.currentRelativeTime);
     }
     
     startScheduling() {
