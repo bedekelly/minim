@@ -38,7 +38,12 @@ export default class TextValue extends React.PureComponent {
         this.onChange = props.onChange;
         this.state = {};
     }
-
+    
+    componentDidUpdate(newProps) {
+        this.min = newProps.min;
+        this.max = newProps.max;
+    }
+    
     startListening({ clientY }) {
         const initialY = clientY;
         const initialValue = this.props.value;

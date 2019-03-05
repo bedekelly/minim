@@ -270,7 +270,7 @@ export default class Sequencer extends React.PureComponent {
         ctx.strokeStyle = "#222";
         ctx.stroke();
     }
-    
+
     drawAllNotes() {
         for (let { ring, angle, drum } of this.state.notes) {
             let angleDiff = 0;
@@ -439,8 +439,11 @@ export default class Sequencer extends React.PureComponent {
     }
 
     get minBeatsPerMeasure() {
-        // Todo: loop through notes and find the lowest unpopulated ring.
-        return 1;
+        let maxRing = 0;
+        for (let { ring } of this.state.notes) {
+            if (ring > maxRing) maxRing = ring;
+        }
+        return maxRing;
     }
 
     stop() {
