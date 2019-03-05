@@ -10,8 +10,8 @@ import EchoAudio from '../Effects/Echo/EchoAudio';
 import DistortionAudio from '../Effects/Distortion/DistortionAudio';
 import BitCrusherAudio from '../Effects/BitCrusher/BitCrusherAudio';
 
-import SequencerAudio from './SequencerAudio';
-import RecorderAudio from './RecorderAudio';
+import SequencerAudio from '../Sequencer/SequencerAudio';
+import RecorderAudio from '../Recorder/RecorderAudio';
 
 import { EffectType } from '../Effects/EffectTypes'
 import { SourceTypes } from '../Sources/SourceTypes';

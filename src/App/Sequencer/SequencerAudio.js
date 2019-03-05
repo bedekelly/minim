@@ -136,7 +136,6 @@ export default class SequencerAudio {
                 const noteAlreadyScheduled = includesClose(
                     scheduledTimes[data[0]], noteScheduledTime, this.closenessDelta);
 
-                
                 const notePlayingNow = noteScheduledTime <= currentTime + this.closenessDelta;
                 
                 if (!noteAlreadyScheduled && !notePlayingNow) {

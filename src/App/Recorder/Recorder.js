@@ -13,6 +13,10 @@ import { faPlay, faPause, faStop, faTimes } from '@fortawesome/pro-solid-svg-ico
 library.add(faPlay, faPause, faStop, faCircle, faTimes);
 
 
+const MetronomeIcon = 
+    "https://s3.eu-west-2.amazonaws.com/static-electricity/icons/MetronomeIcon.svg";
+
+
 
 export default class Recorder extends React.Component {
     
@@ -64,6 +68,7 @@ export default class Recorder extends React.Component {
     }
     
     toggleMetronome() {
+        this.props.audio.toggleMetronome();
         this.setState({ metronome: !this.state.metronome });
     }
     
@@ -116,7 +121,7 @@ export default class Recorder extends React.Component {
                 </button>
                 <button className="metronome" style={ this.metronomeButtonStyle() } 
                         onClick={ () => this.toggleMetronome() }>
-                    <img src="https://s3.eu-west-2.amazonaws.com/static-electricity/icons/MetronomeIcon.svg" alt=""/>
+                    <img src={ MetronomeIcon } alt=""/>
                 </button>
             </section>
         </section>
