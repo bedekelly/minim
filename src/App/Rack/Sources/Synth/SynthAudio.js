@@ -18,12 +18,17 @@ function midiToPitch(midi) {
     return Math.pow(2, (midi - 69) / 12) * 440;
 }
 
+function shallowCopy(object) {
+    return Object.assign({}, object);
+}
+
 
 export default class SynthAudio {
 
     constructor(parentAudio) {
         for (let [key, value] of Object.entries(InitialData)) {
-            this[key] = value;
+            this[key] = shallowCopy(value);
+            console.log(`Setting ${key} to ${value}`);
         }
         this.context = parentAudio.appAudio.context;
         this.mainMix = this.context.createGain();
@@ -216,9 +221,6 @@ export default class SynthAudio {
     }
     
     noteOnAtTimeWithID(pitch, time, id) {
-        
-        console.log(`ON: ${id}`);
-        
         // Calculate notes and pitches.
         const oscOneNote = this.calculateNote(pitch, 1);
         const oscTwoNote = this.calculateNote(pitch, 2);
@@ -306,7 +308,6 @@ export default class SynthAudio {
     }
     
     manualNoteOffAtTime(pitch, time) {
-        console.log(`manualNoteOffAtTime(${pitch}, ${time})`);
         // Apply noteOff messages to every non-cleaned-up note of the given pitch.
         let notes = this.notes[pitch];
         if (!notes) {

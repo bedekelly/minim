@@ -19,7 +19,7 @@ export default class Oscillator extends React.Component {
     constructor(props) {
         super(props);
         this.audio = props.appAudio.sources[this.props.id];
-        this.num = props.num + 1;
+        this.num = this.props.num + 1;
         this.osc = `osc${this.num}`;
         this.state = {
             waveform: this.audio[this.osc].waveform,
@@ -30,6 +30,7 @@ export default class Oscillator extends React.Component {
     }
 
     changeWaveform(waveform) {
+        console.log(`changeWaveform(waveform=${waveform})`)
         this.props.audio[this.osc].waveform = waveform;
         this.setState({ waveform });
     }
@@ -56,7 +57,9 @@ export default class Oscillator extends React.Component {
         const osc = this.osc;
         const outerClassname = `comp osc ${CLASSNAMES[this.num]}`;
         const waveLabel = `waveform-${this.props.id}-${this.num}`;
-        
+        console.log(waveLabel);
+        console.log(this.state.waveform);
+
         return <div className={ outerClassname }>
           <div className="knobs">
             <Knob min={-3} max={3} value={this.state.octave} precision={ 0 }
@@ -86,7 +89,7 @@ export default class Oscillator extends React.Component {
             <label htmlFor={"sine" + waveLabel}>
               <input type="radio" name={ waveLabel } value="sine" id={"sine" + waveLabel}
                   checked={ this.state.waveform === "sine" }
-                  onChange={ e => this.changeWaveform(e.target.value) }
+                  onChange={ e => this.changeWaveform("sine") }
                   ></input>
               <div className="light"></div>
               <img src={ SineIcon } alt=''></img>
@@ -97,7 +100,7 @@ export default class Oscillator extends React.Component {
             <label htmlFor={"sawtooth" + waveLabel}>
               <input type="radio" name={waveLabel} value="sawtooth" id={"sawtooth" + waveLabel}
                   checked={ this.state.waveform === "sawtooth" }
-                  onChange={ e => this.changeWaveform(e.target.value) }
+                  onChange={ e => this.changeWaveform("sawtooth") }
                   ></input>
               <div className="light"></div>
               <img src={ SawtoothIcon } alt=''></img>
@@ -108,7 +111,7 @@ export default class Oscillator extends React.Component {
             <label htmlFor={"triangle" + waveLabel}>
               <input type="radio" name={waveLabel} value="triangle" id={"triangle" + waveLabel}
                   checked={ this.state.waveform === "triangle" }
-                  onChange={ e => this.changeWaveform(e.target.value) }
+                  onChange={ e => this.changeWaveform("triangle") }
                   ></input>
               <div className="light"></div>
               <img src={ TriangleIcon } alt=''></img>
@@ -119,7 +122,7 @@ export default class Oscillator extends React.Component {
             <label htmlFor={"square" + waveLabel}>
               <input type="radio" name={waveLabel} value="square" id={"square" + waveLabel}
                   checked={ this.state.waveform === "square" }
-                  onChange={ e => this.changeWaveform(e.target.value) }
+                  onChange={ e => this.changeWaveform("square") }
                   ></input>
               <div className="light"></div>
               <img src={ SquareIcon } alt=''></img>
