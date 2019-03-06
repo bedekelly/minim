@@ -92,6 +92,11 @@ export default class Recorder extends React.Component {
         this.props.audio.clearAll();
     }
     
+    componentWillUnmount() {
+        this.stop();
+        this.clearAll();
+    }
+    
     render() {
         return <section className="recorder">
             <section className="timing">
