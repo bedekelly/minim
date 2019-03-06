@@ -1,3 +1,5 @@
+import uuid from 'uuid';
+
 import InitialData from './InitialData';
 
 
@@ -26,6 +28,7 @@ export default class SynthAudio {
         this.context = parentAudio.appAudio.context;
         this.mainMix = this.context.createGain();
         this.notes = {};
+        this.manualNotes = new Set();
         this.setupLFOs();
     }
     
@@ -212,7 +215,10 @@ export default class SynthAudio {
         this.notes[pitch].push(note);
     }
     
-    noteOnAtTime(pitch, time, id) {
+    noteOnAtTimeWithID(pitch, time, id) {
+        
+        console.log(`ON: ${id}`);
+        
         // Calculate notes and pitches.
         const oscOneNote = this.calculateNote(pitch, 1);
         const oscTwoNote = this.calculateNote(pitch, 2);
@@ -259,12 +265,18 @@ export default class SynthAudio {
         oscTwoGain.connect(filter);
         filter.connect(oscAmpGain);
         oscAmpGain.connect(this.mainMix);
-
+        
         for (let [osc, pitch] of [[oscOne, pitchOne], [oscTwo, pitchTwo]]) {
-            this.playNote(osc, pitch, time, oscAmpGain, filter);
+            this.playNoteAtTime(osc, pitch, time, oscAmpGain, filter);
         }
-
-        this.addNoteAtPitch(pitch, { note: pitch, id, one: oscOne, two: oscTwo, oneGain: oscOneGain, twoGain: oscTwoGain, amp: oscAmpGain, filter, noteOffTriggered: false })
+        
+        this.addNoteAtPitch(pitch, { note: pitch, id, one: oscOne, two: oscTwo, oneGain: oscOneGain, twoGain: oscTwoGain, amp: oscAmpGain, filter, noteOffTriggered: false });
+        return id;
+    }
+    
+    noteOnAtTime(pitch, time) {
+        const id = uuid();
+        return this.noteOnAtTimeWithID(pitch, time, id);
     }
 
     noteOn(note) {
@@ -293,13 +305,8 @@ export default class SynthAudio {
         filter.disconnect();
     }
     
-    cleanupNoteIfAlreadyPlayed(note, time) {
-        if (time <= this.context.currentTime) {
-            setTimeout(() => this.cleanupNote(note), this.ampEnvelope.release * 1000);
-        }
-    }
-    
-    noteOffAtTime(pitch, time) {
+    manualNoteOffAtTime(pitch, time) {
+        console.log(`manualNoteOffAtTime(${pitch}, ${time})`);
         // Apply noteOff messages to every non-cleaned-up note of the given pitch.
         let notes = this.notes[pitch];
         if (!notes) {
@@ -307,26 +314,37 @@ export default class SynthAudio {
             return;
         }
         
-        for (let note of notes) {
+        for (let i=0; i<notes.length; i++) {
+            const note = notes[i];
+            if (!this.manualNotes.has(note.id)) continue;
             if (note.noteOffEnvelopeAppliedTime <= time ) continue;
             this.applyNoteOffEnvelope(note, time);
-            this.cleanupNoteIfAlreadyPlayed(note, time);
             note.noteOffEnvelopeAppliedTime = time;
         }
     }
     
+    noteIDOffAtTime(id, time) {
+        for (let note of Object.values(this.notes).flat()) {
+            if (note.id !== id) continue;
+            console.log(`OFF: ${id}`);
+            this.applyNoteOffEnvelope(note, time);
+        }
+    }
+    
     noteOff(note) {
+        console.log(`noteOff(${note})`);
         this.noteOffAtTime(note, 0);
     }
 
-    midiMessage(message, time, id) {
-        time = time ? time : 0;
+    midiMessage(message) {
         const { data: [messageType, note, velocity] } = message;
         if (messageType === NOTE_OFF || velocity === 0) {
-            this.noteOffAtTime(note, time, id);
+            this.manualNoteOffAtTime(note, 0);
         } else if (messageType === NOTE_ON) {
-            this.noteOnAtTime(note, time, id);
-        } 
+            const id = uuid();
+            this.manualNotes.add(id);
+            this.noteOnAtTimeWithID(note, 0, id);
+        }
     }
     
     scheduleNotes(notes) {
@@ -336,7 +354,6 @@ export default class SynthAudio {
     }
     
     cancelAllNotes() {
-        console.log("Cancelling all notes");
         for (let pitch of Object.keys(this.notes)) {
             for (let note of this.notes[pitch]) {
                 this.cleanupNote(note);

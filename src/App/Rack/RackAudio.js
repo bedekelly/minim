@@ -65,14 +65,13 @@ class RackAudio {
     }
 
     midiMessage(message) {
-        if (this.recorder) {
+        if (this.recorder && this.recorder.playing && this.recorder.recording) {
             this.recorder.midiMessage(message);
-            return;
+        } else {
+            this.source && this.source.midiMessage ? 
+                this.source.midiMessage(message)
+                : console.warn("Sent MIDI messages to a source who doesn't support it.");
         }
-        
-        this.source && this.source.midiMessage ? 
-            this.source.midiMessage(message)
-            : console.warn("Sent MIDI messages to a source who doesn't support it.");
     }
 
     removeEffect(id) {

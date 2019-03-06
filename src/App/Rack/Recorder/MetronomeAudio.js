@@ -24,7 +24,7 @@ export default class MetronomeAudio {
     }
     
     get schedulerInterval() {
-        return 1000 * (this.beatDuration / 3);
+        return 1000 * (this.barDuration * (this.barsLookahead - 1));
     }
     
     set audible(value) {
