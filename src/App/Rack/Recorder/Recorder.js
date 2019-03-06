@@ -49,6 +49,12 @@ export default class Recorder extends React.Component {
         this.props.audio.togglePlaying();
     }
     
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props.reloadPlayState !== prevProps.reloadPlayState) {
+            this.setState({ playing: this.audio.playing });
+        }
+    }
+    
     metronomeButtonStyle() {
         if (this.state.metronome) {
             return {

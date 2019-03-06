@@ -25,7 +25,7 @@ class TapeLooper extends React.Component {
             playbackRate: this.audio.playbackRate
         }
     }
-
+    
     async stop() {
         // this.audio.stop();
         this.setState({ playing: false });
@@ -35,9 +35,11 @@ class TapeLooper extends React.Component {
         event.preventDefault();
     }
 
-    componentDidUpdate(prevProps) {
-        if (this.props.playing !== prevProps.playing) {
-            this.setState({ playing: this.props.playing })
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props.reloadPlayState !== prevProps.reloadPlayState) {
+            const newPlaying = this.audio.playing;
+            console.log("In TapeLooper.componentDidUpdate: ", { newPlaying });
+            this.setState({ playing: this.audio.playing });
         }
     }
 

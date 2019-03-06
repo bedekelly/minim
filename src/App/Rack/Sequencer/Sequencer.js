@@ -58,7 +58,7 @@ function removeFromArray(removeItem, array) {
 }
 
 
-export default class Sequencer extends React.PureComponent {
+export default class Sequencer extends React.Component {
     constructor(props) {
         super(props);
         this.audio = props.audio;
@@ -75,7 +75,7 @@ export default class Sequencer extends React.PureComponent {
             mousePos: { x: -10, y: -10 },
             selectedDrum: 0,
             canDragRing: false,
-            playing: false
+            playing: this.audio.playing
         };
         this.keyDown = this.keyDown.bind(this);
         this.keyUp = this.keyUp.bind(this);
@@ -99,8 +99,11 @@ export default class Sequencer extends React.PureComponent {
         return [144, 36 + drumIndex]
     }
     
-    componentDidUpdate() {
+    componentDidUpdate(prevProps, prevState) {
         this.context = this.canvas.current.getContext("2d");
+        if (this.props.reloadPlayState !== prevProps.reloadPlayState) {
+            this.setState({ playing: this.audio.playing });
+        }
     }
 
     keyDown(event) {
@@ -457,6 +460,7 @@ export default class Sequencer extends React.PureComponent {
     }
 
     render() {
+        console.log("Sequencer render with props playing of ", this.props.playing, "and state playing of", this.state.playing);
         return <div className="sequencer">
             <TextValue
                 value={this.state.beatsPerMeasure}

@@ -154,7 +154,7 @@ export default class RecorderAudio {
     }
     
     cancelAllNotes() {
-        if (this.destination) this.destination.cancelAllNotes();
+        if (this.destination && this.destination.cancelAllNotes) this.destination.cancelAllNotes();
         this.scheduled = new Set();
     }
     

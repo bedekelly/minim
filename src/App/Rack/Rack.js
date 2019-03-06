@@ -53,14 +53,16 @@ class Rack extends React.Component {
 
     addEffect(effectType) {
         const effect = this.audio.addEffect(effectType);
-        this.setState({ effectsModalOpen: false, effects: [...this.state.effects, {id: effect, effectType}]})
+        this.setState({ effectsModalOpen: false, 
+            effects: [...this.state.effects, {id: effect, effectType}]})
     }
 
     sourceComponent() {
         const Component = this.state.source && this.state.source.component;
         if (Component) return <Component
             sourceType={this.state.source.type} 
-            playing={this.props.playing} 
+            playing={this.props.playing}
+            reloadPlayState={this.props.reloadPlayState}
             id={this.state.source.id} 
             appAudio={this.appAudio}>
         </Component>
@@ -102,21 +104,27 @@ class Rack extends React.Component {
     
     recorderComponent() {
         if (this.state.recorderAdded) {
-            return <Recorder audio={ this.audio.recorder } appAudio={ this.appAudio }/>
+            return <Recorder audio={ this.audio.recorder } appAudio={ this.appAudio }
+                playing={this.props.playing} 
+                reloadPlayState={this.props.reloadPlayState}
+            />
         } else if (this.state.sequencerAdded) {
             return null;
         } else {
-            return <button className="add-button add-recorder" onClick={ () => this.addRecorder() }>+ Recorder</button>
+            return <button className="add-button add-recorder" 
+                onClick={ () => this.addRecorder() }>+ Recorder</button>
         }        
     }
     
     sequencerComponent() {
         if (this.state.sequencerAdded) {
-            return <Sequencer audio={ this.audio.sequencer } appAudio={ this.appAudio }/>
+            return <Sequencer audio={ this.audio.sequencer } 
+                appAudio={ this.appAudio } reloadPlayState={this.props.reloadPlayState} />
         } else if (this.state.recorderAdded) {
             return null;
         } else {
-            return <button className="add-button add-sequencer" onClick={ () => this.addSequencer() }>+ Sequencer</button>
+            return <button className="add-button add-sequencer" 
+                onClick={ () => this.addSequencer() }>+ Sequencer</button>
         }        
     }
     
@@ -131,6 +139,7 @@ class Rack extends React.Component {
     }
     
     render() {
+        console.log("Rack render with playing of", this.props.playing);
         const EffectsList = SortableEffectsList(this.appAudio);
         return <React.Fragment>
             { this.state.effectsModalOpen && 
@@ -147,15 +156,16 @@ class Rack extends React.Component {
                     chooseItem={ this.addSource.bind(this) }
                     items={ SourceTypes }>
                 </SourceModal> }
-            <section className={ "rack" + (this.props.selected ? " selected" : "") } onClick={ this.props.select } ref={ this.wrapperRef }>
-                <MuteToggle muted={ this.state.mute } onChange={ value => this.setMute(value) }/>
-                <EditableTextBox value={ this.state.name } onChange={ value => this.setName(value) } klass="rack-title"></EditableTextBox>
+            <section className={ "rack" + (this.props.selected ? " selected" : "") } 
+                    onClick={ this.props.select } ref={ this.wrapperRef }>
+                <MuteToggle muted={ this.state.mute } 
+                    onChange={ value => this.setMute(value) }/>
+                <EditableTextBox value={ this.state.name } 
+                    onChange={ value => this.setName(value) } klass="rack-title" />
                 <button className="delete-rack" onClick={ () => this.deleteSelf() }>
                     <FontAwesomeIcon icon={ ["fas", "times" ]}></FontAwesomeIcon>
                 </button>
                 <div className="components-wrapper" >
-                    { /*<Recorder audio={ this.audio.recorder } appAudio={ this.appAudio }></Recorder> */ }
-                    { /*  */ }
                     <section className={"components"}>
                         { this.sequencerComponent() }
                         { this.recorderComponent() }

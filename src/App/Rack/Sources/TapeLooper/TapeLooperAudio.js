@@ -25,6 +25,10 @@ class TapeLooperAudio {
         this.audioId = null;
     }
 
+    get playing() {
+        return !this.paused;
+    }
+
     midiMessage(message) {
         console.log("Tape looper ignoring MIDI message: ", message);
         console.log(message.data);

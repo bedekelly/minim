@@ -31,7 +31,7 @@ class App extends Component {
         super(props);
         this.appAudio = new AppAudio();
         this.state = { loaded: false, racks: [], playing: false, selectedRack: this.appAudio.selectedRack,
-        globalEffects: [], learning: false }
+        globalEffects: [], learning: false, reloadPlayState: false }
     }
     
     async initialise() {
@@ -49,17 +49,17 @@ class App extends Component {
 
     playAll() {
         this.appAudio.playAll();
-        this.setState({playing: this.appAudio.playing});
+        this.setState({playing: this.appAudio.playing, reloadPlayState: !this.state.reloadPlayState});
     }
 
     pauseAll() {
         this.appAudio.pauseAll();
-        this.setState({playing: this.appAudio.playing});
+        this.setState({playing: this.appAudio.playing, reloadPlayState: !this.state.reloadPlayState});
     }
     
     stopAll() {
         this.appAudio.stopAll();
-        this.setState({ playing: this.appAudio.playing });
+        this.setState({ playing: this.appAudio.playing, reloadPlayState: !this.state.reloadPlayState });
     }
     
     selectRack(id) {
@@ -144,6 +144,7 @@ class App extends Component {
                 <Rack 
                     key={rack.id} id={rack.id} appAudio={this.appAudio} 
                     selected={ this.state.selectedRack === rack.id }
+                    reloadPlayState={ this.state.reloadPlayState }
                     playing={this.state.playing} select={() => this.selectRack(rack.id)}
                     deleteSelf={ () => this.deleteRack(rack.id) }>
                 </Rack>
