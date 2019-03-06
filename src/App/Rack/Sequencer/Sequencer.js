@@ -12,7 +12,7 @@ import { faPlay, faPause, faStop, faTimes } from '@fortawesome/pro-solid-svg-ico
 
 library.add(faPlay, faPause, faStop, faTimes);
 
-
+const NOTE_SIZE = 7;
 const SIZE = 300;
 const COLOURS = [
     "rgb(0, 0, 0)",
@@ -135,7 +135,7 @@ export default class Sequencer extends React.PureComponent {
     }
 
     drawDraggingNote() {
-        const point = this.getClosestPointToMouse();
+        const point = this.getClosestPointToMouse(true);
         if (!point) return;
         const colour = COLOURS[this.state.draggingNote.drum];
         this.drawNote(point.coords.x - SIZE/2, point.coords.y - SIZE/2, colour);
@@ -179,7 +179,8 @@ export default class Sequencer extends React.PureComponent {
                 this.state.canDragRing && 
                 !this.state.draggingRing && 
                 this.closeToRing(ring) && 
-                !this.hoveringOverNote
+                !this.hoveringOverNote &&
+                !this.state.draggingNote
             ) || this.state.draggingRing === ring;
             this.drawRing(ring, bold);
             this.drawPositionIndicator(ring, angleTravelled);
@@ -213,7 +214,7 @@ export default class Sequencer extends React.PureComponent {
         return [circleX, circleY];
     }
     
-    getClosestPointToMouse() {
+    getClosestPointToMouse(snap) {
         let closestPoint = { dist: 123456 };
         for (let ring = 1; ring <= this.state.beatsPerMeasure; ring++) {
             const radius = this.radiusOfRing(ring);
@@ -224,7 +225,7 @@ export default class Sequencer extends React.PureComponent {
 
             let dist = Math.hypot((mouse.x + SIZE/2 - circleX), (mouse.y + SIZE/2 - circleY));
             if ( dist < closestPoint.dist ) {
-                if (circleX !== circleY)
+                if (circleX !== circleY && snap)
                     [circleX, circleY] = this.snap(circleX, circleY, radius);
                 closestPoint.coords = { x: circleX, y: circleY };
                 closestPoint.dist = dist;
@@ -241,31 +242,30 @@ export default class Sequencer extends React.PureComponent {
         const { coords: { x, y } } = point;
         for (let note of this.state.notes) {
             const dist = Math.hypot(x - note.x, y - note.y);
-            if (dist < 13) return note;
+            if (dist < NOTE_SIZE-1) return note;
         }
         return false;
     }
     
     drawNoteGhost() {
-        const closestPoint = this.getClosestPointToMouse();
-        if (!closestPoint || closestPoint.dist > 17) return;
-        if (this.state.dragging) return;
+        const closestPoint = this.getClosestPointToMouse(true);
+        if (!closestPoint || closestPoint.dist > NOTE_SIZE) return;
+        if (this.state.draggingNote) return;
         if (this.hoveringOverNote) return;
         if (this.state.canDragRing) return;
         this.drawNote(
             closestPoint.coords.x - SIZE/2, 
             closestPoint.coords.y - SIZE/2, 
-            "rgba(20, 20, 20, 0.2)", 10
+            "rgba(20, 20, 20, 0.2)"
         );
     }
     
-    drawNote(x, y, colour, size) {
-        if (!size) size = 7;
+    drawNote(x, y, colour) {
         const ctx = this.refreshContext();
         ctx.fillStyle = colour;
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.arc(SIZE/2+x, SIZE/2+y, 7, 0, 2 * Math.PI);
+        ctx.arc(SIZE/2+x, SIZE/2+y, NOTE_SIZE, 0, 2 * Math.PI);
         ctx.fill();
         ctx.strokeStyle = "#222";
         ctx.stroke();
@@ -385,7 +385,7 @@ export default class Sequencer extends React.PureComponent {
     }
 
     async addNoteHere(note) {
-        const closestPoint = this.getClosestPointToMouse();
+        const closestPoint = this.getClosestPointToMouse(true);
         const { coords: { x, y }, ring } = closestPoint;
         const angle = Math.PI - Math.atan2(x - SIZE/2, y - SIZE/2);
         await this.addNoteAt(ring, angle, x, y, note);
