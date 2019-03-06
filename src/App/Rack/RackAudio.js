@@ -179,11 +179,13 @@ class RackAudio {
     mute() {
         this.muted = true;
         this.output.gain.setValueAtTime(0, 0);
+        this.recorder && this.recorder.rackMuteMetronome();
     }
     
     unmute() {
         this.muted = false;
         this.output.gain.setValueAtTime(1, 0);
+        this.recorder && this.recorder.rackUnmuteMetronome();
     }
 }
 

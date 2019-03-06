@@ -15,7 +15,9 @@ export default class MetronomeAudio {
         this.absoluteStartTime = 0;
         this.scheduleNextBars = this.scheduleNextBars.bind(this);
         this.output = this.context.createGain();
-        this.output.connect(this.context.destination);
+        this.rackMute = this.context.createGain();
+        this.output.connect(this.rackMute);
+        this.rackMute.connect(this.context.destination);
         this.audible = false;
         this.scheduled = new Set();
         this.nodes = {};
@@ -108,6 +110,14 @@ export default class MetronomeAudio {
             node.disconnect();
             delete this.nodes[key]
         }
+    }
+    
+    muteFromRack() {
+        this.rackMute.gain.setValueAtTime(0, 0);
+    }
+    
+    unmuteFromRack() {
+        this.rackMute.gain.setValueAtTime(1, 0);
     }
 
     scheduleSoundAtBeat(sound, bar, beat) {

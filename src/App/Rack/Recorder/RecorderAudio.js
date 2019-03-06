@@ -189,6 +189,14 @@ export default class RecorderAudio {
         this.metronome.stop();
     }
     
+    rackMuteMetronome() {
+        this.metronome.muteFromRack();
+    }
+    
+    rackUnmuteMetronome() {
+        this.metronome.unmuteFromRack();
+    }
+    
     togglePlaying() {
         if (this.playing) {
             this.pause();
