@@ -110,7 +110,7 @@ class Rack extends React.Component {
             />
         } else if (this.state.sequencerAdded) {
             return null;
-        } else {
+        } else if (this.audio.source && ["MPCAudio", "SynthAudio"].includes(this.audio.source.constructor.name)) {
             return <button className="add-button add-recorder" 
                 onClick={ () => this.addRecorder() }>+ Recorder</button>
         }        
@@ -122,7 +122,7 @@ class Rack extends React.Component {
                 appAudio={ this.appAudio } reloadPlayState={this.props.reloadPlayState} />
         } else if (this.state.recorderAdded) {
             return null;
-        } else {
+        } else if (this.audio.source && this.audio.source.constructor.name === "MPCAudio"){
             return <button className="add-button add-sequencer" 
                 onClick={ () => this.addSequencer() }>+ Sequencer</button>
         }        
@@ -139,7 +139,6 @@ class Rack extends React.Component {
     }
     
     render() {
-        console.log("Rack render with playing of", this.props.playing);
         const EffectsList = SortableEffectsList(this.appAudio);
         return <React.Fragment>
             { this.state.effectsModalOpen && 
