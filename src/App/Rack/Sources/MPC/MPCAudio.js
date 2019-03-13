@@ -10,6 +10,9 @@ const CONTROLLER_NOTE_OFFSET = -36;
 
 export default class MPCAudio {
     
+    // Work around a bug with minification.
+    name = "MPCAudio";
+    
     constructor(parentRack) {
         this._pads = new Array(NUMBER_PADS);
         this._pads.fill(false);

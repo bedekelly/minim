@@ -25,10 +25,12 @@ function shallowCopy(object) {
 
 export default class SynthAudio {
 
+    // Work around a bug with minification.
+    name = "SynthAudio";
+
     constructor(parentAudio) {
         for (let [key, value] of Object.entries(InitialData)) {
             this[key] = shallowCopy(value);
-            console.log(`Setting ${key} to ${value}`);
         }
         this.context = parentAudio.appAudio.context;
         this.mainMix = this.context.createGain();
