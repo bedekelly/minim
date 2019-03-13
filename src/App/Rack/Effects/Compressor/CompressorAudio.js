@@ -8,6 +8,7 @@ class CompressorAudio extends EffectAudio {
         
         // Default ratio of 12 is pretty hardcore.
         this.node.ratio.setValueAtTime(1.5, 0);
+        this.ratioChanged = false;  // Sort out a nasty race condition.
     }
 
     setValue(name, value) {
@@ -16,15 +17,22 @@ class CompressorAudio extends EffectAudio {
 
     get threshold() { return this.node.threshold.value; }
     get knee() { return this.node.knee.value; }
-    get ratio() { return this.node.ratio.value; }
+    
     get attack() { return this.node.attack.value; }
     get release() { return this.node.release.value; }
+    get ratio() {
+        if (!this.ratioChanged) return 1.5;
+        return this.node.ratio.value;
+    }
     
     set threshold(value) { return this.setValue("threshold", value); }
     set knee(value) { return this.setValue("knee", value); }
-    set ratio(value) { return this.setValue("ratio", value); }
     set attack(value) { return this.setValue("attack", value); }
     set release(value) { return this.setValue("release", value); }
+    set ratio(value) {
+        this.ratioChanged = true;
+        return this.setValue("ratio", value);
+    }
 }
 
 
