@@ -3,7 +3,7 @@ import React from 'react';
 import './Ambience.css';
 
 
-const IMAGE_URL = name => `https://s3.eu-west-2.amazonaws.com/static-electricity/daw/ambience-images/${name.replace(" ", "+")}.jpeg`;
+const IMAGE_URL = sound => `https://s3.eu-west-2.amazonaws.com/static-electricity/daw/ambience-images/${sound.name.replace(" ", "+")}.jpeg`;
 
 
 class Ambience extends React.Component {

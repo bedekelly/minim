@@ -1,12 +1,17 @@
-const BUFFER_URL = name => 
-    `https://s3.eu-west-2.amazonaws.com/static-electricity/daw/ambience-sounds/${name.replace(" ", "+")}.wav`;
+import Wind from './Sounds/Wind.ogg';
+import Record from './Sounds/Record Crackle.ogg';
+import Rainstorm from './Sounds/Rainstorm.ogg';
+
 const SCHEDULING_WINDOW = 4;
 const CROSSOVER = 2;
 
 
 export default class AmbienceAudio {
     
-    SOUNDS = ["Wind", "Record Crackle", "Rainstorm"]
+    SOUNDS = [
+        {name: 'Wind', url: Wind}, 
+        {name: 'Record', url: Record}, 
+        {name: 'Rainstorm', url: Rainstorm}];
     
     constructor(parentRack) {
         this.soundBuffers = {};
@@ -63,9 +68,8 @@ export default class AmbienceAudio {
 
     async loadSoundBuffer(index) {
         if (this.soundBuffers[index]) return;
-        const name = this.SOUNDS[index];
-        const url = BUFFER_URL(name);
-        this.soundBuffers[index] = await this.fetchAndLoadAudio(url);
+        const sound = this.SOUNDS[index];
+        this.soundBuffers[index] = await this.fetchAndLoadAudio(sound.url);
         return this.soundBuffers[index];
     }
 
