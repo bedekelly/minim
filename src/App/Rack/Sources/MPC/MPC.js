@@ -38,10 +38,16 @@ class MPC extends React.Component {
     onDrop(event, index) {
         event.preventDefault()
         const { files } = event.dataTransfer;
-        for (let file of files) {
-            this.newFile(file, index);
-            console.log("Loading file to index " + index);
-            if (--index < 0) break;
+        if (files.length === 0) {
+            const id = event.dataTransfer.getData("id");
+            const data = window.audioData[id];
+            this.audio.loadFromTapeLooper(data, index);
+        } else {
+            for (let file of files) {
+                this.newFile(file, index);
+                console.log("Loading file to index " + index);
+                if (--index < 0) break;
+            }
         }
     }
 

@@ -3,6 +3,7 @@ import React from "react";
 import './TapeLooper.css';
 import Editor from './Editor';
 import TapeComponents from './TapeComponents';
+import DraggableAudioData from './DraggableAudioData';
 import Knob from 'Components/Knob';
 
 const DOUBLE_CLICK_TIME = 600;  // milliseconds.
@@ -57,7 +58,12 @@ class TapeLooper extends React.Component {
     newFile(file) {
         const reader = new FileReader();
         reader.onloadend = () => this.fileLoaded(reader.result);
-        reader.readAsArrayBuffer(file);
+        try {
+            reader.readAsArrayBuffer(file);
+        } catch (e) {
+            // Don't do anything if we've dragged something dumb on.
+        }
+        
     }
 
     onDrop(event) {
@@ -176,6 +182,9 @@ class TapeLooper extends React.Component {
             { this.audio.buffer ? <div className="button editor-button" onClick={() => this.openEditor()}>~</div> : null }
             <TapeComponents></TapeComponents>
             { this.state.editorOpen ? this.editor() : null}
+            
+            
+            { this.audio.buffer ? <DraggableAudioData audio={this.audio} /> : null }
         </div>
     }
 }

@@ -27,6 +27,10 @@ export default class MPCAudio {
         return (NUMBER_PADS - 1) - (note + CONTROLLER_NOTE_OFFSET)
     }
 
+    loadFromTapeLooper({loopStart, loopEnd, playbackRate, buffer}, index) {
+        this._pads[index] = { buffer, loopStart, loopEnd, playbackRate }
+    }
+
     scheduleNotes(midiMessages) {
         for (let { data: [messageType, note], time } of midiMessages) {
             if (messageType === NOTE_ON) {
@@ -82,15 +86,21 @@ export default class MPCAudio {
 
     playPadAtTime(index, time) {
         if (!this._pads[index]) return;
-        const { buffer } = this._pads[index];
+        const { buffer, playbackRate, loopStart, loopEnd } = this._pads[index];
         const node = this.context.createBufferSource();
         node.buffer = buffer;
         node.connect(this.node);
-        node.start(time);
+
+        if (playbackRate) {
+            node.playbackRate.setValueAtTime(playbackRate, time);
+            node.start(time, loopStart, loopEnd - loopStart);
+        } else {
+            node.start(time);
+        }
+        
         const id = uuid();
         this.futureSounds.push({ id, node})
         node.onended = () => this.removeNodeWithId(id);
-        console.log("playing", index, time);
     }
 
     playPad(index) {
