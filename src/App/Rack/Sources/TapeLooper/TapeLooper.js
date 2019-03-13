@@ -6,6 +6,12 @@ import TapeComponents from './TapeComponents';
 import DraggableAudioData from './DraggableAudioData';
 import Knob from 'Components/Knob';
 
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCut} from '@fortawesome/free-solid-svg-icons';
+
+library.add(faCut);
+
 const DOUBLE_CLICK_TIME = 600;  // milliseconds.
 
 
@@ -145,6 +151,42 @@ class TapeLooper extends React.Component {
                ></Editor>
     }
     
+    speedKnob() {
+        return <React.Fragment>
+            <Knob min={ this.PLAYBACK_MIN } 
+                max={ this.PLAYBACK_MAX } 
+                precision={ 0 }
+                value={ this.state.playbackRate }
+                default={ 1 }
+                label="Speed"
+                units="%"
+                scale={ 100 }
+                id={ this.props.id + "-playback-speed" }
+                onChange={ value => this.setPlaybackRate(value) }
+                appAudio={ this.props.appAudio }>
+            </Knob>
+            <p className="speed-title">Speed</p>
+        </React.Fragment>
+    }
+    
+    dragFileLabel() {
+        return <p className="drag-sounds-label">Drag sounds here!</p>
+    }
+    
+    editorButton() {
+        return <div className="button editor-button" onClick={() => this.openEditor()}>
+            <FontAwesomeIcon icon={ ["fas", "cut"] } size="lg" />
+        </div>;
+    }
+    
+    decorativeButtons() {
+        return <div className="buttons">
+            <div className="left"></div>
+            <div className="middle"></div>
+            <div className="right"></div>
+        </div>
+    }
+    
     render() {
         const classNames = [
             "tape-looper",
@@ -159,31 +201,11 @@ class TapeLooper extends React.Component {
             onDragLeave={ event => this.onDragLeave(event) }
             onDrop={ event => this.onDrop(event) }
         >
-            <div className="buttons">
-                <div className="left"></div>
-                <div className="middle"></div>
-                <div className="right"></div>
-            </div>
-
-            <Knob 
-                min={ this.PLAYBACK_MIN } 
-                max={ this.PLAYBACK_MAX } 
-                precision={ 0 }
-                value={ this.state.playbackRate }
-                default={ 1 }
-                label="Speed"
-                units="%"
-                scale={ 100 }
-                id={ this.props.id + "-playback-speed" }
-                onChange={ value => this.setPlaybackRate(value) }
-                appAudio={ this.props.appAudio }>
-            </Knob>
-            <p className="speed-title">Speed</p>
-            { this.audio.buffer ? <div className="button editor-button" onClick={() => this.openEditor()}>~</div> : null }
+            { this.decorativeButtons() }
+            { this.audio.buffer ? this.speedKnob() : this.dragFileLabel() }
+            { this.audio.buffer ? this.editorButton() : null }
             <TapeComponents></TapeComponents>
             { this.state.editorOpen ? this.editor() : null}
-            
-            
             { this.audio.buffer ? <DraggableAudioData audio={this.audio} /> : null }
         </div>
     }

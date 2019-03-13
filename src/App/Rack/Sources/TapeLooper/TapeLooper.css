@@ -282,8 +282,7 @@
     background: #666;
     display: grid;
     place-items: center;
-    width: 30px;
-    height: 16px;
+    padding: 3px 10px;
     line-height: 1;
     text-align: center;
     box-shadow: 0 0 5px #333;
@@ -291,7 +290,8 @@
     position: absolute;
     color: whitesmoke;
     border-radius: 2px;
-    top: 20px;
+    top: 21px;
+    left: 65px;
     cursor: pointer;
 }
 
@@ -302,10 +302,6 @@
 
 .tape-looper .speed-up {
     left: 20px;
-}
-
-.tape-looper .editor-button {
-    left: 60px;
 }
 
 
@@ -337,4 +333,14 @@
     font-family: monospace;
     font-size: 9pt;
     margin: 25px 0 0 12px;
+}
+
+.drag-sounds-label {
+    font-family: monospace;
+    max-width: 120px;
+    position: absolute;
+    left: 26px;
+    top: 6px;
+    font-size: 15px;
+    font-weight: 500;
 }
