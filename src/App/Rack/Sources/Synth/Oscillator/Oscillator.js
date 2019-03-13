@@ -30,7 +30,6 @@ export default class Oscillator extends React.Component {
     }
 
     changeWaveform(waveform) {
-        console.log(`changeWaveform(waveform=${waveform})`)
         this.props.audio[this.osc].waveform = waveform;
         this.setState({ waveform });
     }
@@ -57,8 +56,6 @@ export default class Oscillator extends React.Component {
         const osc = this.osc;
         const outerClassname = `comp osc ${CLASSNAMES[this.num]}`;
         const waveLabel = `waveform-${this.props.id}-${this.num}`;
-        console.log(waveLabel);
-        console.log(this.state.waveform);
 
         return <div className={ outerClassname }>
           <div className="knobs">

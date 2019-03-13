@@ -15,6 +15,9 @@ export default class LFO extends React.Component {
     }
     
     changeLFODestination(lfoDestination) {
+        if (lfoDestination === this.state.lfoDestination) {
+            lfoDestination = null;
+        }
         this.audio.lfoDestination = lfoDestination;
         this.setState({ lfoDestination });
     }
@@ -42,7 +45,8 @@ export default class LFO extends React.Component {
                 <label htmlFor="pitch">
                   <input type="radio" name="destination" value="pitch" id="pitch" 
                       checked={ this.state.lfoDestination === "pitch" }
-                      onChange={ e => this.changeLFODestination(e.target.value) }
+                      onClick={ e => this.changeLFODestination(e.target.value) }
+                      onChange={ () => {} }
                       ></input>
                   <div className="light"></div>
                   <span className="label">Pitch</span>
@@ -52,7 +56,8 @@ export default class LFO extends React.Component {
                 <label htmlFor="amplitude">
                   <input type="radio" name="destination" value="amplitude" id="amplitude" 
                       checked={ this.state.lfoDestination === "amplitude" }
-                      onChange={ e => this.changeLFODestination(e.target.value) }
+                      onClick={ e => this.changeLFODestination(e.target.value)  }
+                      onChange={ () => {} }
                       ></input>
                   <div className="light"></div>
                   <span className="label">Amp</span>
@@ -62,7 +67,8 @@ export default class LFO extends React.Component {
                 <label htmlFor="filter">
                   <input type="radio" name="destination" value="filter" id="filter" 
                       checked={ this.state.lfoDestination === "filter" }
-                      onChange={ e => this.changeLFODestination(e.target.value) }
+                      onClick={ e => this.changeLFODestination(e.target.value) }
+                      onChange={ () => {} }
                       ></input>
                   <div className="light"></div>
                   <span className="label">Filter</span>

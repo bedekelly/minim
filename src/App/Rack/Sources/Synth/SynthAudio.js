@@ -148,11 +148,17 @@ export default class SynthAudio {
                 break;
             }
             
-            case "filter":
-            default: {
+            case "filter": {
                 this.pitchLfo.disconnect();
                 this.ampLfo.disconnect();
                 this.connectFilterLFO();
+                break;
+            }
+            
+            default: {
+                this.pitchLfo.disconnect();
+                this.ampLfo.disconnect();
+                this.filterLfo.disconnect();
             }
         }
     }
