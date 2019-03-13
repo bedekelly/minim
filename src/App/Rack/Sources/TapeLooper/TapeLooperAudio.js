@@ -210,6 +210,7 @@ class TapeLooperAudio {
 
     async stop() {
         await this.pause();
+        this.inLoop = false;
         this.absoluteStartTime = this.context.currentTime;
         this.relativeStartTime = 0;
         if (this.stopGraphics) {
