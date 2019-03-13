@@ -109,3 +109,7 @@
 .sequencer .clear-all:active:hover {
     background: #ee3333;
 }
+
+.sequencer .clear-all * {
+    transform: scale(1.15) translateY(-1px);
+}
