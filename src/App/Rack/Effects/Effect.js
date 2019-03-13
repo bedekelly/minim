@@ -59,7 +59,7 @@ class Effect extends React.Component {
                     appAudio={ this.props.appAudio }
                     id={ this.props.id + "-wetdry" }
                     default={ 1 }
-                    label={ "Wet" }
+                    label={ "Mix" }
                     units={ "%" }
                     scale={ 100 }
                     precision={ 0 }
