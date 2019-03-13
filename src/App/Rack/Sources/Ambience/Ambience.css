@@ -55,7 +55,7 @@
 }
 
 .ambience img.blurred-image {
-  filter: blur(2px);
+  filter: saturate(70%);
   position: absolute;
   top: 5px;
   left: 5px;
