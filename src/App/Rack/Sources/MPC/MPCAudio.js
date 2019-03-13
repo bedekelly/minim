@@ -117,4 +117,10 @@ export default class MPCAudio {
             this.node.connect(destination);
         }
     }
+    
+    stop() {
+        for (let { node } of this.futureSounds) {
+            node.disconnect();
+        }
+    }
 }
