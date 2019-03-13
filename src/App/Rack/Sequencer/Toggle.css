@@ -1,25 +1,27 @@
+.toggle:first-of-type {
+    border-radius: 0 0 0 3px;
+}
+
 .toggle {
     cursor: pointer;
     border-right: 0;
     outline: 0;
     border: 0;
-    border-right: 1px solid lightgrey;
-    border-top: 1px solid lightgrey;
-    background: whitesmoke;
+    background: none;
+    left: 50%;
+    top: 50%;
+    position: absolute;
+    font-size: 16pt;
+    transform: translate(-50%, -40%);
+    background: transparent;
+    border: 0;
+    font-family: monospace;
+    outline: 0;
+    cursor: pointer;
+    font-weight: bold;
 }
 
-.toggle:active {
-    background: lightgrey;
-}
-
-.toggle:first-of-type {
-    border-radius: 0 0 0 3px;
-}
-
-.toggle.on {
-    background: lightgrey;
-}
-
-.toggle.on:active {
-    background: whitesmoke;
+.toggle:hover {
+    scale: 1.1;
+    transform: translate(-45%, -35%);
 }

@@ -482,8 +482,9 @@ export default class Sequencer extends React.Component {
                 ref={ this.canvas }></canvas>
             
             <div className="bottom-left-buttons">
-                <Toggle className="lock" value={ this.state.snap }
-                    onChange={ () => this.setState({ snap: !this.state.snap })} />
+                <button className="clear-all" onClick={ () => this.clearAll() }>
+                    <FontAwesomeIcon icon={ [ "fas", "times" ]} />
+                </button>
                 <button className="stop" onClick={ () => this.stop() }>
                     <FontAwesomeIcon icon={ ["fas", "stop"] }></FontAwesomeIcon>
                 </button>
@@ -500,9 +501,8 @@ export default class Sequencer extends React.Component {
                 onChange={ selectedDrum => this.setState({ selectedDrum })} 
                 colours={ COLOURS }
                 />
-            <button className="clear-all" onClick={ () => this.clearAll() }>
-                <FontAwesomeIcon icon={ [ "fas", "times" ]} />
-            </button>
+            <Toggle className="lock" value={ this.state.snap }
+                onChange={ () => this.setState({ snap: !this.state.snap })} />
         </div>;
     }
 }

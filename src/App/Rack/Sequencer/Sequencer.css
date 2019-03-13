@@ -82,33 +82,6 @@
     right: 20px;
 }
 
-.sequencer .clear-all {
-    left: 50%;
-    top: 50%;
-    position: absolute;
-    font-size: 16pt;
-    transform: translate(-50%, -40%);
-    background: transparent;
-    border: 0;
-    font-family: monospace;
-    outline: 0;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.sequencer .clear-all:hover {
-    scale: 1.1;
-    transform: translate(-45%, -35%);
-}
-
-.sequencer .clear-all:active {
-    color: red;
-}
-
-.sequencer .clear-all:active:not(:hover) {
-    color: inherit;
-}
-
 .sequencer .bottom-left-buttons {
     position: absolute;
     bottom: 0;
@@ -131,4 +104,8 @@
 
 .sequencer .bottom-left-buttons button:active:not(:hover) {
     background: whitesmoke;
+}
+
+.sequencer .clear-all:active:hover {
+    background: #ee3333;
 }
