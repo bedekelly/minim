@@ -8,9 +8,9 @@ class Compressor extends React.Component {
         super(props);
         this.compressorAudio = this.props.appAudio.effects[this.props.id];
         const {
-            threshold, knee, ratio, attack, release
+            threshold, knee, attack, release
         } = this.compressorAudio;
-        this.state = { threshold, knee, ratio, attack, release };
+        this.state = { threshold, knee, ratio: 1.5, attack, release };
     }
     
     change(key, value) {
