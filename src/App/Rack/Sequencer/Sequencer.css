@@ -15,8 +15,8 @@
   grid-template-rows: 1fr 1fr 1fr 1fr;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   background: #C0BCB5;
-  width: 40px;
-  height: 40px;
+  width: 160px;
+  height: 160px;
   place-items: center;
   position: absolute;
   bottom: 10px;
@@ -24,14 +24,14 @@
   transition: all ease 0.2s;
   border-radius: 3px;
   scale: 1;
+  transform: translate(65px, 65px) scale(0.25);
 }
 
 .sequencer .buttons:hover {
-  scale: 4;
-  bottom: 65px;
-  right: 65px;
+  transform: translate(0, 0) scale(1);
   transition: all ease 0.3s;
   box-shadow: 0 0 40px;
+  z-index: 2;
 }
 
 .sequencer .buttons:hover .colour-indicator {
@@ -39,22 +39,21 @@
 }
 
 .sequencer .button {
-  width: 6px;
-  height: 6px;
-  border-radius: 0.5px;
+  width: 24px;
+  height: 24px;
+  border-radius: 2px;
   background: whitesmoke;
   cursor: pointer;
-  box-shadow: 0 0 0.2px 0.2px #444, 0 0 3px inset white;
+  box-shadow: 0 0 1px 1px #444, 0 0 12px inset white;
   position: relative;
 }
 
 .sequencer .colour-indicator {
-    width: 4px;
-    height: 4px;
+    width: 16px;
+    height: 16px;
     position: absolute;
-    top: 1px;
-    left: 1px;
-    /* border-radius: 50%; */
+    top: 4px;
+    left: 4px;
 }
 
 .sequencer .button.selected {
