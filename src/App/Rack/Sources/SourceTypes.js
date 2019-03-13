@@ -12,10 +12,10 @@ import SynthAudio from './Synth/SynthAudio';
 
 const SourceType = Object.freeze({
     TapeLooper: Symbol("TapeLooper"),
-    GranularSynth: Symbol("GranularSynth"),
     MPC: Symbol("MPC"),
+    Synth: Symbol("Synth"),
     Ambience: Symbol("Ambience"),
-    Synth: Symbol("Synth")
+    GranularSynth: Symbol("GranularSynth")
 });
 
 
@@ -28,18 +28,18 @@ const SourceTypes = [
         audio: TapeLooperAudio
     },
     {
-        type: SourceType.GranularSynth,
-        text: "Granular Synth",
-        image: "https://lorempixel.com/300/240",
-        component: GranularSynth,
-        audio: GranularSynthAudio
-    },
-    {
         type: SourceType.MPC,
-        text: "MPC Drum Pads",
+        text: "Drum Pads",
         image: "https://lorempixel.com/300/240",
         component: MPC,
         audio: MPCAudio
+    },
+    {
+        type: SourceType.Synth,
+        text: "Poly Synth",
+        image: "https://lorempixel.com/300/240",
+        component: Synth,
+        audio: SynthAudio
     },
     {
         type: SourceType.Ambience,
@@ -49,12 +49,12 @@ const SourceTypes = [
         audio: AmbienceAudio
     },
     {
-        type: SourceType.Synth,
-        text: "2x OSC",
+        type: SourceType.GranularSynth,
+        text: "Granular Synth",
         image: "https://lorempixel.com/300/240",
-        component: Synth,
-        audio: SynthAudio
-    }
+        component: GranularSynth,
+        audio: GranularSynthAudio
+    },
 ]
 
 
