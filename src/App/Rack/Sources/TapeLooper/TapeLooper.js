@@ -175,7 +175,7 @@ class TapeLooper extends React.Component {
     
     editorButton() {
         return <div className="button editor-button" onClick={() => this.openEditor()}>
-            <FontAwesomeIcon icon={ ["fas", "cut"] } size="lg" />
+            <FontAwesomeIcon icon={ ["fas", "cut"] } size="2x" />
         </div>;
     }
     

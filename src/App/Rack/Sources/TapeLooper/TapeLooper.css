@@ -279,25 +279,28 @@
 
 .tape-looper .button {
     font-size: 8pt;
-    background: #666;
     display: grid;
     place-items: center;
-    padding: 3px 10px;
+    padding: 20px;
     line-height: 1;
     text-align: center;
-    box-shadow: 0 0 5px #333;
     font-family: monospace;
     position: absolute;
-    color: whitesmoke;
+    color: #333;
+    opacity: 0.6;
     border-radius: 2px;
-    top: 21px;
-    left: 65px;
+    top: 35px;
+    left: 75px;
+    transform: rotate(-25deg);
     cursor: pointer;
+    transition: none;
+    z-index: 3;
 }
 
-.tape-looper .button:active {
-    background: coral;
-    color: whitesmoke;
+.tape-looper .button:hover {
+    transition: none;
+    transform: scale(1.1) rotate(-25deg);
+    opacity: 1;
 }
 
 .tape-looper .speed-up {
