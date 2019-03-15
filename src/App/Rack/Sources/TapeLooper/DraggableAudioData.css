@@ -3,6 +3,19 @@
     position: absolute;
     right: 10px;
     bottom: 10px;
-    color: #666;
+    color: #333;
     cursor: move;
+    transform: scale(0.8);
+    opacity: 0.7;
+    transition: none;
+}
+
+.draggable-audio-data:hover {
+    transition: none;
+    opacity: 1;
+    transform: scale(1);
+}
+
+.draggable-audio-data:active {
+    transform: scale(1.2);
 }
