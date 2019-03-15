@@ -6,11 +6,17 @@ import Toggle from './Toggle';
 
 import './Sequencer.css';
 
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlay, faPause, faStop, faTimes } from '@fortawesome/pro-solid-svg-icons';
+import {library} from '@fortawesome/fontawesome-svg-core';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {
+    faPause,
+    faPlay,
+    faStop,
+    faTimes
+} from '@fortawesome/pro-solid-svg-icons';
 
 library.add(faPlay, faPause, faStop, faTimes);
+
 
 const NOTE_SIZE = 7;
 const SIZE = 300;
@@ -31,7 +37,8 @@ const COLOURS = [
     "rgb(233, 222, 187)",
     "rgb(255, 205, 243)",
     "rgb(255, 255, 255)"
-]
+];
+
 
 /**
 * Linearly map a value from one range to another.
@@ -42,8 +49,7 @@ function linMap(value, fromLower, fromUpper, toLower, toUpper) {
     const magnitudeThroughLowerRange = (value - fromLower);
     const fractionThroughRange = magnitudeThroughLowerRange / lowerRange;
     const magnitudeThroughUpperRange = fractionThroughRange * upperRange;
-    const valueInUpperRange = toLower + magnitudeThroughUpperRange;
-    return valueInUpperRange;
+    return toLower + magnitudeThroughUpperRange;
 }
 
 const shallowCompare = (obj1, obj2) =>
@@ -92,10 +98,10 @@ export default class Sequencer extends React.Component {
     }
     
     get selectedDrumMIDI() {
-        return this.midiFor(this.state.selectedDrum);
+        return Sequencer.midiFor(this.state.selectedDrum);
     }
     
-    midiFor(drumIndex) {
+    static midiFor(drumIndex) {
         return [144, 36 + drumIndex]
     }
     
@@ -316,7 +322,7 @@ export default class Sequencer extends React.Component {
     async addNoteAt(ring, angle, x, y, note) {
         const drum = note ? note.drum : this.state.selectedDrum;
         await this.setState({notes: [...this.state.notes, { ring, angle, drum, x, y }]});
-        this.addAudioNote(angle, ring, this.midiFor(drum))
+        this.addAudioNote(angle, ring, Sequencer.midiFor(drum))
     }
     
     addAudioNote(angle, ring, data) {
@@ -338,7 +344,7 @@ export default class Sequencer extends React.Component {
     
     addAllAudioNotes() {
         for (let { angle, ring, drum } of this.state.notes) {
-            this.addAudioNote(angle, ring, this.midiFor(drum));
+            this.addAudioNote(angle, ring, Sequencer.midiFor(drum));
         }
     }
 
@@ -362,7 +368,7 @@ export default class Sequencer extends React.Component {
 
         const hoverNote = this.hoveringOverNote;
         if (hoverNote) {
-            const notes = removeFromArray(hoverNote, this.state.notes)
+            const notes = removeFromArray(hoverNote, this.state.notes);
             this.setState({ draggingNote: hoverNote, notes })
         } else if (this.state.canDragRing) {
             const ringToDrag = this.closestRing();
@@ -394,7 +400,7 @@ export default class Sequencer extends React.Component {
         await this.addNoteAt(ring, angle, x, y, note);
     }
 
-    async onMouseUp(event) {
+    async onMouseUp() {
         if (!(this.state.draggingNote || this.state.draggingRing)) return;
         const note = this.state.draggingNote;
         if (this.state.draggingNote) await this.addNoteHere(note);
@@ -413,7 +419,7 @@ export default class Sequencer extends React.Component {
             const roundedDistance = Math.round(distanceRoundCircle * steps) / steps;
             newAngle = Math.PI * 2 * roundedDistance;
         }
-        this.rotateRingBy(this.state.draggingRing, newAngle)
+        this.rotateRingBy(this.state.draggingRing, newAngle);
         return this.setState({ canDragRing: false, draggingRing: null });
     }
     
@@ -473,25 +479,25 @@ export default class Sequencer extends React.Component {
                 min={10} max={200} 
                 label={ "bpm" }
                 onChange={ bpm => this.setBpm(bpm) }/>
-            <canvas 
-                onMouseDown={ e => this.onMouseDown(e) } 
+            <canvas
+                onMouseDown={ e => this.onMouseDown(e) }
                 onMouseUp={ e => this.onMouseUp(e) }
-                onMouseMove={ e => this.onMouseMove(e) } 
+                onMouseMove={ e => this.onMouseMove(e) }
                 onContextMenu={ e => this.onRightClick(e) }
-                id="canvas" width={ `${SIZE}px` } height={ `${SIZE}px` } 
-                ref={ this.canvas }></canvas>
+                id="canvas" width={ `${SIZE}px` } height={ `${SIZE}px` }
+                ref={ this.canvas } />
             
             <div className="bottom-left-buttons">
                 <button className="clear-all" onClick={ () => this.clearAll() }>
                     <FontAwesomeIcon icon={ [ "fas", "times" ]} />
                 </button>
                 <button className="stop" onClick={ () => this.stop() }>
-                    <FontAwesomeIcon icon={ ["fas", "stop"] }></FontAwesomeIcon>
+                    <FontAwesomeIcon icon={ ["fas", "stop"] } />
                 </button>
                 <button className="playpause" onClick={ () => this.playPause() }>
                     { this.state.playing ?
-                         <FontAwesomeIcon icon={ ["fas", "pause"] }></FontAwesomeIcon>
-                         : <FontAwesomeIcon icon={ ["fas", "play"] }></FontAwesomeIcon> }
+                         <FontAwesomeIcon icon={ ["fas", "pause"] } />
+                         : <FontAwesomeIcon icon={ ["fas", "play"] } /> }
                 </button>
             </div>
             
