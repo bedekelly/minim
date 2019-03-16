@@ -7,8 +7,6 @@
 // existing tabs open on the page have been closed, since previously cached
 // resources are updated in the background.
 
-// To learn more about the benefits of this model and instructions on how to
-// opt-in, read https://bit.ly/CRA-PWA
 
 const isLocalhost = Boolean(
   window.location.hostname === 'localhost' ||
@@ -19,6 +17,7 @@ const isLocalhost = Boolean(
       /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/
     )
 );
+
 
 export function register(config) {
   if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
@@ -32,6 +31,7 @@ export function register(config) {
     }
 
     window.addEventListener('load', () => {
+      // noinspection JSUnresolvedVariable – this is used by WebPack.
       const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
       if (isLocalhost) {
         // This is running on localhost. Let's check if a service worker still exists or not.
@@ -51,6 +51,7 @@ export function register(config) {
     });
   }
 }
+
 
 function registerValidSW(swUrl, config) {
   navigator.serviceWorker
@@ -96,6 +97,7 @@ function registerValidSW(swUrl, config) {
     });
 }
 
+
 function checkValidServiceWorker(swUrl, config) {
   // Check if the service worker can be found. If it can't reload the page.
   fetch(swUrl)
@@ -124,10 +126,11 @@ function checkValidServiceWorker(swUrl, config) {
     });
 }
 
+
 export function unregister() {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.ready.then(registration => {
-      registration.unregister();
+      registration.unregister().then(() => console.log("Unregistered."));
     });
   }
 }
