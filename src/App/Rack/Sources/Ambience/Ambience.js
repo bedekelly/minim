@@ -1,9 +1,19 @@
 import React from 'react';
 
+import Wind from './Images/Wind.jpeg';
+import Rainstorm from './Images/Rainstorm.jpeg';
+import Record from './Images/Record.jpeg';
+
 import './Ambience.css';
 
 
-const IMAGE_URL = sound => `https://s3.eu-west-2.amazonaws.com/static-electricity/daw/ambience-images/${sound.name.replace(" ", "+")}.jpeg`;
+const IMAGES = {
+    Rainstorm, Wind, Record
+};
+
+const IMAGE_URL = sound => {
+    return IMAGES[sound.name]
+};
 
 
 class Ambience extends React.Component {
@@ -31,9 +41,9 @@ class Ambience extends React.Component {
     render() {
         const imageUrl = IMAGE_URL(this.state.sound);
         return <div className="ambience">
-          <img src={ imageUrl } alt={ `${this.state.sound}`}></img>
-          <img className="blurred-image" src={ imageUrl } alt={ `${this.state.sound}` }></img>
-          <div className="inset-shadow"></div>
+          <img src={imageUrl} alt={`${this.state.sound}`}/>
+          <img className="blurred-image" src={imageUrl} alt={`${this.state.sound}`}/>
+          <div className="inset-shadow"/>
           <div onClick={ () => this.previous() } className="button left">{ "<" }</div>
           <div onClick={ () => this.next() } className="button right">{ ">" }</div>
         </div>;
