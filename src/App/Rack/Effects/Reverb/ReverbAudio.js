@@ -1,11 +1,27 @@
 import EffectAudio from '../EffectAudio';
 
-const sounds = "https://s3.eu-west-2.amazonaws.com/static-electricity/sounds/";
-const images = "https://s3.eu-west-2.amazonaws.com/static-electricity/daw/images/";
+import QuarryImpulse from './Impulses/Quarry.wav';
+import AmbienceImpulse from './Impulses/Ambience.wav';
+import CavernImpulse from './Impulses/Cavern.wav';
+import CrystalPlateImpulse from './Impulses/CrystalPlate.wav';
+import HugeCarParkImpulse from './Impulses/HugeCarPark.wav';
+import LargeHallImpulse from './Impulses/LargeHall.wav';
 
-const reverb = name => ({ sound: sounds + name + ".wav", image: images + name + ".jpg" });
-const reverbs = [ "Quarry", "Ambience", "Cavern", "CrystalPlate", 
-                   "HugeCarPark", "LargeHall" ].map(reverb);
+import QuarryPic from './Images/Quarry.jpg'
+import AmbiencePic from './Images/Ambience.jpg';
+import CavernPic from './Images/Cavern.jpg';
+import CrystalPlatePic from './Images/CrystalPlate.jpg';
+import HugeCarParkPic from './Images/HugeCarPark.jpg';
+import LargeHallPic from './Images/LargeHall.jpg';
+
+const reverbs = [
+    { sound: QuarryImpulse, image: QuarryPic },
+    { sound: AmbienceImpulse, image: AmbiencePic },
+    { sound: CavernImpulse, image: CavernPic },
+    { sound: CrystalPlateImpulse, image: CrystalPlatePic },
+    { sound: HugeCarParkImpulse, image: HugeCarParkPic },
+    { sound : LargeHallImpulse, image: LargeHallPic }
+];
 
 
 class ReverbAudio extends EffectAudio {
@@ -45,15 +61,12 @@ class ReverbAudio extends EffectAudio {
     async loadAllFiles() {
         const that = this;
         const filesLoaded = this.reverbs.map(async ({ sound, image }, index) => {
-            console.log("Starting to load buffer for ", index);
             const buffer = await ReverbAudio.fetchAndLoadAudio(sound, that.context);
-            console.log("Loaded buffer for ", index);
-            that.reverbs[index] = { sound, image, buffer };
-
+            that.reverbs[index].buffer = buffer;
             if (index === 0) {
                 that.node.buffer = buffer;
             }
-        })
+        });
         await Promise.all(filesLoaded);
         console.log("All files loaded!");
     }

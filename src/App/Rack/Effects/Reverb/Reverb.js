@@ -21,9 +21,9 @@ class Reverb extends React.Component {
     render() {
         return <div className="reverb">
           <div className="reverb-inner">
-            <img src={ this.state.image } alt='' width="80" height="80"></img>
-            <button className="left" onClick={ () => this.changeIndex(-1) }></button>
-            <button className="right" onClick={ () => this.changeIndex(+1) }></button>
+            <img src={this.state.image} alt='' width="80" height="80"/>
+            <button className="left" onClick={() => this.changeIndex(-1)}/>
+            <button className="right" onClick={() => this.changeIndex(+1)}/>
           </div>
         </div>
     }
