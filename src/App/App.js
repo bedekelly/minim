@@ -133,11 +133,23 @@ class App extends Component {
     stopLearning() {
         this.appAudio.stopLearning();
     }
+
+    recordToggle() {
+        if (this.appAudio.recording) {
+            this.appAudio.stopRecording();
+            this.setState({ recording: false})
+        }
+        else {
+            this.appAudio.record();
+            this.setState({ recording: true })
+        }
+    }
     
     render() {
         const noRacks = this.state.racks.length === 0;
         const addRackClass = `add-rack ${noRacks ? "center" : ""}`;
         const midiLearningClass = `midi-learn ${this.state.learning ? "learning" : ""}`;
+        const recordingClass = `record ${this.state.recording ? "recording" : ""}`;
         return <section className="app">
             { this.globalEffectsComponent() }
             { this.state.racks.map(rack => 
@@ -157,19 +169,17 @@ class App extends Component {
     
             <div className="play-controls">
                 <button className="stop-all" onMouseDown={ () => this.stopAll()}>
-                    <FontAwesomeIcon icon={ ["fas", "stop"] } size="lg"></FontAwesomeIcon>
+                    <FontAwesomeIcon icon={["fas", "stop"]} size="lg"/>
                 </button>
                 <button className="pause-all" onMouseDown={() => this.pauseAll()}>
-                    <FontAwesomeIcon icon={ ["fas", "pause"] } size="lg"></FontAwesomeIcon>
+                    <FontAwesomeIcon icon={["fas", "pause"]} size="lg"/>
                 </button>
                 <button className="play-all" onMouseDown={() => this.playAll()}>
-                    <FontAwesomeIcon icon={ ["fas", "play"] } size="lg"></FontAwesomeIcon>
+                    <FontAwesomeIcon icon={["fas", "play"]} size="lg"/>
                 </button>
-                { /*
-                <button className="record" onMouseDown={ () => console.log("record button pressed")}>
-                    <FontAwesomeIcon icon={ ["fas", "circle"] } size="lg"></FontAwesomeIcon>
+                <button className={ recordingClass } onMouseDown={ () => this.recordToggle() }>
+                    <FontAwesomeIcon icon={["fas", "circle"]} size="lg"/>
                 </button>
-                */ }
             </div>
             
         </section>;

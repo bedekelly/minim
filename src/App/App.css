@@ -247,7 +247,7 @@ button {
     background: #e22;
 }
 
-.play-controls button:last-of-type.recording {
+.play-controls .recording {
     color: whitesmoke;
     background: #e22;
 }

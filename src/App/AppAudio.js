@@ -11,6 +11,8 @@ import EchoAudio from './Rack/Effects/Echo/EchoAudio';
 import DistortionAudio from './Rack/Effects/Distortion/DistortionAudio';
 import BitCrusherAudio from './Rack/Effects/BitCrusher/BitCrusherAudio';
 
+import Recorder from './Recorder.js';
+
 import { EffectType } from './Rack/Effects/EffectTypes'
 
 
@@ -30,6 +32,8 @@ class AppAudio {
         this.learningMidi = false;
         this.midiLearnTarget = null;
         this.setupMidi();
+        this.recording = false;
+        this.recordingOutput = null;
     }
 
     onMidiMessage(input, message) {
@@ -73,7 +77,7 @@ class AppAudio {
 
     outputOf(index) {
         return (index >= this.globalEffects.length-1) ? 
-            this.context.destination : this.globalEffects[index+1];
+            this.recordingOutput : this.globalEffects[index+1];
     }
 
     inputOf(index) {
@@ -86,7 +90,7 @@ class AppAudio {
             rack.updateOutput();
         }
         if (this.currentOutput) {
-            this.currentOutput.routeTo(this.context.destination);
+            this.currentOutput.routeTo(this.recordingOutput);
         }
     }
 
@@ -142,7 +146,7 @@ class AppAudio {
 
         // Route the current output to this effect.
         if (lastOutput) lastOutput.routeTo(effect);
-        effect.routeTo(this.context.destination);
+        effect.routeTo(this.recordingOutput);
         
         this.updateOutputs();
         
@@ -215,7 +219,7 @@ class AppAudio {
     }
     
     get startOfFxChain() {
-        return (this.globalEffects[0] && this.globalEffects[0].input) || this.context.destination;
+        return (this.globalEffects[0] && this.globalEffects[0].input) || this.recordingOutput;
     }
     
     get currentOutput() {
@@ -238,8 +242,9 @@ class AppAudio {
 
     async initialise() {
         await this.makeContext();
+        this.recordingOutput = this.context.createGain();
+        this.recordingOutput.connect(this.context.destination);
         return this.loadProcessors();
-        
     }
     
     async loadProcessors() {
@@ -277,6 +282,20 @@ class AppAudio {
         const rack = this.racks[id];
         rack.output.disconnect();
         delete this.racks[id];
+    }
+
+    record() {
+        console.log("Record");
+        this.recorder = new Recorder(this.recordingOutput);
+        this.recorder.record();
+        this.recording = true;
+    }
+
+    stopRecording() {
+        console.log("Stop recording");
+        this.recording = false;
+        this.recorder.stop();
+        this.recorder.exportWAV(blob => Recorder.download( blob, "output" ) );
     }
 }
 
