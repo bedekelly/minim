@@ -1,14 +1,22 @@
 import React from 'react';
 
-import Wind from './Images/Wind.jpeg';
-import Rainstorm from './Images/Rainstorm.jpeg';
-import Record from './Images/Record.jpeg';
+import Wind from './Images/Wind.webp';
+import Rainstorm from './Images/Rainstorm.webp';
+import Record from './Images/Record.webp';
+import Fire from './Images/Fire.webp';
+import Birds from './Images/Birds.webp';
+import Waves from './Images/Waves.webp';
+import Train from './Images/Train.webp';
+import Cafe from './Images/Cafe.webp';
+
+
 
 import './Ambience.css';
 
 
 const IMAGES = {
-    Rainstorm, Wind, Record
+    Rainstorm, Wind, Record, Fire, Birds, Waves, Train, Cafe
+
 };
 
 const IMAGE_URL = sound => {

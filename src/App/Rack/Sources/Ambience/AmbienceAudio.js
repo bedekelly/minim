@@ -1,6 +1,12 @@
 import Wind from './Sounds/Wind.ogg';
 import Record from './Sounds/Record Crackle.ogg';
 import Rainstorm from './Sounds/Rainstorm.ogg';
+import Fire from './Sounds/Fire.ogg';
+import Birds from './Sounds/Birds.ogg';
+import Waves from './Sounds/Waves.ogg';
+import Train from './Sounds/Train.ogg';
+import Cafe from './Sounds/Cafe.ogg';
+
 
 const SCHEDULING_WINDOW = 4;
 const CROSSOVER = 2;
@@ -11,7 +17,13 @@ export default class AmbienceAudio {
     SOUNDS = [
         {name: 'Wind', url: Wind}, 
         {name: 'Record', url: Record}, 
-        {name: 'Rainstorm', url: Rainstorm}];
+        {name: 'Rainstorm', url: Rainstorm},
+        {name: 'Birds', url: Birds},
+        {name: 'Waves', url: Waves},
+        {name: 'Train', url: Train},
+        {name: 'Cafe', url: Cafe},
+        {name: 'Fire', url: Fire}
+    ];
     
     constructor(parentRack) {
         this.soundBuffers = {};
@@ -77,7 +89,7 @@ export default class AmbienceAudio {
         this.interval = setInterval(this.scheduleNextSound.bind(this), 2000);
     }
 
-    shouldScheduleSound(now, start, length) {
+    static shouldScheduleSound(now, start, length) {
         return (now > (start + length - CROSSOVER - SCHEDULING_WINDOW));
     }
 
@@ -85,7 +97,7 @@ export default class AmbienceAudio {
         const now = this.context.currentTime;
         const start = this.startTime;
         const length = this.currentBuffer.duration;
-        if (this.shouldScheduleSound(now, start, length)) {
+        if (AmbienceAudio.shouldScheduleSound(now, start, length)) {
             this.playAt(start + length - CROSSOVER);
         }
         this.cleanup({ allSounds: false });
@@ -128,7 +140,7 @@ export default class AmbienceAudio {
         this.playAt(0);
         this.startScheduling();
         const promises = [];
-        for (let i=0; i<this.SOUNDS.length; i++) { promises.push(this.loadSoundBuffer(i)) };
+        for (let i=0; i<this.SOUNDS.length; i++) { promises.push(this.loadSoundBuffer(i)) }
         await Promise.all(promises);
         this.loaded = true;
     }
