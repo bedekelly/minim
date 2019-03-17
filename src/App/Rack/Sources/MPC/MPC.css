@@ -40,7 +40,7 @@
 
 .hold-toggle {
   position: absolute;
-  left: calc(50% - 60px);
+  left: calc(50% - 45px);
   bottom: -15px;
   min-height: 20px;
   padding: 5px;
