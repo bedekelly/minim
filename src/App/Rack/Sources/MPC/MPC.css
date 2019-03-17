@@ -7,10 +7,11 @@
   display: grid;
   grid-template-rows: repeat(4, 1fr);
   grid-template-columns: repeat(4, 1fr);
-  padding: 15px;
   box-sizing: border-box;
   direction: rtl;
   margin: 3vh;
+  position: relative;
+  padding: 15px;
 }
 
 
@@ -35,4 +36,34 @@
 
 .pad.lit {
     background: #ED474A;
+}
+
+.hold-toggle {
+  position: absolute;
+  left: calc(50% - 60px);
+  bottom: -20px;
+  min-height: 20px;
+  padding: 5px;
+  width: 120px;
+  font-size: 10pt;
+  cursor: pointer;
+  font-family: monospace;
+  user-select: none;
+  background: #4A6C6F;
+  border-radius: 0 0 7px 7px;
+  text-align: center;
+}
+
+.hold-toggle:hover {
+  font-weight: bold;
+}
+
+.hold-toggle.held {
+  color: darkgoldenrod;
+}
+
+.hold-toggle img {
+  width: 15px;
+  height: 15px;
+  margin-left: 10px;
 }

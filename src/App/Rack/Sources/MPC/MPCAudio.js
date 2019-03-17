@@ -68,7 +68,7 @@ export default class MPCAudio {
         const padIndex = MPCAudio.padIndexOf(note);
         if (messageType === NOTE_OFF) {
             lightPad(padIndex, false);
-            if (this.hold) this.stopPad(padIndex);
+            if (!this.hold) this.stopPad(padIndex);
         } else if (messageType === NOTE_ON) {
             this.playPad(padIndex);
             lightPad(padIndex, true);
@@ -81,7 +81,7 @@ export default class MPCAudio {
     }
 
     noteIDOffAtTime(id, time) {
-        return this.stopPadWithIDAtTime(id, time);
+        if (!this.hold) return this.stopPadWithIDAtTime(id, time);
     }
 
     async loadBufferToPad(encodedBuffer, index) {
@@ -170,7 +170,11 @@ export default class MPCAudio {
             this.node.connect(destination);
         }
     }
-    
+
+    toggleHold() {
+        this.hold = !this.hold;
+    }
+
     stop() {
         for (let { node } of this.futureSounds) {
             node.disconnect();
