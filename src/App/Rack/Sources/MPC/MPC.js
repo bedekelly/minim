@@ -9,7 +9,7 @@ class MPC extends React.Component {
         super(props);
         this.audio = props.appAudio.sources[props.id];
         this.audio.lightPad = this.lightPad.bind(this);
-        this.state = { pads: this.audio.pads };
+        this.state = { pads: this.audio.pads, hold: this.audio.hold };
     }
 
     playPad(index) {
@@ -55,6 +55,7 @@ class MPC extends React.Component {
         const className = `pad ${pad.lit ? "lit" : ""}`;
         return <button
             onMouseDown={() => this.playPad(index)}
+            onMouseUp={() => this.state.hold && this.audio.stopPad(index)}
             onDragOver={event => event.preventDefault()}
             onDragLeave={event => event.preventDefault()}
             onDrop={event => this.onDrop(event, index)}
@@ -65,6 +66,7 @@ class MPC extends React.Component {
 
     render() {
         return <div className="mpc">
+            {/*<p className="hold-toggle">HOLD</p>*/}
             { this.state.pads.map((pad, index) => this.showPad(pad, index)) }
         </div>
     }

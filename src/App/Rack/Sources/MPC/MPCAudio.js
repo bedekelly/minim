@@ -24,6 +24,8 @@ export default class MPCAudio {
         this.futureSounds = [];
         this.loadInitialSounds();
         this.lightPad = null;
+
+        this.hold = true;
     }
     
     static padIndexOf(note) {
@@ -66,10 +68,20 @@ export default class MPCAudio {
         const padIndex = MPCAudio.padIndexOf(note);
         if (messageType === NOTE_OFF) {
             lightPad(padIndex, false);
+            if (this.hold) this.stopPad(padIndex);
         } else if (messageType === NOTE_ON) {
             this.playPad(padIndex);
             lightPad(padIndex, true);
         }
+    }
+
+    noteOnAtTime(note, time) {
+        const index = MPCAudio.padIndexOf(note);
+        return this.playPadAtTime(index, time);
+    }
+
+    noteIDOffAtTime(id, time) {
+        return this.stopPadWithIDAtTime(id, time);
     }
 
     async loadBufferToPad(encodedBuffer, index) {
@@ -91,9 +103,11 @@ export default class MPCAudio {
     removeNodeWithId(id) {
         const sound = this.futureSounds.find(n => n.id === id);
         if (sound) {
+            console.log("Removing node", sound);
             sound.node.stop();
             sound.node.disconnect();
         }
+        this.futureSounds = this.futureSounds.filter(n => n.id !== id);
     }
     
     cancelAllNotes() {
@@ -105,26 +119,48 @@ export default class MPCAudio {
     }
 
     playPadAtTime(index, time) {
+        // console.log(`playPadAtTime(${index}, ${time})`);
         if (!this._pads[index]) return;
         const { buffer, playbackRate, loopStart, loopEnd } = this._pads[index];
         const node = this.context.createBufferSource();
         node.buffer = buffer;
         node.connect(this.node);
+        const duration = loopEnd - loopStart || buffer.duration;
 
         if (playbackRate) {
             node.playbackRate.setValueAtTime(playbackRate, time);
-            node.start(time, loopStart, loopEnd - loopStart);
+            node.start(time, loopStart, duration);
         } else {
             node.start(time);
         }
         
         const id = uuid();
-        this.futureSounds.push({ id, node});
+        const stopTime = time + duration;
+        // console.log("Current time is ", this.context.currentTime);
+        // console.log("Stop time is", stopTime);
+        this.futureSounds.push({ id, node, index, stopTime });
         node.onended = () => this.removeNodeWithId(id);
+        return id;
+    }
+
+    stopPadWithIDAtTime(id, time) {
+        for (let sound of this.futureSounds) {
+            if (sound.id !== id) continue;
+            if (sound.stopTime <= time) continue;
+            console.log(`stopPadWithIDAtTime(id=${id}, time=${time}, sound.stopTime=${sound.stopTime}, currentTime=${this.context.currentTime})`);
+            sound.node.stop(time);
+        }
     }
 
     playPad(index) {
         this.playPadAtTime(index, 0);
+    }
+
+    stopPad(index) {
+        for (let sound of this.futureSounds) {
+            if (sound.index !== index) continue;
+            this.removeNodeWithId(sound.id);
+        }
     }
 
     routeTo(destination) {

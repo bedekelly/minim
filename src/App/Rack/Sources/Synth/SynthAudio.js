@@ -335,13 +335,11 @@ export default class SynthAudio {
     noteIDOffAtTime(id, time) {
         for (let note of Object.values(this.notes).flat()) {
             if (note.id !== id) continue;
-            console.log(`OFF: ${id}`);
             this.applyNoteOffEnvelope(note, time);
         }
     }
     
     noteOff(note) {
-        console.log(`noteOff(${note})`);
         this.noteOffAtTime(note, 0);
     }
 

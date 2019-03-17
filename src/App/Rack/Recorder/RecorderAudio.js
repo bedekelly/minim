@@ -111,6 +111,7 @@ export default class RecorderAudio {
         } 
         
         else if (onOff === NOTE_OFF) {
+            console.log("Playing notes: ", this.playingNotesAtTime(note, time));
             for (let playingNote of this.playingNotesAtTime(note, time)) {
                 this.destination.noteIDOffAtTime(playingNote.id, time);
                 this.removeNoteID(note, playingNote.id);
@@ -129,7 +130,7 @@ export default class RecorderAudio {
             // Schedule every note for this bar.
             for (let { onOff, note, offset } of this.notes) {
                 const time = startOfBar + offset;
-                
+                console.log({ note, onOff, time});
                 // Only schedule notes once, to prevent minor timing mistakes.
                 const key = `${note},${onOff},${time}`;
                 if (!this.scheduled.has(key)) {
