@@ -28,6 +28,9 @@ export default class LFO extends React.Component {
     }
     
     render() {
+
+        const destName = this.props.id + "-destination";
+
         return <div className="comp lfo">
           <h2>LFO</h2>
           <div className="lfo-layout">
@@ -38,39 +41,39 @@ export default class LFO extends React.Component {
                   onChange={ value => this.setLFORate(value) }
                   appAudio={ this.props.appAudio }
                   id={ this.props.id + "-lfo-rate" }
-                  ></Knob>
+                  />
             <div className="label">Rate</div>
             <div className="destinations">
               <div className="destination">
-                <label htmlFor="pitch">
-                  <input type="radio" name="destination" value="pitch" id="pitch" 
+                <label htmlFor={destName + "pitch"}>
+                  <input type="radio" name={destName} value="pitch" id={ destName + "pitch" }
                       checked={ this.state.lfoDestination === "pitch" }
                       onClick={ e => this.changeLFODestination(e.target.value) }
                       onChange={ () => {} }
-                      ></input>
-                  <div className="light"></div>
+                      />
+                  <div className="light" />
                   <span className="label">Pitch</span>
                 </label>
               </div>
               <div className="destination">
-                <label htmlFor="amplitude">
-                  <input type="radio" name="destination" value="amplitude" id="amplitude" 
+                <label htmlFor={destName + "amplitude"}>
+                  <input type="radio" name={destName} value="amplitude" id={ destName + "amplitude" }
                       checked={ this.state.lfoDestination === "amplitude" }
                       onClick={ e => this.changeLFODestination(e.target.value)  }
                       onChange={ () => {} }
-                      ></input>
-                  <div className="light"></div>
+                      />
+                  <div className="light" />
                   <span className="label">Amp</span>
                 </label>
               </div>
               <div className="destination">
-                <label htmlFor="filter">
-                  <input type="radio" name="destination" value="filter" id="filter" 
+                <label htmlFor={destName + "filter"}>
+                  <input type="radio" name={destName} value="filter" id={destName + "filter"}
                       checked={ this.state.lfoDestination === "filter" }
                       onClick={ e => this.changeLFODestination(e.target.value) }
                       onChange={ () => {} }
-                      ></input>
-                  <div className="light"></div>
+                      />
+                  <div className="light" />
                   <span className="label">Filter</span>
                 </label>
               </div>

@@ -119,7 +119,7 @@ export default class Oscillator extends React.Component {
             <label htmlFor={"square" + waveLabel}>
               <input type="radio" name={waveLabel} value="square" id={"square" + waveLabel}
                   checked={ this.state.waveform === "square" }
-                  onChange={ e => this.changeWaveform("square") }
+                  onChange={ () => this.changeWaveform("square") }
                   />
               <div className="light" />
               <img src={ SquareIcon } alt='' />
