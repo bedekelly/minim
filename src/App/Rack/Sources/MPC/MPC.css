@@ -41,10 +41,10 @@
 .hold-toggle {
   position: absolute;
   left: calc(50% - 60px);
-  bottom: -20px;
+  bottom: -15px;
   min-height: 20px;
   padding: 5px;
-  width: 120px;
+  width: 90px;
   font-size: 10pt;
   cursor: pointer;
   font-family: monospace;
@@ -52,18 +52,14 @@
   background: #4A6C6F;
   border-radius: 0 0 7px 7px;
   text-align: center;
+  direction: ltr;
+  font-weight: bold;
 }
 
 .hold-toggle:hover {
-  font-weight: bold;
+  transform: scale(1.02);
 }
 
 .hold-toggle.held {
   color: darkgoldenrod;
-}
-
-.hold-toggle img {
-  width: 15px;
-  height: 15px;
-  margin-left: 10px;
 }
