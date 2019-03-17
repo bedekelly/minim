@@ -21,7 +21,7 @@ class MPC extends React.Component {
             if (i === index) {
                 return { ...p, lit }
             } else return p;
-        })
+        });
         this.setState({ pads })
     }
 
@@ -36,7 +36,7 @@ class MPC extends React.Component {
     }
 
     onDrop(event, index) {
-        event.preventDefault()
+        event.preventDefault();
         const { files } = event.dataTransfer;
         if (files.length === 0) {
             const id = event.dataTransfer.getData("id");
@@ -52,15 +52,15 @@ class MPC extends React.Component {
     }
 
     showPad(pad, index) {
-        const className = `pad ${pad.lit ? "lit" : ""}`
-        return <button 
-                onMouseDown={ () => this.playPad(index) }
-                onDragOver={ event => event.preventDefault() }
-                onDragLeave={ event => event.preventDefault() }
-                onDrop={ event => this.onDrop(event, index) }
-                className={ className }
-                key={ index }
-               ></button>;
+        const className = `pad ${pad.lit ? "lit" : ""}`;
+        return <button
+            onMouseDown={() => this.playPad(index)}
+            onDragOver={event => event.preventDefault()}
+            onDragLeave={event => event.preventDefault()}
+            onDrop={event => this.onDrop(event, index)}
+            className={className}
+            key={index}
+        />;
     }
 
     render() {

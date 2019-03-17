@@ -25,7 +25,6 @@ export default class EditableTextBox extends React.PureComponent {
   
   componentDidUpdate(_, prevState) {
     if (this.textboxRef.current && !prevState.editing) {
-      console.log("hello")
       this.textboxRef.current.select();
     }
   }

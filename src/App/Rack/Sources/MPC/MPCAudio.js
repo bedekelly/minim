@@ -1,4 +1,5 @@
 import uuid from "uuid4";
+import Samples from './Samples';
 
 const NUMBER_PADS = 16;
 
@@ -21,6 +22,7 @@ export default class MPCAudio {
         this.node = this.context.createGain();
         this.node.connect(parentRack.startOfFxChain);
         this.futureSounds = [];
+        this.loadInitialSounds();
     }
     
     padIndexOf(note) {
@@ -38,6 +40,27 @@ export default class MPCAudio {
                 this.playPadAtTime(padIndex, time);
             }
         }
+    }
+
+    async loadInitialSounds() {
+        const promises = [];
+
+        for (let [url, index] of Object.values(Samples)) {
+            const loadSound = (url, index) => async () => {
+                try {
+                    const response = await fetch(url);
+                    const arrayBuffer = await response.arrayBuffer();
+                    await this.loadBufferToPad(arrayBuffer, index)
+                } catch (e) {
+                    console.warn(e);
+                }
+            };
+
+            promises.push(loadSound(url, index));
+        }
+
+        await Promise.all(promises);
+        this.loaded = true;
     }
 
     midiMessage(message) {
