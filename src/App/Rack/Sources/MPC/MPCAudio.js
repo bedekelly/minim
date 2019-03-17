@@ -119,7 +119,6 @@ export default class MPCAudio {
     }
 
     playPadAtTime(index, time) {
-        // console.log(`playPadAtTime(${index}, ${time})`);
         if (!this._pads[index]) return;
         const { buffer, playbackRate, loopStart, loopEnd } = this._pads[index];
         const node = this.context.createBufferSource();
@@ -136,8 +135,6 @@ export default class MPCAudio {
         
         const id = uuid();
         const stopTime = time + duration;
-        // console.log("Current time is ", this.context.currentTime);
-        // console.log("Stop time is", stopTime);
         this.futureSounds.push({ id, node, index, stopTime });
         node.onended = () => this.removeNodeWithId(id);
         return id;
