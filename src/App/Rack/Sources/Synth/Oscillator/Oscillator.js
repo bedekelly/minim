@@ -11,7 +11,7 @@ import TriangleIcon from './triangle.svg';
 const CLASSNAMES = {
     1: "one",
     2: "two"
-}
+};
 
 
 export default class Oscillator extends React.Component {
@@ -64,21 +64,21 @@ export default class Oscillator extends React.Component {
                   appAudio={ this.props.appAudio }
                   label="Octave"
                   id={`${this.props.id}-${osc}-octave`}
-                  onChange={ value => this.changeOctave(value) }></Knob>
+                  onChange={ value => this.changeOctave(value) } />
             <div className="label">Oct</div>
             <Knob min={-12} max={12} value={this.state.semi} precision={ 0 }
                   default={ 0 }
                   label="Semi"
                   appAudio={ this.props.appAudio }
                   id={ `${this.props.id}-${osc}-semi` }
-                  onChange={ value => this.changeSemi(value) }></Knob>
+                  onChange={ value => this.changeSemi(value) } />
             <div className="label">Semi</div>
             <Knob min={-50} max={50} value={this.state.tune} precision={ 0 }
                   default={ 0 }
                   label="Tune"
                   appAudio={ this.props.appAudio }
                   id={ `${this.props.id}-${osc}-tune` }
-                  onChange={ value => this.changeTune(value) }></Knob>
+                  onChange={ value => this.changeTune(value) } />
             <div className="label">Tune</div>
           </div>
 
@@ -87,9 +87,9 @@ export default class Oscillator extends React.Component {
               <input type="radio" name={ waveLabel } value="sine" id={"sine" + waveLabel}
                   checked={ this.state.waveform === "sine" }
                   onChange={ e => this.changeWaveform("sine") }
-                  ></input>
-              <div className="light"></div>
-              <img src={ SineIcon } alt=''></img>
+                  />
+              <div className="light" />
+              <img src={ SineIcon } alt='' />
             </label>
           </div>
 
@@ -98,9 +98,9 @@ export default class Oscillator extends React.Component {
               <input type="radio" name={waveLabel} value="sawtooth" id={"sawtooth" + waveLabel}
                   checked={ this.state.waveform === "sawtooth" }
                   onChange={ e => this.changeWaveform("sawtooth") }
-                  ></input>
-              <div className="light"></div>
-              <img src={ SawtoothIcon } alt=''></img>
+                  />
+              <div className="light"/>
+              <img src={ SawtoothIcon } alt=''/>
             </label>
           </div>
 
@@ -109,9 +109,9 @@ export default class Oscillator extends React.Component {
               <input type="radio" name={waveLabel} value="triangle" id={"triangle" + waveLabel}
                   checked={ this.state.waveform === "triangle" }
                   onChange={ e => this.changeWaveform("triangle") }
-                  ></input>
-              <div className="light"></div>
-              <img src={ TriangleIcon } alt=''></img>
+                  />
+              <div className="light" />
+              <img src={ TriangleIcon } alt='' />
             </label>
           </div>
 
@@ -120,9 +120,9 @@ export default class Oscillator extends React.Component {
               <input type="radio" name={waveLabel} value="square" id={"square" + waveLabel}
                   checked={ this.state.waveform === "square" }
                   onChange={ e => this.changeWaveform("square") }
-                  ></input>
-              <div className="light"></div>
-              <img src={ SquareIcon } alt=''></img>
+                  />
+              <div className="light" />
+              <img src={ SquareIcon } alt='' />
             </label>
           </div>
 

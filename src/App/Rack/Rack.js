@@ -22,7 +22,7 @@ import './Rack.css';
 library.add(faTimes);
 
 
-class Rack extends React.Component {
+class Rack extends React.PureComponent {
 
     constructor(props) {
         super(props);
@@ -65,7 +65,7 @@ class Rack extends React.Component {
             reloadPlayState={this.props.reloadPlayState}
             id={this.state.source.id} 
             appAudio={this.appAudio}>
-        </Component>
+        </Component>;
         else return <div className="add-source" onClick={ () => this.openSourceModal() }>
             <span className="add-source-plus">+</span>
             <span className="add-source-title">Instrument</span>

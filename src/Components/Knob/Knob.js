@@ -101,7 +101,7 @@ class Knob extends React.Component {
             const valueDiff = linMap(pixelDiff, -PIXEL_TOLERANCE, PIXEL_TOLERANCE, -valueBreadth, valueBreadth);
             const newValue = bounded(value + valueDiff, min, max);
             onChange(newValue);
-            event.preventDefault()
+            event.preventDefault();
             event.stopPropagation();
         }
         
@@ -129,10 +129,7 @@ class Knob extends React.Component {
     knobStyle() {
         const { value, min, max } = this.props;
         const angle = boundedLinMap(value, min, max, -Math.PI, Math.PI);
-        const style = {
-          transform: `rotate(${angle}rad)`
-        };
-        return style;
+        return { transform: `rotate(${angle}rad)` };
     }
     
     knobValueStyle() {
@@ -162,7 +159,7 @@ class Knob extends React.Component {
                          { `${this.props.label}: ${(this.props.value * scale).toFixed(this.precision)}${units}` }
                      </div> }
                  <div className="knob-inner" style={this.knobStyle()} onMouseDown={ event => this.onMouseDown(event) }>
-                     <div className="notch"></div>
+                     <div className="notch"/>
                  </div>
             </div>
         </React.Fragment>
