@@ -33,12 +33,12 @@ export default class GranularSynthAudio {
         this.context = this.appAudio.context;
         this.maxLength = 3;
 
-        this.tightness = 40;
+        this.tightness = 74;
         this.attack = 1;
         this.release = 1;
         this.targetConstant = 1/3;
 
-        this.grainLength = 0.05;
+        this.grainLength = 0.055;
         this.grainOverlap = -0.3;
         this.grainAttack = this.grainLength/6;
         this.grainRelease = this.grainLength/6;

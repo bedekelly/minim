@@ -9,11 +9,13 @@ export default class GranularSynth extends React.Component {
 
     MIN_LENGTH = 0.01;
     MAX_LENGTH = 0.1;
-    DEFAULT_LENGTH = 0.05;
+    DEFAULT_LENGTH = 0.055;
 
     MIN_SPACE = -0.8;
     MAX_SPACE = 0.2;
     DEFAULT_SPACE = -0.1;
+
+    DEFAULT_SPRAY = 74;
 
     constructor(props) {
         super(props);
@@ -88,7 +90,7 @@ export default class GranularSynth extends React.Component {
                min={ 0 }
                max={ 100 }
                value={ this.state.spray }
-               default={ 6 }
+               default={ this.DEFAULT_SPRAY }
                label="Spray"
                precision={ 0 }
                units="%"

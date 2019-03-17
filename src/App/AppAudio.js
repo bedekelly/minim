@@ -295,7 +295,7 @@ class AppAudio {
         console.log("Stop recording");
         this.recording = false;
         this.recorder.stop();
-        this.recorder.exportWAV(blob => Recorder.download( blob, "output" ) );
+        this.recorder.exportWAV(blob => Recorder.download( blob, "Recording" ) );
     }
 }
 
