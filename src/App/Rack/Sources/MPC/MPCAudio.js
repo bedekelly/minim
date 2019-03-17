@@ -23,9 +23,10 @@ export default class MPCAudio {
         this.node.connect(parentRack.startOfFxChain);
         this.futureSounds = [];
         this.loadInitialSounds();
+        this.lightPad = null;
     }
     
-    padIndexOf(note) {
+    static padIndexOf(note) {
         return (NUMBER_PADS - 1) - (note + CONTROLLER_NOTE_OFFSET)
     }
 
@@ -36,37 +37,33 @@ export default class MPCAudio {
     scheduleNotes(midiMessages) {
         for (let { data: [messageType, note], time } of midiMessages) {
             if (messageType === NOTE_ON) {
-                const padIndex = this.padIndexOf(note);
+                const padIndex = MPCAudio.padIndexOf(note);
                 this.playPadAtTime(padIndex, time);
             }
         }
     }
 
-    async loadInitialSounds() {
+    loadInitialSounds() {
         const promises = [];
 
-        for (let [url, index] of Object.values(Samples)) {
-            const loadSound = (url, index) => async () => {
+        Object.values(Samples).forEach((url, index) => {
+            const loadSound = async (url, index) => {
                 try {
                     const response = await fetch(url);
                     const arrayBuffer = await response.arrayBuffer();
-                    await this.loadBufferToPad(arrayBuffer, index)
-                } catch (e) {
-                    console.warn(e);
-                }
+                    await this.loadBufferToPad(arrayBuffer, 15-index)
+                } catch (e) { console.warn(e); }
             };
-
             promises.push(loadSound(url, index));
-        }
+        });
 
-        await Promise.all(promises);
-        this.loaded = true;
+        Promise.all(promises).then(() => this.loaded = true);
     }
 
     midiMessage(message) {
         const lightPad = this.lightPad || (() => {});
         const { data: [messageType, note] } = message;
-        const padIndex = this.padIndexOf(note);
+        const padIndex = MPCAudio.padIndexOf(note);
         if (messageType === NOTE_OFF) {
             lightPad(padIndex, false);
         } else if (messageType === NOTE_ON) {
@@ -122,7 +119,7 @@ export default class MPCAudio {
         }
         
         const id = uuid();
-        this.futureSounds.push({ id, node})
+        this.futureSounds.push({ id, node});
         node.onended = () => this.removeNodeWithId(id);
     }
 
