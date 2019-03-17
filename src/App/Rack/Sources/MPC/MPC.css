@@ -9,7 +9,7 @@
   grid-template-columns: repeat(4, 1fr);
   box-sizing: border-box;
   direction: rtl;
-  margin: 3vh;
+  margin: 3vh 3vh 6vh;
   position: relative;
   padding: 15px;
 }
