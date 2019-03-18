@@ -21,7 +21,8 @@
     "recorder-js": "^1.0.7",
     "stereo-panner-shim": "^0.1.4",
     "uuid4": "^1.1.4",
-    "viewport-units-buggyfill": "^0.6.2"
+    "viewport-units-buggyfill": "^0.6.2",
+    "worklet-loader": "^1.0.0"
   },
   "scripts": {
     "start": "react-scripts start",

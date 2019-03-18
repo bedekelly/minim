@@ -13,12 +13,15 @@ import BitCrusherAudio from './Rack/Effects/BitCrusher/BitCrusherAudio';
 
 import Recorder from './Recorder.js';
 
+import RecorderWorklet from 'worklet-loader!./Worklets/recorder-worklet.js';
+import BitCrusherWorklet from 'worklet-loader!./Worklets/bit-crusher.js';
+
 import { EffectType } from './Rack/Effects/EffectTypes'
 
 
 class AppAudio {
 
-    processors = [ "bit-crusher" ];
+    processors = [ RecorderWorklet, BitCrusherWorklet ];
 
     constructor() {
         this.racks = {};
@@ -242,6 +245,7 @@ class AppAudio {
 
     async initialise() {
         await this.makeContext();
+        console.log("Created context successfully");
         this.recordingOutput = this.context.createGain();
         this.recordingOutput.connect(this.context.destination);
         return this.loadProcessors();
@@ -250,7 +254,12 @@ class AppAudio {
     async loadProcessors() {
         for (let worklet of this.processors) {
             // Todo: use Promise.all() here to allow asynchronous loading.
-            await this.context.audioWorklet.addModule(`worklets/${worklet}.js`);
+            try {
+                await this.context.audioWorklet.addModule(`worklets/${worklet}.js`);
+            } catch (e) {
+                console.warn("Failed to load ", worklet);
+            }
+
         }
     }
 
@@ -260,7 +269,11 @@ class AppAudio {
 
         // Unlock audio context for iOS devices.
         if (context.state === 'suspended' && 'ontouchstart' in window) {
-            await context.resume();
+            try {
+                await context.resume();
+            } catch (e) {
+                console.log("Error resuming context.")
+            }
         }
 
         this.context = context;
