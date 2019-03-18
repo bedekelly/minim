@@ -1,4 +1,5 @@
-var WORKER_PATH = 'Worklets/recorder.worklet.js';
+import WORKER_PATH from './Worklets/recorder.worklet.js';
+
 
 var Recorder = function(source, cfg){
     var config = cfg || {};
