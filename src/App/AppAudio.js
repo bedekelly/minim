@@ -247,6 +247,7 @@ class AppAudio {
         console.log("Created context successfully");
         this.recordingOutput = this.context.createGain();
         this.recordingOutput.connect(this.context.destination);
+        this.recorder = new Recorder(this.recordingOutput);
         return this.loadProcessors();
     }
     
@@ -300,7 +301,6 @@ class AppAudio {
 
     record() {
         console.log("Record");
-        this.recorder = new Recorder(this.recordingOutput);
         this.recorder.record();
         this.recording = true;
     }

@@ -61,7 +61,6 @@ var Recorder = function(source, cfg){
         currCallback = cb || config.callback;
         type = type || config.type || 'audio/wav';
         if (!currCallback) throw new Error('Callback not set');
-        console.log("Sending export wav message");
         worker.postMessage({
             command: 'exportWAV',
             type: type
@@ -89,10 +88,7 @@ var Recorder = function(source, cfg){
 
 
 Recorder.download = function(blob, filename){
-    console.log("Downloading", blob);
-    console.log(window);
-    debugger;
-    const url = (window.URL || { createObjectURL: (blob) => { console.log("nope", blob)} }).createObjectURL(blob);
+    const url = (window.URL || window.webkitURL).createObjectURL(blob);
     downloadURI(url, filename);
 };
 
@@ -103,8 +99,7 @@ function downloadURI(uri, name) {
     link.href = uri;
     document.body.appendChild(link);
     link.click();
-    console.log("Downloading with ", link);
-    // document.body.removeChild(link);
+    document.body.removeChild(link);
 }
 
 
