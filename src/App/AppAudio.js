@@ -13,8 +13,8 @@ import BitCrusherAudio from './Rack/Effects/BitCrusher/BitCrusherAudio';
 
 import Recorder from './Recorder.js';
 
-import RecorderWorklet from 'worklet-loader!./Worklets/recorder-worklet.js';
-import BitCrusherWorklet from 'worklet-loader!./Worklets/bit-crusher.js';
+import RecorderWorklet from './Worklets/recorder.worklet.js';
+import BitCrusherWorklet from './Worklets/bit-crusher.worklet.js';
 
 import { EffectType } from './Rack/Effects/EffectTypes'
 
@@ -255,9 +255,11 @@ class AppAudio {
         for (let worklet of this.processors) {
             // Todo: use Promise.all() here to allow asynchronous loading.
             try {
-                await this.context.audioWorklet.addModule(`worklets/${worklet}.js`);
+                await this.context.audioWorklet.addModule(worklet);
             } catch (e) {
                 console.warn("Failed to load ", worklet);
+                console.log(e);
+                debugger;
             }
 
         }

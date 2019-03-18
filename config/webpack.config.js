@@ -291,6 +291,17 @@ module.exports = function(webpackEnv) {
         // Disable require.ensure as it's not a standard language feature.
         { parser: { requireEnsure: false } },
 
+          // Don't load worklets as JS.
+        {
+          test: /\.worklet\.js$/,
+          use: {
+            loader: 'worklet-loader',
+            options: {
+              inline: false
+            }
+          },
+        },
+
         // First, run the linter.
         // It's important to do this before Babel processes the JS.
         {
