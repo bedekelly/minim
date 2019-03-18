@@ -13,7 +13,6 @@ import BitCrusherAudio from './Rack/Effects/BitCrusher/BitCrusherAudio';
 
 import Recorder from './Recorder.js';
 
-import RecorderWorklet from './Worklets/recorder.worklet.js';
 import BitCrusherWorklet from './Worklets/bit-crusher.worklet.js';
 
 import { EffectType } from './Rack/Effects/EffectTypes'
@@ -21,7 +20,7 @@ import { EffectType } from './Rack/Effects/EffectTypes'
 
 class AppAudio {
 
-    processors = [ RecorderWorklet, BitCrusherWorklet ];
+    processors = [ BitCrusherWorklet ];
 
     constructor() {
         this.racks = {};
