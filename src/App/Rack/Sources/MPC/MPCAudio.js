@@ -103,7 +103,6 @@ export default class MPCAudio {
     removeNodeWithId(id) {
         const sound = this.futureSounds.find(n => n.id === id);
         if (sound) {
-            console.log("Removing node", sound);
             sound.node.stop();
             sound.node.disconnect();
         }
@@ -144,7 +143,6 @@ export default class MPCAudio {
         for (let sound of this.futureSounds) {
             if (sound.id !== id) continue;
             if (sound.stopTime <= time) continue;
-            console.log(`stopPadWithIDAtTime(id=${id}, time=${time}, sound.stopTime=${sound.stopTime}, currentTime=${this.context.currentTime})`);
             sound.node.stop(time);
         }
     }
