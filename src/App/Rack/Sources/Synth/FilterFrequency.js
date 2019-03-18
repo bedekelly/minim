@@ -8,7 +8,7 @@ const filterTypes = {
     "BP": { next: "NT", audio: "bandpass", qLabel: "Width" },
     "NT": { next: "AP", audio: "notch", qLabel: "Width" },
     "AP": { next: "LP", audio: "allpass", qLabel: "Sharp" }
-}
+};
 
 
 export default class FilterFrequency extends React.Component {
@@ -29,9 +29,9 @@ export default class FilterFrequency extends React.Component {
         this.changeFilterType(next);
     }
     
-    changeFilterType(value) {
-        this.audio.filterType = filterTypes[this.state.filterType].audio;
-        this.setState({ filterType: value });
+    changeFilterType(nextFilter) {
+        this.audio.filterType = filterTypes[nextFilter].audio;
+        this.setState({ filterType: nextFilter });
     }
 
     changeFilterFreq(value) {
