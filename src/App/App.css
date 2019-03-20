@@ -4,7 +4,6 @@
 
 html,
 body {
-  position: fixed;
   overflow: hidden;
 }
 
@@ -27,9 +26,7 @@ button {
     border-style: solid;
     background: none;
     outline: 0;
-    border-radius: 7px;
     border-image-slice: 1;
-    margin: 3vh;
     position: relative;
     height: 20vh;
     min-width: 20vh;
