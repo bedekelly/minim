@@ -1,4 +1,5 @@
 import React from 'react';
+import { linMap } from 'Utils/linearInterpolation';
 
 import './Editor.css';
 import LoopStartBar from './LoopStartBar';
@@ -10,20 +11,6 @@ import { faSyncAlt } from '@fortawesome/free-solid-svg-icons';
 import { faFastBackward, faFastForward, faPlay, faPause } from '@fortawesome/pro-solid-svg-icons';
 
 library.add(faSyncAlt, faFastBackward, faFastForward, faPlay, faPause);
-
-
-/**
- * Linearly map a value from one range to another.
- */
-function linMap(value, fromLower, fromUpper, toLower, toUpper) {
-    const lowerRange = fromUpper - fromLower;
-    const upperRange = toUpper - toLower;
-    const magnitudeThroughLowerRange = (value - fromLower);
-    const fractionThroughRange = magnitudeThroughLowerRange / lowerRange;
-    const magnitudeThroughUpperRange = fractionThroughRange * upperRange;
-    const valueInUpperRange = toLower + magnitudeThroughUpperRange;
-    return valueInUpperRange;
-}
 
 
 class Editor extends React.Component {

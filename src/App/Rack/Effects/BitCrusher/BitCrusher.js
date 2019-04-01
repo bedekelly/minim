@@ -1,21 +1,8 @@
 import React from 'react';
 import Knob from 'Components/Knob';
+import { linMap } from 'Utils/linearInterpolation';
 
 import './BitCrusher.css';
-
-
-/**
- * Linearly map a value from one range to another.
- */
-function linMap(value, fromLower, fromUpper, toLower, toUpper) {
-    const lowerRange = fromUpper - fromLower;
-    const upperRange = toUpper - toLower;
-    const magnitudeThroughLowerRange = (value - fromLower);
-    const fractionThroughRange = magnitudeThroughLowerRange / lowerRange;
-    const magnitudeThroughUpperRange = fractionThroughRange * upperRange;
-    const valueInUpperRange = toLower + magnitudeThroughUpperRange;
-    return valueInUpperRange;
-}
 
 
 const maxStep = 25;

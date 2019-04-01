@@ -42,7 +42,7 @@ export default class AmpEnvelope extends React.Component {
         return <div className="comp amp envelope">
           <h2>Amp Env.</h2>
           <div className="slidecontainer">
-              <Slider min={ 0 } max={ 1 } step={ 0.001 } 
+              <Slider min={ 0 } max={ 1 } step={ 0.001 }
                   value={ this.state.ampAttack }
                   default={ 0 }
                   label="Attack"
@@ -51,7 +51,7 @@ export default class AmpEnvelope extends React.Component {
                   onChange={ value => this.setAmpAttack(value) }
                   appAudio={ this.props.appAudio }
                   id={ this.props.id + "-amp-attack" }
-                  ></Slider>
+                  />
           </div>
           <div className="slidecontainer">
               <Slider min={ 0 } max={ 1 } step={ 0.001 } 
@@ -63,7 +63,7 @@ export default class AmpEnvelope extends React.Component {
                   onChange={ value => this.setAmpDecay(value) }
                   appAudio={ this.props.appAudio }
                   id={ this.props.id + "-amp-decay" }
-                  ></Slider>
+                  />
           </div>
           <div className="slidecontainer">
               <Slider min={ 0 } max={ 1 } step={ 0.001 } 
@@ -76,7 +76,7 @@ export default class AmpEnvelope extends React.Component {
                   onChange={ value => this.setAmpSustain(value) }
                   appAudio={ this.props.appAudio }
                   id={ this.props.id + "-amp-sustain" }
-                  ></Slider>
+                  />
           </div>
           <div className="slidecontainer">
               <Slider min={ 0.01 } max={ 1 } step={ 0.01 } 
@@ -88,7 +88,7 @@ export default class AmpEnvelope extends React.Component {
                   onChange={ value => this.setAmpRelease(value) }
                   appAudio={ this.props.appAudio }
                   id={ this.props.id + "-amp-release" }
-                  ></Slider>
+                  />
           </div>
           <div className="label">A</div>
           <div className="label">D</div>

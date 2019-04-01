@@ -1,32 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { linMap, bounded } from 'Utils/linearInterpolation';
+
 import './TextValue.css';
 
 const PIXEL_TOLERANCE = 200;
 
-
-/**
- * Linearly map a value from one range to another.
- */
-function linMap(value, fromLower, fromUpper, toLower, toUpper) {
-    const lowerRange = fromUpper - fromLower;
-    const upperRange = toUpper - toLower;
-    const magnitudeThroughLowerRange = (value - fromLower);
-    const fractionThroughRange = magnitudeThroughLowerRange / lowerRange;
-    const magnitudeThroughUpperRange = fractionThroughRange * upperRange;
-    const valueInUpperRange = toLower + magnitudeThroughUpperRange;
-    return valueInUpperRange;
-}
-
-/**
- * Clamp a value to the range lower <= value <= upper.
- */
-function bounded(value, lower, upper) {
-    if (value > upper) return upper;
-    if (value < lower) return lower;
-    return value;
-}
 
 
 export default class TextValue extends React.PureComponent {

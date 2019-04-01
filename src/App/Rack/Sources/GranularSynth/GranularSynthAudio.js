@@ -1,19 +1,10 @@
 import uuid from 'uuid4';
+import { bounded } from 'Utils/linearInterpolation';
 
 const CLEANUP_INTERVAL = 500;  // ms
 const CLEANUP_WINDOW = 5;  // s
 
 const NOTE_ON = 144;
-
-
-/**
- * Clamp a value to the range lower <= value <= upper.
- */
-function bounded(value, lower, upper) {
-  if (value > upper) return upper;
-  if (value < lower) return lower;
-  return value;
-}
 
 
 function gaussianRand(tightness) {

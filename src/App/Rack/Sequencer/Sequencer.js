@@ -5,6 +5,7 @@ import Toggle from './Toggle';
 
 
 import './Sequencer.css';
+import { linMap } from 'Utils/linearInterpolation';
 
 import {library} from '@fortawesome/fontawesome-svg-core';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
@@ -39,18 +40,6 @@ const COLOURS = [
     "rgb(255, 255, 255)"
 ];
 
-
-/**
-* Linearly map a value from one range to another.
-*/
-function linMap(value, fromLower, fromUpper, toLower, toUpper) {
-    const lowerRange = fromUpper - fromLower;
-    const upperRange = toUpper - toLower;
-    const magnitudeThroughLowerRange = (value - fromLower);
-    const fractionThroughRange = magnitudeThroughLowerRange / lowerRange;
-    const magnitudeThroughUpperRange = fractionThroughRange * upperRange;
-    return toLower + magnitudeThroughUpperRange;
-}
 
 const shallowCompare = (obj1, obj2) =>
   Object.keys(obj1).length === Object.keys(obj2).length &&
