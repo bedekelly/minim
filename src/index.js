@@ -8,4 +8,9 @@ import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
+
+window.onbeforeunload = function(){
+    return "Your music won't be saved if you leave!";
+};
+
 serviceWorker.register();
