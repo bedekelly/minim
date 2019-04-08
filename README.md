@@ -11,3 +11,10 @@ Features include:
 * Fully integrated MIDI-based hardware control with learning
 
 ![Screenshot of Minim app showing (from left to right) tape looper, granular synthesizer and circular sequencer](Screenshot.png)
+
+
+## Running the App
+Steps:
+- Change directory into the root of the Git repository
+- Run `yarn start`
+- Minim should pop open in a browser automatically
