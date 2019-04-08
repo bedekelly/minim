@@ -16,5 +16,6 @@ Features include:
 ## Running the App
 Steps:
 - Change directory into the root of the Git repository
+- Run `yarn install`
 - Run `yarn start`
 - Minim should pop open in a browser automatically
