@@ -5,12 +5,8 @@ import Editor from './Editor';
 import TapeComponents from './TapeComponents';
 import DraggableAudioData from './DraggableAudioData';
 import Knob from 'Components/Knob';
+import { CutIcon } from "../../../../Icons";
 
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCut} from '@fortawesome/free-solid-svg-icons';
-
-library.add(faCut);
 
 const DOUBLE_CLICK_TIME = 600;  // milliseconds.
 
@@ -175,7 +171,7 @@ class TapeLooper extends React.Component {
     
     editorButton() {
         return <div className="button editor-button" onClick={() => this.openEditor()}>
-            <FontAwesomeIcon icon={ ["fas", "cut"] } size="2x" />
+            <CutIcon />
         </div>;
     }
     

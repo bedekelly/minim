@@ -10,16 +10,10 @@ import MuteToggle from './MuteToggle';
 import Sequencer from './Sequencer';
 import Recorder from './Recorder';
 
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/pro-solid-svg-icons';
-
-
 import { arrayMove } from 'react-sortable-hoc';
 
 import './Rack.css';
-
-library.add(faTimes);
+import { CrossIcon } from "../../Icons";
 
 
 class Rack extends React.PureComponent {
@@ -162,7 +156,7 @@ class Rack extends React.PureComponent {
                 <EditableTextBox value={ this.state.name } 
                     onChange={ value => this.setName(value) } klass="rack-title" />
                 <button className="delete-rack" onClick={ () => this.deleteSelf() }>
-                    <FontAwesomeIcon icon={ ["fas", "times" ]}></FontAwesomeIcon>
+                    <CrossIcon />
                 </button>
                 <div className="components-wrapper" >
                     <section className={"components"}>

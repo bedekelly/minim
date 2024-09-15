@@ -3,19 +3,11 @@ import React from 'react';
 import './Recorder.css';
 
 import TextValue from 'Components/TextValue';
-
-
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircle } from '@fortawesome/free-solid-svg-icons'
-import { faPlay, faPause, faStop, faTimes } from '@fortawesome/pro-solid-svg-icons';
-
-library.add(faPlay, faPause, faStop, faCircle, faTimes);
+import { CrossIcon, PauseIcon, RecordIcon, PlayIcon, StopIcon } from '../../../Icons';
 
 
 const MetronomeIcon = 
     "https://s3.eu-west-2.amazonaws.com/static-electricity/icons/MetronomeIcon.svg";
-
 
 
 export default class Recorder extends React.Component {
@@ -114,21 +106,21 @@ export default class Recorder extends React.Component {
             </section>
             <section className="controls">
                 <button className="clear-all" onClick={ () => this.clearAll() }>
-                    <FontAwesomeIcon size={ "lg" } icon={ [ "fas", "times" ]} />
+                    <CrossIcon />
                 </button>
                 <button className="stop" onMouseDown={ () => this.stop() }>
-                    <FontAwesomeIcon size={ "lg" } icon={ [ "fas", "stop" ]} />
+                    <StopIcon />
                 </button>
                 <button className="play-pause" onMouseDown={ () => this.togglePlaying() }>
                     {
                         this.state.playing ?
-                        <FontAwesomeIcon size={ "lg" } icon={ [ "fas", "pause" ]} />
-                        : <FontAwesomeIcon size={ "lg" } icon={ [ "fas", "play"]} />
+                        <PauseIcon />
+                        : <PlayIcon />
                     }
                 </button>
                 <button className="record" style={ this.recordingButtonStyle() }
                         onMouseDown={ () => this.toggleRecording() }>
-                    <FontAwesomeIcon size={ "lg" } icon={ [ "fas", "circle" ]} />
+                    <RecordIcon />
                 </button>
                 <button className="metronome" style={ this.metronomeButtonStyle() } 
                         onMouseDown={ () => this.toggleMetronome() }>

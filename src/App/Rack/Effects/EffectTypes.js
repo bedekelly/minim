@@ -13,7 +13,7 @@ const EffectType = Object.freeze({
 
 const EffectTypes = [
     {type: EffectType.Pan, text: "Pan"},
-    {type: EffectType.Filter, text: "Muffler"},
+    {type: EffectType.Filter, text: "Low Pass"},
     {type: EffectType.HighPassFilter, text: "High Pass"},
     {type: EffectType.Gain, text: "Volume"},
     {type: EffectType.Compressor, text: "Compressor"},

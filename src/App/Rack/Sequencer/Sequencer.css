@@ -113,3 +113,7 @@
 .sequencer .clear-all * {
     transform: scale(1.15) translateY(-1px);
 }
+
+.sequencer .bottom-left-buttons button svg {
+    width: 1em;
+}

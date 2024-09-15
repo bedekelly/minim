@@ -54,6 +54,8 @@
   text-align: center;
   direction: ltr;
   font-weight: bold;
+  height: 2em;
+  padding-bottom: 10px;
 }
 
 .hold-toggle:hover {
@@ -62,4 +64,12 @@
 
 .hold-toggle.held {
   color: darkgoldenrod;
+}
+
+.hold-icon {
+  height: 1em;
+}
+
+.hold-icon svg {
+  height: 100%;
 }

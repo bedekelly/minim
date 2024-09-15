@@ -4,13 +4,7 @@ import { linMap } from 'Utils/linearInterpolation';
 import './Editor.css';
 import LoopStartBar from './LoopStartBar';
 import LoopEndBar from './LoopEndBar';
-
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSyncAlt } from '@fortawesome/free-solid-svg-icons';
-import { faFastBackward, faFastForward, faPlay, faPause } from '@fortawesome/pro-solid-svg-icons';
-
-library.add(faSyncAlt, faFastBackward, faFastForward, faPlay, faPause);
+import { BackwardIcon, ForwardIcon, PauseIcon, PlayIcon, LoopIcon } from '../../../../../Icons';
 
 
 class Editor extends React.Component {
@@ -222,19 +216,19 @@ class Editor extends React.Component {
             <div className="editor">
             <div className="controls">
               <button className="rewind" onMouseDown={ this.props.rewind }>
-                  <FontAwesomeIcon icon={["fas", "fast-backward"]}></FontAwesomeIcon>
+                  <BackwardIcon />
               </button>
               <button className={ loopClass } onMouseDown={ this.props.toggleLoop }>
-                  <FontAwesomeIcon icon="sync-alt"></FontAwesomeIcon>
+                  <LoopIcon />
               </button>
               <button className="playpause" onMouseDown={ playPause }>
                   { this.props.playing ? 
-                      <FontAwesomeIcon icon={["fas", "pause"]}></FontAwesomeIcon>
-                      : <FontAwesomeIcon icon={["fas", "play"]}></FontAwesomeIcon>
+                      <PauseIcon />
+                      : <PlayIcon />
                   }
               </button>
               <button className="fastforward" onMouseDown={ this.props.fastForward }>
-                  <FontAwesomeIcon icon={["fas", "fast-forward"]}></FontAwesomeIcon>
+                  <ForwardIcon />
               </button>
             </div> 
               <div className="frame">

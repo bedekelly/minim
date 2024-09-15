@@ -347,3 +347,11 @@
     font-size: 15px;
     font-weight: 500;
 }
+
+.editor-button svg {
+    width: 2em;
+}
+
+.draggable-audio-data svg {
+    width: 1.5em;
+}

@@ -1,12 +1,7 @@
 import React from 'react';
 import './DraggableAudioData.css';
 import uuid from 'uuid';
-
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMusic } from '@fortawesome/free-solid-svg-icons';
-
-library.add(faMusic);
+import { MusicIcon } from '../../../../Icons';
 
 
 export default function DraggableAudioData(props) {
@@ -24,6 +19,6 @@ export default function DraggableAudioData(props) {
     
     return <div className="draggable-audio-data"
         onDragStart={ dragStart }>
-        <FontAwesomeIcon icon={["fas", "music"]} size="lg" />
+        <MusicIcon />
     </div>;
 }

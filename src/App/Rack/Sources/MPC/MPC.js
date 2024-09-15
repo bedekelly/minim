@@ -1,12 +1,7 @@
 import React from 'react';
 
 import './MPC.css';
-
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRight, faArrowToRight } from '@fortawesome/pro-solid-svg-icons';
-
-library.add(faArrowRight, faArrowToRight);
+import { RightArrowIcon, StopIcon } from '../../../../Icons';
 
 
 class MPC extends React.Component {
@@ -81,9 +76,9 @@ class MPC extends React.Component {
             <div className={ heldClass } onClick={() => this.toggleHold()}>
                 {
                     this.state.hold ?
-                        <React.Fragment><span>HIT</span> <span><FontAwesomeIcon icon={ ["fa", "arrow-right" ] } /></span></React.Fragment>
+                        <React.Fragment><span>HIT</span> <span className="hold-icon"><RightArrowIcon /></span></React.Fragment>
                         :
-                        <React.Fragment><span>HOLD</span> <span><FontAwesomeIcon icon={ ["fa", "arrow-to-right" ] } /></span></React.Fragment>
+                        <React.Fragment><span>HOLD</span> <span className="hold-icon"><StopIcon /></span></React.Fragment>
                 }
             </div>
             { this.state.pads.map((pad, index) => this.showPad(pad, index)) }

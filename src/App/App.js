@@ -11,13 +11,7 @@ import { EffectsModal } from './Rack/Modals';
 import { EffectTypes } from './Rack/Effects/EffectTypes'
 
 import './App.css';
-
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlay, faPause, faStop } from '@fortawesome/pro-solid-svg-icons';
-
-library.add(faPlay, faPause, faStop);
-
+import { PauseIcon, PlayIcon, RecordIcon, StopIcon } from '../Icons';
 
 viewportFix.init();
 
@@ -169,19 +163,18 @@ class App extends Component {
     
             <div className="play-controls">
                 <button className="stop-all" onMouseDown={ () => this.stopAll()}>
-                    <FontAwesomeIcon icon={["fas", "stop"]} size="lg"/>
+                    <StopIcon />
                 </button>
                 <button className="pause-all" onMouseDown={() => this.pauseAll()}>
-                    <FontAwesomeIcon icon={["fas", "pause"]} size="lg"/>
+                    <PauseIcon />
                 </button>
                 <button className="play-all" onMouseDown={() => this.playAll()}>
-                    <FontAwesomeIcon icon={["fas", "play"]} size="lg"/>
+                    <PlayIcon />
                 </button>
                 <button className={ recordingClass } onMouseDown={ () => this.recordToggle() }>
-                    <FontAwesomeIcon icon={["fas", "circle"]} size="lg"/>
+                    <RecordIcon />
                 </button>
             </div>
-            
         </section>;
     }
 }

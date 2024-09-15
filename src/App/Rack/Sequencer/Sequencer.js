@@ -6,17 +6,8 @@ import Toggle from './Toggle';
 
 import './Sequencer.css';
 import { linMap } from 'Utils/linearInterpolation';
+import { CrossIcon, PauseIcon, PlayIcon, StopIcon } from '../../../Icons';
 
-import {library} from '@fortawesome/fontawesome-svg-core';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {
-    faPause,
-    faPlay,
-    faStop,
-    faTimes
-} from '@fortawesome/pro-solid-svg-icons';
-
-library.add(faPlay, faPause, faStop, faTimes);
 
 
 const NOTE_SIZE = 7;
@@ -478,15 +469,15 @@ export default class Sequencer extends React.Component {
             
             <div className="bottom-left-buttons">
                 <button className="clear-all" onClick={ () => this.clearAll() }>
-                    <FontAwesomeIcon icon={ [ "fas", "times" ]} />
+                    <CrossIcon />
                 </button>
                 <button className="stop" onClick={ () => this.stop() }>
-                    <FontAwesomeIcon icon={ ["fas", "stop"] } />
+                    <StopIcon />
                 </button>
                 <button className="playpause" onClick={ () => this.playPause() }>
                     { this.state.playing ?
-                         <FontAwesomeIcon icon={ ["fas", "pause"] } />
-                         : <FontAwesomeIcon icon={ ["fas", "play"] } /> }
+                         <PauseIcon />
+                         : <PlayIcon /> }
                 </button>
             </div>
             
